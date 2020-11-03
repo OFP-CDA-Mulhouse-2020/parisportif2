@@ -1,0 +1,47 @@
+@startuml parisportif
+
+class User{
+    - id
+    - login
+    - email
+    - birthDate
+    - wallet
+}
+
+class Wallet{
+    - userId
+    - balance
+    - history
+}
+
+class Bet{
+    - typeOfBet
+    - betOrder
+    - betOdds
+    - betHistory
+    - betResult
+    - betWin
+    - betWinHistory
+}
+
+class SportEvent{
+    - name
+    - location
+    - dateEvent
+    - dateTimeZone
+    - nbContestant
+}
+
+class Sport{
+    - name
+    - nbPlayer
+}
+
+class Competition{
+    - name
+    - StartDate
+    - FinishDate
+    - nbTeam
+}
+
+@enduml
