@@ -7,8 +7,10 @@ Livrable :
 Taches :
 [] Analyse de la specs
 [] Creation du Diagramme
-[] Veille technologique sur site de paris sportifs concurrent
+[] Veille concurentielle sur site de paris sportifs concurrent
 [] Création du Diagramme avec Adobe Xd
 
 
 Activités :
+03/11 lecture specs, analyse, et veille concurentielle
+04/11
