@@ -14,12 +14,14 @@ Specs : https://github.com/OFP-CDA-Mulhouse-2020/specs
 - [ ] Wireframe with AdobeXd
 
 **Tasks List :**
-- [X] Specs analysis
-- [/] Check on other online bet website how things are managed (diplay, bet, options)
+- [x] Specs analysis
+- [o] Check on other online bet website how things are managed (diplay, bet, options)
 
-- [X] Uml create entity
-- [ ] Uml add relations
-- [ ] Uml add cardinality
+- [x] Uml create entity
+- [x] Uml add relations
+- [x] Uml add cardinality
+- [ ] Uml review and correction
+
 
 - [ ] Wireframe homePage, connexion, new user
 - [ ] Wireframe scenario : make a bet

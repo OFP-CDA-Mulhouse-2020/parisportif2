@@ -11,8 +11,8 @@ class User{
     - birthDate
     - avatar
     - linkToOfficialId
-    - Adress
-    - wallet
+    - adressId
+    - walletId
     - typeOfMoney
 
     + createUser()
@@ -35,7 +35,6 @@ class Adress{
     - city
     - country
 }
-
 
 class Wallet{
     - userId
@@ -128,5 +127,6 @@ class Competition{
     - FinishDate
     - nbTeam
 }
+
 
 @enduml
