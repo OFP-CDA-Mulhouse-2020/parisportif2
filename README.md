@@ -1,56 +1,30 @@
-Création d'un diagramme de classe pour une application dédiée au pari sportif
 
-<!-- *Les entités -->
+# parisportif2
 
-Utilisateurs(joueur) | Concurrents | Epreuves Sportive | Type de sport | Pari | Sport
+## Target : Design App for online bet, with several sport available, pokerstars like 
 
-<!-- *Les informations -->
+Specs : https://github.com/OFP-CDA-Mulhouse-2020/specs
 
-Utilisateur(Joueur)
---> nomUtilisateur
---> prenomUtilisateur
---> dateNaissanceUtilisateur
---> contactUtilisateur(tel,mail... à définir)
---> portefeuilleUtilisateur
 
-??? Monnaie(virtuelle ou réelle )
 
-<!--  -->
+### Phase 1 : Design graph and logic (9 days) 03-11-2020 to  16-11-2020
 
-Pari
---> natureDuPari
---> pariMise
---> pariCote
---> PariHistorique
---> pariResultat
---> pariGain
---> pariGainHistorique
+**Deliverables :**
+- [ ] Uml diagram class
+- [ ] Wireframe with AdobeXd
 
-<!--  -->
+**Tasks List :**
+- [x] Specs analysis
+- [o] Check on other online bet website how things are managed (diplay, bet, options)
 
-Epreuve
---> nomEpreuve
---> lieuEpreuve
---> dateEpreuve
---> fuseauHoraireEpreuve
---> nbOpposants
+- [x] Uml create entity
+- [x] Uml add relations
+- [x] Uml add cardinality
+- [ ] Uml review and correction
 
-<!--  -->
 
-Sport
---> nomSport
---> nbJoueurs
+- [ ] Wireframe homePage, connexion, new user
+- [ ] Wireframe scenario : make a bet
+- [ ] Wireframe scenario : add money, make withdraw
 
-??? equipement (ex-voiture,velo, )
 
-<!--  -->
-
-Epreuve, Sport --> TypeSport (sportIndividuel, sportEquipe, Les deux)
-
-<!--  -->
-
-Compétition
---> nomCompetition
---> dateDebut
---> dateFin
---> nbrEquipe

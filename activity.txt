@@ -1,0 +1,6 @@
+Liste des activité phase1 : conception graphique et logique (9 jours)
+
+Activités :
+03/11 lecture specs, analyse, et veille concurentielle (ladji & daniel)
+04/11 uml (matin) (ladji & daniel), uml et projet (daniel), wireframe homepage (ladji)
+05/11 wireframe nouvel utilisateur et connexion (ladji), template home page (daniel), navigation sur des sites concurrents pour voir les bons points
