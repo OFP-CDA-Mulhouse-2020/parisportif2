@@ -15,7 +15,7 @@ Specs : https://github.com/OFP-CDA-Mulhouse-2020/specs
 
 **Tasks List :**
 - [x] Specs analysis
-- [o] Check on other online bet website how things are managed (diplay, bet, options)
+- [x] Check on other online bet website how things are managed (diplay, bet, options)
 
 - [x] Uml create entity
 - [x] Uml add relations
@@ -23,8 +23,8 @@ Specs : https://github.com/OFP-CDA-Mulhouse-2020/specs
 - [ ] Uml review and correction
 
 
-- [ ] Wireframe homePage, connexion, new user
-- [ ] Wireframe scenario : make a bet
-- [ ] Wireframe scenario : add money, make withdraw
+- [x] Wireframe homePage, connexion, new user
+- [x] Wireframe scenario : make a bet
+- [x] Wireframe scenario : add money, make withdraw
 
 
