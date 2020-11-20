@@ -10,7 +10,7 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     env:
-      working-directory: ./code
+      working-directory: code
 
     steps:
       - uses: actions/checkout@v1
