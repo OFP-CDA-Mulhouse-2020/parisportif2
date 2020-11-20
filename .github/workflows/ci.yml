@@ -12,12 +12,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+        working-directory: ./code
       - uses: php-actions/composer@v1
+        working-directory: ./code
       - name: Run phpunit
+        working-directory: ./code
         run: ./vendor/bin/simple-phpunit
-
-      - name: Run phpcs
-        run: ./vendor/bin/phpcs
       - name: Run phpcbf
+        working-directory: ./code
         run: ./vendor/bin/phpcbf
+      - name: Run phpcs
+        working-directory: ./code
+        run: ./vendor/bin/phpcs
+
         
