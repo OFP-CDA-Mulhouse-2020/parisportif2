@@ -6,10 +6,6 @@ on:
   pull_request:
     branches:
 
-defaults:
-  run:
-    working-directory: code
-
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -18,7 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run Composer
-        run: php-actions/composer@v2
+        run: |
+          cd code
+          composer install --prefer-dist
       - name: Run phpunit
         run: ./vendor/bin/simple-phpunit
       - name: Run phpcbf
