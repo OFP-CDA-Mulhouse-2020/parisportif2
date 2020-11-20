@@ -1,5 +1,7 @@
 <?php
 
+namespace Test;
+
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
@@ -48,7 +50,7 @@ class UserTest extends TestCase
     /**
      * @dataProvider additionProviderMail
      */
-   public function testSetMail($mail)
+    public function testSetMail($mail)
     {
         $pattern = self::PATTERN_MAIL;
 
@@ -113,5 +115,4 @@ class UserTest extends TestCase
             ['12lettresUni']
         ];
     }
-
 }

@@ -18,10 +18,10 @@ jobs:
           cd code
           composer install --prefer-dist
       - name: Run phpunit
-        run: ./vendor/bin/simple-phpunit
+        run: .code/vendor/bin/simple-phpunit
       - name: Run phpcbf
-        run: ./vendor/bin/phpcbf
+        run: .code/vendor/bin/phpcbf
       - name: Run phpcs
-        run: ./vendor/bin/phpcs
+        run: .code/vendor/bin/phpcs
 
         
