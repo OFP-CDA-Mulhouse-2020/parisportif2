@@ -17,7 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - uses: php-actions/composer@v1
+      - name: Run Composer
+        run: php-actions/composer@v2
       - name: Run phpunit
         run: ./vendor/bin/simple-phpunit
       - name: Run phpcbf
