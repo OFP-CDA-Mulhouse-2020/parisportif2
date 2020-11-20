@@ -22,8 +22,12 @@ jobs:
           cd code
           ./vendor/bin/simple-phpunit
       - name: Run phpcbf
-        run: .code/vendor/bin/phpcbf
+        run: |
+          cd code
+          ./vendor/bin/phpcbf
       - name: Run phpcs
-        run: .code/vendor/bin/phpcs
+        run: |
+          cd code
+          ./vendor/bin/phpcs
 
         
