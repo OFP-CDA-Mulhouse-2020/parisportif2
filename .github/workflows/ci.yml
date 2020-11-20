@@ -9,12 +9,13 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./code
 
     steps:
       - uses: actions/checkout@v1
-        working-directory: ./code
       - uses: php-actions/composer@v1
-        working-directory: ./code
+        working-directory: ${{env.working-directory}}
       - name: Run phpunit
         working-directory: ./code
         run: ./vendor/bin/simple-phpunit
