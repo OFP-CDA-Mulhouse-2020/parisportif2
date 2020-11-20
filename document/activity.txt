@@ -1,0 +1,15 @@
+Liste des activité phase1 : conception graphique et logique (9 jours)
+
+Activités :
+03/11 lecture specs, analyse, et veille concurentielle (ladji & daniel)
+04/11 uml (matin) (ladji & daniel), uml et projet (daniel), wireframe homepage (ladji)
+05/11 wireframe nouvel utilisateur et connexion (ladji), template home page (daniel), navigation sur des sites concurrents pour voir les bons points
+06/11 wireframe navigation site et validation du ticket (daniel), connexion et nouvel utilisateur (ladji)
+
+09/11 wireframe validation du ticket et gestion portefeuille (daniel), gestion du compte utilisateur (ladji)
+10/11 wireframe fin et mise en commun et uml (tous)
+12/11 uml review (tous), correction (ladji) et projet solidaire (daniel)
+13/11 uml review (tous), correction (ladji) et projet solidaire (daniel)
+
+16/11 installation environnement symfony (tous), réinstallation de symfony (ladji), projet solidaire (daniel)
+17/11 création des issues, milestones et projet dans Github (tous), dockerisation du projet (tous)

@@ -1,0 +1,20 @@
+name: CI
+
+on: [push]
+on: [pull-request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: php-actions/composer@v2
+      - name: Run phpunit
+        run: ./vendor/bin/simple-phpunit
+
+      - name: Run phpcs
+        run: ./vendor/bin/phpcs
+      - name: Run phpcbf
+        run: ./vendor/bin/phpcbf
+        
