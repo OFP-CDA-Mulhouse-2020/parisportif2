@@ -21,6 +21,12 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
       
     steps:
+
+      - uses: actions/checkout@v1
+      - name: Run Composer
+        run: |
+          cd code
+          composer install --prefer-dist
         
       - name: Verify MySQL connection from container 
         run: |
@@ -28,17 +34,10 @@ jobs:
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
           php bin/console doctrine:database:create --env=test
-        
-      - uses: actions/checkout@v1
-      - name: Run Composer
-        run: |
-          cd code
-          composer install --prefer-dist
 
       - name: Run phpunit
         run: |
           cd code
-          
           ./vendor/bin/simple-phpunit
         env:
           DB_CONNECTION: mysql
