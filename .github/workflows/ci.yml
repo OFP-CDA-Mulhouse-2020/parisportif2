@@ -26,14 +26,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
-          sudo mysql --host mysql -uroot -ppassword -e "SHOW DATABASES"
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_USERNAME: username
-          DB_PASSWORD: password
-          DB_DATABASE: test
+          mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
+        
 
           
       - uses: actions/checkout@v1
@@ -47,7 +41,12 @@ jobs:
           cd code
           ./vendor/bin/simple-phpunit
         env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_CONNECTION: mysql
+          DB_HOST: mysql
+          DB_PORT: 3306
+          DB_USERNAME: username
+          DB_PASSWORD: password
+          DB_DATABASE: test
 
       - name: Run phpcbf
         run: |
