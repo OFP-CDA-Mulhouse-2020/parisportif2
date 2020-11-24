@@ -15,7 +15,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
+          MYSQL_DATABASE: onlinebet_test
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
@@ -34,23 +34,23 @@ jobs:
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
           cd code
-          php bin/console doctrine:database:create --env=test
-          php bin/console do:mi:mi --env=test
-          php bin/console doctrine:fixtures:load --env=test
-
-
-
-      - name: Run phpunit
-        run: |
-          cd code
-          ./vendor/bin/simple-phpunit
+          php bin/console doctrine:database:create
+          php bin/console do:mi:mi
+          php bin/console doctrine:fixtures:load
         env:
           DB_CONNECTION: mysql
           DB_HOST: mysql
           DB_PORT: 3306
           DB_USERNAME: username
           DB_PASSWORD: password
-          DB_DATABASE: test
+          DB_DATABASE: onlinebet_test
+
+
+      - name: Run phpunit
+        run: |
+          cd code
+          ./vendor/bin/simple-phpunit
+
 
       - name: Run phpcbf
         run: |
