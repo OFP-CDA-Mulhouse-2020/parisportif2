@@ -1,0 +1,7 @@
+parameters:
+	level: 6
+	paths:
+		- src
+		- tests
+	autoload_directories:
+            - vendor/bin/.phpunit/phpunit-7.5-0/vendor/autoload.php

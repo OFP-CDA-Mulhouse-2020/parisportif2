@@ -27,10 +27,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
-
+          php bin/console doctrine:database:create --env=test
         
-
-          
       - uses: actions/checkout@v1
       - name: Run Composer
         run: |
@@ -40,7 +38,7 @@ jobs:
       - name: Run phpunit
         run: |
           cd code
-          php bin/console do:mi:mi
+          
           ./vendor/bin/simple-phpunit
         env:
           DB_CONNECTION: mysql
