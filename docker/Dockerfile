@@ -8,6 +8,8 @@ RUN sed -ri -e \
         's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
         ${APACHE_CONFDIR}/apache2.conf /etc/apache2/conf-available/*.conf
 
+RUN docker-php-ext-install pdo pdo_mysql
+
 RUN docker-php-ext-install opcache > /dev/null
 COPY conf/opcache.ini ${PHP_INI_DIR}/conf/opcache.ini
 
