@@ -37,7 +37,7 @@ jobs:
           cp -r .env.test .env
           php bin/console make:migration
           php bin/console doctrine:schema:update --force
-          php bin/console doctrine:fixtures:load --purger
+          php bin/console doctrine:fixtures:load --purge-with-truncate
         env:
           DB_CONNECTION: mysql
           DB_HOST: mysql
