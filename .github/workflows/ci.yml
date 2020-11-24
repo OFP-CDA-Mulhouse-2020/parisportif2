@@ -19,12 +19,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
         
     steps:
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: db_test
-          DB_PORT: 3306
-          DB_USER: root
-          DB_PASSWORD: password
+
       - name: Verify MySQL connection from container 
         run: |
           sudo apt-get update
@@ -50,5 +45,12 @@ jobs:
         run: |
           cd code
           ./vendor/bin/phpcs
+
+        env:
+          DB_CONNECTION: mysql
+          DB_DATABASE: db_test
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: password
 
         
