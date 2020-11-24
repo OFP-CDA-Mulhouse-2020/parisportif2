@@ -33,7 +33,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
+          cd code
           php bin/console doctrine:database:create --env=test
+          php bin/console do:mi:mi --env=test
+          php bin/console doctrine:fixtures:load --env=test
+
+
 
       - name: Run phpunit
         run: |
