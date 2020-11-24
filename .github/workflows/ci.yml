@@ -27,6 +27,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
+
         
 
           
@@ -39,6 +40,7 @@ jobs:
       - name: Run phpunit
         run: |
           cd code
+          php bin/console do:mi:mi
           ./vendor/bin/simple-phpunit
         env:
           DB_CONNECTION: mysql
