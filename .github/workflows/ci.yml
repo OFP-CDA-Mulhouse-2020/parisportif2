@@ -22,12 +22,6 @@ jobs:
       
     steps:
 
-      - name: Copy Symfony CI environment
-        run: |
-          cd code
-          ls
-          cp .env.test .env
-
       - name: Verify MySQL connection from container 
         run: |
           sudo apt-get update
