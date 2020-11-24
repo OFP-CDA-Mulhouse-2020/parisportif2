@@ -35,7 +35,6 @@ jobs:
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
           cd code
           cp -r .env.test .env
-          php bin/console doctrine:database:create
           php bin/console do:mi:mi
           php bin/console doctrine:fixtures:load
         env:
