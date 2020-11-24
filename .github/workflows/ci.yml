@@ -16,26 +16,35 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: db_test
+        ports:
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
-        
+      
     steps:
+
+      - name: Copy Symfony CI environment
+        run: |
+          cd code
+          cp .env.test.dist .env
 
       - name: Verify MySQL connection from container 
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
-          mysql --host mysql -uroot -ppassword -e "SHOW DATABASES"  
+          sudo mysql --host mysql -uroot -ppassword -e "SHOW DATABASES"  
 
       - uses: actions/checkout@v1
       - name: Run Composer
         run: |
           cd code
           composer install --prefer-dist
-      - name: Run phpunit
 
+      - name: Run phpunit
         run: |
           cd code
           ./vendor/bin/simple-phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
       - name: Run phpcbf
         run: |
@@ -46,11 +55,6 @@ jobs:
           cd code
           ./vendor/bin/phpcs
 
-        env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: db_test
-          DB_PORT: 3306
-          DB_USER: root
-          DB_PASSWORD: password
+
 
         
