@@ -25,7 +25,8 @@ jobs:
       - name: Copy Symfony CI environment
         run: |
           cd code
-          cp /.env.test .env
+          ls
+          cp .env.test .env
 
       - name: Verify MySQL connection from container 
         run: |
