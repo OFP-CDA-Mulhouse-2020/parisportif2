@@ -15,7 +15,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: db_test
+          MYSQL_DATABASE: test
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
@@ -28,12 +28,12 @@ jobs:
           sudo apt-get install -y mysql-client
           sudo mysql --host mysql -uroot -ppassword -e "SHOW DATABASES"
         env:
-          DB_CONNECTION=mysql
-          DB_HOST=mysql
-          DB_PORT=3306
-          DB_USERNAME=username
-          DB_PASSWORD=password
-          DB_DATABASE=test
+          DB_CONNECTION: mysql
+          DB_HOST: mysql
+          DB_PORT: 3306
+          DB_USERNAME: username
+          DB_PASSWORD: password
+          DB_DATABASE: test
 
           
       - uses: actions/checkout@v1
