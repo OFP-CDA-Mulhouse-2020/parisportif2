@@ -28,7 +28,7 @@ jobs:
           cd code
           composer install --prefer-dist
         
-      - name: Verify MySQL connection from container 
+      - name: Verify MySQL connection from container and load tables and fixtures
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
@@ -38,13 +38,6 @@ jobs:
           php bin/console make:migration
           php bin/console doctrine:schema:update --force
           php bin/console doctrine:fixtures:load --no-interaction
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_USERNAME: root
-          DB_PASSWORD: password
-          DB_DATABASE: onlinebet_test
 
 
       - name: Run phpunit
