@@ -49,7 +49,7 @@ class User
      * @throws Exception
      * @return  self
      */
-    public function setId(int $id): self
+    public function setId(int $id)
     {
         if (! is_int($id) || $id < 0) {
             throw new Exception('Id invalide');
