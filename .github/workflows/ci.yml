@@ -23,7 +23,6 @@ jobs:
     steps:
 
       - uses: actions/checkout@v1
-      - name: Run Composer
       - uses: php-actions/composer@v2
 
       - name: Verify MySQL connection from container
