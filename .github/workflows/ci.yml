@@ -34,6 +34,7 @@ jobs:
       - name: Load tables and fixtures
         run: |
           cp -r .env.test .env
+          php bin/console make:migration
           php bin/console doctrine:schema:update --force
           php bin/console doctrine:fixtures:load --no-interaction
 
