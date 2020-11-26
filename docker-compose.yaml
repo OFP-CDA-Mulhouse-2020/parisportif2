@@ -14,7 +14,7 @@ services:
       - "traefik.enable=true" # active la gestion de ce container par Traefik
       - "traefik.http.routers.traefik-api.rule=Host(`docker.localhost`)" # indique à Traefik que le Host de la requête doit être 'localhost'
       - "traefik.http.routers.traefik-api.service=api@internal" # associe la route au service interne de Traefik api@internal
-    restart: "unless-stopped"
+    restart: "always"
     networks:
       - proxy
 
@@ -25,12 +25,13 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`web.docker.localhost`)"
     volumes:
-      - ./code:/var/www/html/
+      - ./:/var/www/html/
     environment:
       PHP_OPCACHE_VALIDATE_TIMESTAMPS: "1"
       PHP_OPCACHE_MAX_ACCELERATED_FILES: "10000"
       PHP_OPCACHE_MEMORY_CONSUMPTION: "192"
       PHP_OPCACHE_MAX_WASTED_PERCENTAGE: "10"
+      
     networks:
       - proxy
   
@@ -78,7 +79,7 @@ services:
     command: install
     working_dir: /var/www/html/
     volumes: 
-      - ./code:/var/www/html/
+      - ./:/var/www/html/
   
   mailhog:
     container_name: mailhog

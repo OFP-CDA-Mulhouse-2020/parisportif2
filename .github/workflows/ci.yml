@@ -2,9 +2,9 @@ name: CI
 
 on: 
   push:
-    branches:
+    branches: [feature/*]
   pull_request:
-    branches:
+    branches: [feature/*]
 
 jobs:
   build-test:
@@ -28,35 +28,31 @@ jobs:
           cd code
           composer install --prefer-dist
         
-      - name: Verify MySQL connection from container and load tables and fixtures
+      - name: Verify MySQL connection from container
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
           mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
+
+      - name: Load tables and fixtures
+        run: |
           cd code
           cp -r .env.test .env
           php bin/console make:migration
           php bin/console doctrine:schema:update --force
           php bin/console doctrine:fixtures:load --no-interaction
 
-
       - name: Run phpunit
         run: |
           cd code
           ./vendor/bin/simple-phpunit
 
-
       - name: Run phpcbf
         run: |
           cd code
           ./vendor/bin/phpcbf
+
       - name: Run phpcs
         run: |
           cd code
           ./vendor/bin/phpcs
-
-
-
-
-
-        

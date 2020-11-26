@@ -4,8 +4,8 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-code/var/
-code/vendor/
+/var/
+/vendor/
 ###< symfony/framework-bundle ###
 /.vscode/
 ###> squizlabs/php_codesniffer ###

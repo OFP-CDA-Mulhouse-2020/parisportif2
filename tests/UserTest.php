@@ -10,7 +10,7 @@ class UserTest extends TestCase
 
     private const PATTERN_MAIL = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     private const PATTERN_LOGIN = '/^[a-zA-Z0-9À-ÿ_.-]{2,16}$/';
-    private const PATTERN_PASS = '/^[a-zA-Z0-9_]{6,12}$/';
+    private const PATTERN_PASS = '/^[a-zA-Z0-9_]{8,12}$/';
     private $user;
 
     public function index()
@@ -87,7 +87,7 @@ class UserTest extends TestCase
         return [
             ['fgrej-fdssd'],
             ['élaHfjfiod'],
-            ['ÀteÀde_86'],
+            ['ÀteÀde8_6'],
             ['fdsff.dfzadde'],
             ['Username']
         ];
