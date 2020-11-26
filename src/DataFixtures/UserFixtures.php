@@ -25,7 +25,7 @@ class UserFixtures extends Fixture
             ->setPassword('123456789');
 
         $manager->persist($user);
-        
+
         $manager->flush();
     }
 }

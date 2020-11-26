@@ -24,9 +24,7 @@ jobs:
 
       - uses: actions/checkout@v1
       - name: Run Composer
-        run: |
-          cd code
-          composer install --prefer-dist
+        run: composer install --prefer-dist
         
       - name: Verify MySQL connection from container
         run: |
@@ -36,23 +34,16 @@ jobs:
 
       - name: Load tables and fixtures
         run: |
-          cd code
           cp -r .env.test .env
           php bin/console make:migration
           php bin/console doctrine:schema:update --force
           php bin/console doctrine:fixtures:load --no-interaction
 
       - name: Run phpunit
-        run: |
-          cd code
-          ./vendor/bin/simple-phpunit
+        run: ./vendor/bin/simple-phpunit
 
       - name: Run phpcbf
-        run: |
-          cd code
-          ./vendor/bin/phpcbf
+        run: ./vendor/bin/phpcbf
 
       - name: Run phpcs
-        run: |
-          cd code
-          ./vendor/bin/phpcs
+        run: ./vendor/bin/phpcs

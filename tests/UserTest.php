@@ -104,12 +104,12 @@ class UserTest extends TestCase
         $this->assertMatchesRegularExpression($pattern, $this->user->getPassword($pass));
     }
 
-    
+
 
     public function additionProviderPassword()
     {
         return [
-            ['fsd456'],
+            ['fsd45tu6'],
             ['HlHfjfiod'],
             ['ateade_86'],
             ['12lettresUni']

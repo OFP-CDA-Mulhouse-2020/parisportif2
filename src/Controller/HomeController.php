@@ -20,7 +20,7 @@ class HomeController extends AbstractController
     }
 
 
-        /**
+    /**
      * @Route("/home/test", name="home_test")
      */
     public function index2(): Response
