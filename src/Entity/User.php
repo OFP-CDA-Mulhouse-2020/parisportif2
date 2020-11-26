@@ -50,8 +50,7 @@ class User
      * @return  self
      */
     public function setId(int $id): self
-    {
-        if (! is_int($id) || $id < 0) {
+    {if (! is_int($id) || $id < 0) {
             throw new Exception('Id invalide');
         }
         $this->id = $id;
