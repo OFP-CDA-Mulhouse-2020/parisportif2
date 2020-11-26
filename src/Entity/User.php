@@ -12,7 +12,7 @@ use Exception;
  */
 class User
 {
-    private const PATTERN_MAIL = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
+    private const PATTERN_MAI = '/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/';
     private const PATTERN_PASS = '/^[a-zA-Z0-9_]{6,12}$/';
     private const PATTERN_LOGIN = '/^[a-zA-Z0-9À-ÿ_.-]{2,16}$/';
 
@@ -49,8 +49,9 @@ class User
      * @throws Exception
      * @return  self
      */
-    public function setId(int $id): self
-    {if (! is_int($id) || $id < 0) {
+    public function setId(int $id)
+    {
+        if (! is_int($id) || $id < 0) {
             throw new Exception('Id invalide');
         }
         $this->id = $id;
