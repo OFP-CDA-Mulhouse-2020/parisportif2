@@ -13,3 +13,11 @@ Activités :
 
 16/11 installation environnement symfony (tous), réinstallation de symfony (ladji), projet solidaire (daniel)
 17/11 création des issues, milestones et projet dans Github (tous), dockerisation du projet (tous)
+18/11 dockerisation traefik, php, phpmyadmin et mysql OK
+19/11 dockerisation mailhog et composer OK et github action (tous)
+20/11 remise à niveau du projet entre nous pour avoir la même structure et correction des bugs rencontrés
+
+23/11 creation entity et test (ladji) creation des bases de test (daniel)
+24/11 suite creation base de test distante (daniel) et ajout test pre-commit (ladji)
+25/11 correction test pre-commit (ladji) et correction bug apache (daniel)
+26/11 remise à niveau du projet pour une nouvelle structure et corrections des bugs apache et xdebug, mise en place entiy user et test (ladji)
