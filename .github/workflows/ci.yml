@@ -1,0 +1,49 @@
+name: CI
+
+on: 
+  push:
+    branches: [feature/*]
+  pull_request:
+    branches: [feature/*]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: onlinebet_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+      
+    steps:
+
+      - uses: actions/checkout@v1
+      
+      - name: Run Composer
+        run: composer install --prefer-dist
+
+      - name: Verify MySQL connection from container
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+          mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW DATABASES"
+
+      - name: Load tables and fixtures
+        run: |
+          cp -r .env.test .env
+          php bin/console doctrine:schema:update --force
+          php bin/console doctrine:fixtures:load --no-interaction
+
+      - name: Run phpunit
+        run: ./vendor/bin/simple-phpunit
+
+      - name: Run phpcbf
+        run: ./vendor/bin/phpcbf
+
+      - name: Run phpcs
+        run: ./vendor/bin/phpcs
