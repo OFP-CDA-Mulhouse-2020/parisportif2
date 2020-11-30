@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use DateTimeInterface;
 use DateTime;
 
-
 /**
  * @ORM\Entity(repositoryClass=User1Repository::class)
  */
@@ -78,7 +77,6 @@ class User1
     public function setName(string $name): self
     {
         if (!preg_match(self::PATTERN_NAME, $name)) {
-
             throw new InvalidArgumentException('The Name is Invalid');
         }
 
@@ -97,7 +95,6 @@ class User1
     public function setFirstName(string $firstName): self
     {
         if (!preg_match(self::PATTERN_NAME, $firstName)) {
-
             throw new InvalidArgumentException('The firstname is Invalid');
         }
 

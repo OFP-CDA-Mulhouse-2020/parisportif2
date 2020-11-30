@@ -3,8 +3,6 @@
 namespace App\Tests;
 
 use App\Entity\User1;
-use DateTime;
-
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
