@@ -2,27 +2,26 @@
 
 namespace App\Controller;
 
+use App\Entity\User1;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\User1;
 use App\Form\UserLoginType;
+use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends AbstractController
 {
     /**
      * @Route("/login", name="login")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        //     return $this->render('login/index.html.twig', [
-        //         'controller_name' => 'LoginController',
-        //     ]);
-        // }
+        $form = $this->createForm(UserLoginType::class);
+        $form->handleRequest($request);
 
-        $user = new User1();
-
-        $form = $this->createForm(UserLoginType::class, $user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('loginCheck');
+        }
 
         return $this->render('login/index.html.twig', [
             'login_form' => $form->createView(),

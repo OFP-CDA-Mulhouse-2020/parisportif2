@@ -45,15 +45,17 @@ class LoginControllerTest extends WebTestCase
 
         $form = $crawler->filter('button[class="loginForm_submit"]')->form([
             'user_login[name]' => 'John',
-            'user_login[password]' => 'password'
+            'user_login[password]' => '1epppdpdpdpE'
         ]);
 
-        $crawler = $client->submit($form);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        // $form = $crawler->filter('button[class="loginForm_submit"]')->form();
+        // $form['user_login[name]'] = 'John';
+        // $form['user_login[password]'] = '1epppdpdpdpE';
 
+        $client->submit($form);
         // $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        // $this->assertResponseRedirects('/login/check');
-        // $crawler = $client->followRedirect();
+        $this->assertResponseRedirects('/login/check');
+        $client->followRedirect();
     }
 }

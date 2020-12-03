@@ -178,6 +178,9 @@ class User1
     //     return $this->timeZone;
     // }
 
+
+
+
     public function setBirthDate(DateTimeInterface $birthDate): self
     {
         $this->birthDate = $birthDate;
