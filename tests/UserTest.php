@@ -2,31 +2,36 @@
 
 namespace App\Tests;
 
-use App\Entity\User2;
+use App\Entity\User;
 use DateInterval;
 use DateTime;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class User2Test extends TestCase
+class UserTest extends KernelTestCase
 {
-    public function testAssertInstanceOfUser2()
+
+    public function testAssertInstanceOfUser()
     {
-        $this->user = new User2();
-        $this->assertInstanceOf(User2::class, $this->user);
-        $this->assertClassHasAttribute('id', User2::class);
-        $this->assertClassHasAttribute('lastName', User2::class);
-        $this->assertClassHasAttribute('firstName', User2::class);
-        $this->assertClassHasAttribute('mail', User2::class);
-        $this->assertClassHasAttribute('password', User2::class);
-        $this->assertClassHasAttribute('birthDate', User2::class);
-        $this->assertClassHasAttribute('createDate', User2::class);
-        $this->assertClassHasAttribute('userValidation', User2::class);
-        $this->assertClassHasAttribute('userValidationDate', User2::class);
-        $this->assertClassHasAttribute('userSuspended', User2::class);
-        $this->assertClassHasAttribute('userSuspendedDate', User2::class);
-        $this->assertClassHasAttribute('userDeleted', User2::class);
-        $this->assertClassHasAttribute('userDeletedDate', User2::class);
+     //   $this->user = $this->createValidator();
+        $this->user = new User();
+        $this->assertInstanceOf(User::class, $this->user);
+        $this->assertClassHasAttribute('id', User::class);
+        $this->assertClassHasAttribute('lastName', User::class);
+        $this->assertClassHasAttribute('firstName', User::class);
+        $this->assertClassHasAttribute('email', User::class);
+        $this->assertClassHasAttribute('password', User::class);
+        $this->assertClassHasAttribute('birthDate', User::class);
+        $this->assertClassHasAttribute('createDate', User::class);
+        $this->assertClassHasAttribute('userValidation', User::class);
+        $this->assertClassHasAttribute('userValidationDate', User::class);
+        $this->assertClassHasAttribute('userSuspended', User::class);
+        $this->assertClassHasAttribute('userSuspendedDate', User::class);
+        $this->assertClassHasAttribute('userDeleted', User::class);
+        $this->assertClassHasAttribute('userDeletedDate', User::class);
     }
 
 /************************$id**********************************/
@@ -35,7 +40,7 @@ class User2Test extends TestCase
      */
     public function testSetId($id)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setId($id);
         $this->assertSame($id, $this->user->getId());
     }
@@ -51,172 +56,95 @@ class User2Test extends TestCase
     }
 
 /************************$lastName**********************************/
-    /**
-     * @dataProvider additionProviderLastName
-     */
-    public function testSetLastName($lastName)
-    {
-        $this->user = new User2();
-        $this->user->setLastName($lastName);
 
-        $this->assertSame($lastName, $this->user->getLastName());
-    }
 
-    public function additionProviderLastName()
-    {
-        return [
-          ['Jean-Pierre'],
-          ['V'],
-          ["j'ai trente caractères"]
-
-        ];
-    }
-
-    /**
-     * @dataProvider additionProviderFailLastName
-     */
-    public function testFailSetLastName($lastName)
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->user = new User2();
-        $this->user->setLastName($lastName);
-    }
-
-    public function additionProviderFailLastName()
-    {
-        return [
-          ["J'ai plus de trente caratères donc ça ne marche pas"],
-          [''],
-          ['Macron de Paris 17']
-        ];
-    }
 
 /************************$firstName**********************************/
-    /**
-     * @dataProvider additionProviderFirstName
-     */
-    public function testSetFirstName($firstName)
-    {
-        $this->user = new User2();
-        $this->user->setFirstName($firstName);
 
-        $this->assertSame($firstName, $this->user->getFirstName());
+
+
+/************************$email**********************************/
+
+    public function getKernel(): KernelInterface
+    {
+        $kernel = self::bootKernel();
+        $kernel->boot();
+
+        return $kernel;
     }
 
-    public function additionProviderFirstName()
+    public function numberOfViolations(User $user, $groups)
     {
-        return [
-          ['Jean-Pierre'],
-          ['V'],
-          ['Macron de Paris']
-        ];
-    }
+        $kernel = $this->getKernel();
 
-    /**
-     * @dataProvider additionProviderFailFirstName
-     */
-    public function testFailSetFirstName($firstName)
-    {
-        $this->expectException(InvalidArgumentException::class);
+        $validator = $kernel->getContainer()->get('validator');
+        $violationList = $validator->validate($user, null, $groups);
 
-        $this->user = new User2();
-        $this->user->setFirstName($firstName);
-    }
-
-    public function additionProviderFailFirstName()
-    {
-        return [
-          ["J'ai plus de trente caratères donc ça ne marche pas"],
-          [''],
-          ['Macron de Paris 17']
-        ];
-    }
-
-/************************$mail**********************************/
-    /**
-     * @dataProvider additionProviderMail
-     */
-    public function testSetMail($mail)
-    {
-        $this->user = new User2();
-        $this->user->setMail($mail);
-
-        $this->assertSame($mail, $this->user->getMail());
-    }
-
-    public function additionProviderMail()
-    {
-        return [
-            ['test@test.com'],
-            ['lalalla@d.fr'],
-            ['g@te.de'],
-            ['gmail-dudu@tetest.fdsfd.de']
-        ];
+        return count($violationList);
     }
 
     /**
-     * @dataProvider additionProviderFailMail
+     * @dataProvider validUserProvider
      */
-    public function testSetFailMail($mail)
+    public function testValidUser(User $user, $groups, $numberOfViolations)
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->user = new User2();
-        $this->user->setMail($mail);
+       // var_dump($user);
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderFailMail()
+    public function validUserProvider()
     {
         return [
-            ['testtest.com'],
-            ['lalalla@dfr'],
-            ['@te.de'],
-            ['gmail-dudu.*@tetest.fdsfd.de']
+            [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), null, 0],
+            [User::build('Jean-Pierre', 'V', null, null, null), ['username'], 0],
+            [User::build('V', 'Jean-Pierre', null, null, null), ['username'], 0],
+            [User::build("j'ai trente caractères", "j'ai trente caractères", null, null, null), ['username'], 0],
+            [User::build(null, null, 'daniel@test.fr', null, null), ['email'], 0],
+            [User::build(null, null, 'test@test.com', null, null), ['email'], 0],
+            [User::build(null, null, 'lalalla@d.fr', null, null), ['email'], 0],
+            [User::build(null, null, 'g@te.de', null, null), ['email'], 0],
+            [User::build(null, null, null, 'Jean2825', null), ['password'], 0],
+            [User::build(null, null, null, 'T4G5h2f3R0aaaa', null), ['password'], 0],
+            [User::build(null, null, null, 'Macron41Paris', null), ['password'], 0],
+            [User::build(null, null, null, 'M1cdacda', null), ['password'], 0]
         ];
     }
+
+
+    /**
+     * @dataProvider invalidUserProvider
+     */
+    public function testInvalidUser(User $user, $groups, $numberOfViolations)
+    {
+       // var_dump($user);
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+    }
+
+    public function invalidUserProvider()
+    {
+        return [
+            [User::build(
+                "J'ai plus de trente caratères donc ça ne marche pas",
+                'V',
+                null,
+                null,
+                null
+            ), ['username'], 1],
+            [User::build("j'ai trente caractères", 'Macron de Paris 17', null, null, null), ['username'], 1],
+            [User::build(null, null, null, null, null), ['username'], 2],
+            [User::build(null, null, 'testtest.com', null, null), ['email'], 1],
+            [User::build(null, null, 'lalalla@dfr', null, null), ['email'], 1],
+            [User::build(null, null, '@te.de', null, null), ['email'], 1],
+            [User::build(null, null, '', null, null), ['email'], 1],
+            [User::build(null, null, 'gmail-dudu.*@tetest.fdsfd..de', null, null), ['email'], 1],
+            [User::build(null, null, null, 'jean2825', null), ['password'], 1],
+            [User::build(null, null, null, '123456rt', null), ['password'], 1],
+            [User::build(null, null, null, 'MacronParis', null), ['password'], 1]
+        ];
+    }
+
 
 /************************$password**********************************/
-    /**
-     * @dataProvider additionProviderPassword
-     */
-    public function testSetPassword($password)
-    {
-        $this->user = new User2();
-        $this->user->setPassword($password);
-        $passhash = $this->user->getPassword();
-        password_verify($password, $passhash);
-        $this->assertTrue(password_verify($password, $passhash));
-    }
-
-    public function additionProviderPassword()
-    {
-        return [
-          ['Jean2825'],
-          ['T4G5h2f3R0aaaa'],
-          ['Macron41Paris']
-        ];
-    }
-
-    /**
-     * @dataProvider additionProviderFailPassword
-     */
-    public function testFailSetPassword($password)
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->user = new User2();
-        $this->user->setPassword($password);
-    }
-
-    public function additionProviderFailPassword()
-    {
-        return [
-          ['jean2825'],
-          ['123456rt'],
-          ['MacronParis']
-        ];
-    }
 
 /************************$birthDate**********************************/
     /**
@@ -224,7 +152,7 @@ class User2Test extends TestCase
      */
     public function testSetBirthDate($birthDate)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setBirthDate($birthDate);
 
         $this->assertEquals($birthDate, $this->user->getBirthDate());
@@ -246,7 +174,7 @@ class User2Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setBirthDate($birthDate);
     }
 
@@ -265,7 +193,7 @@ class User2Test extends TestCase
      */
     public function testSetCreateDate($createDate)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setCreateDate($createDate);
 
         $this->assertEquals($createDate, $this->user->getCreateDate());
@@ -287,7 +215,7 @@ class User2Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setCreateDate($createDate);
     }
 
@@ -305,7 +233,7 @@ class User2Test extends TestCase
      */
     public function testSetUserValidation($userValidation)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserValidation($userValidation);
         $this->assertSame($userValidation, $this->user->getUserValidation());
     }
@@ -324,7 +252,7 @@ class User2Test extends TestCase
      */
     public function testSetUserValidationDate($userValidationDate)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserValidationDate($userValidationDate);
 
         $this->assertEquals($userValidationDate, $this->user->getUserValidationDate());
@@ -347,7 +275,7 @@ class User2Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserValidationDate($userValidationDate);
     }
 
@@ -365,7 +293,7 @@ class User2Test extends TestCase
      */
     public function testSetUserSuspended($userSuspended)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserSuspended($userSuspended);
         $this->assertSame($userSuspended, $this->user->getUserSuspended());
     }
@@ -384,7 +312,7 @@ class User2Test extends TestCase
      */
     public function testSetUserSuspendedDate($userSuspendedDate)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserSuspendedDate($userSuspendedDate);
 
         $this->assertEquals($userSuspendedDate, $this->user->getUserSuspendedDate());
@@ -407,7 +335,7 @@ class User2Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserSuspendedDate($userSuspendedDate);
     }
 
@@ -425,7 +353,7 @@ class User2Test extends TestCase
      */
     public function testSetUserDeleted($userDeleted)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserDeleted($userDeleted);
         $this->assertSame($userDeleted, $this->user->getUserDeleted());
     }
@@ -444,7 +372,7 @@ class User2Test extends TestCase
      */
     public function testSetUserDeletedDate($userDeletedDate)
     {
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserDeletedDate($userDeletedDate);
 
         $this->assertEquals($userDeletedDate, $this->user->getUserDeletedDate());
@@ -467,7 +395,7 @@ class User2Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User2();
+        $this->user = new User();
         $this->user->setUserDeletedDate($userDeletedDate);
     }
 
