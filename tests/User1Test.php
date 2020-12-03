@@ -3,8 +3,8 @@
 namespace App\Tests;
 
 use App\Entity\User1;
+use DateInterval;
 use DateTime;
-
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -209,13 +209,39 @@ class User1Test extends TestCase
         $this->user->setPassword($password);
         $passwordLength = strlen($this->user->getPassword());
         $this->assertGreaterThanOrEqual('8', $passwordLength);
+
+        $passhash = $this->user->getPassword();
+        password_verify($password, $passhash);
+        $this->assertTrue(password_verify($password, $passhash));
     }
 
     public function additionPassword()
     {
         return [
             ['12345a67P8'],
-            ['12345678P']
+            ['123456a78P']
+        ];
+    }
+
+    //!
+
+    /**
+     * @dataProvider additionProviderFailPassword
+     */
+    public function testFailSetPassword($password)
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->user = new User1();
+        $passwordLength = strlen($this->user->setPassword($password));
+    }
+
+    public function additionProviderFailPassword()
+    {
+        return [
+            ['jean2825p'],
+            ['123456rt'],
+            ['MacronParis']
         ];
     }
 
@@ -249,4 +275,21 @@ class User1Test extends TestCase
     //             ['30.11.2001']
     //         ];
     //     }
+
+    // final public function testConstructor(): void
+    // {
+    //     $user = new User1();
+
+    //     $this->assertInstanceOf(User::class, $user);
+    //     $this->assertInstanceOf(DateTimeInterface::class, $user->createdAt());
+    //     $this->assertLessThanOrEqual(new DateTime(), $user->createdAt());
+    // }
+
+    // final public function testUserBirthDate(): void
+    // {
+    //     $user = new User1();
+    //     $user->setBirthDate(new DateTime("2000-06-12"));
+
+    //     $this->assertTrue($user->isUserOldEnough());
+    // }
 }
