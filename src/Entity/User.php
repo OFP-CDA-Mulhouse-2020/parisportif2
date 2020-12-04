@@ -37,56 +37,59 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="{{ label }} vide",
-     * groups={"username"}
+     * @Assert\NotBlank(message="Nom vide",
+     * groups={"username", "subscribe"}
      * )
      * @Assert\Regex(
      * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     * message="{{ label }} : {{ value }} incorrect",
-     * groups={"username"}
+     * message="Nom : {{ value }} incorrect",
+     * groups={"username", "subscribe"}
      * )
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="{{ label }} vide",
-     * groups={"username"}
+     * @Assert\NotBlank(message="Prénom vide",
+     * groups={"username", "subscribe"}
      * )
      * @Assert\Regex(
      * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     * message="{{ label }} : {{ value }} incorrect",
-     * groups={"username"}
+     * message="Prénom : {{ value }} incorrect",
+     * groups={"username", "subscribe"}
      * )
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="{{ label }} vide",
-     * groups={"email"}
+     * @Assert\NotBlank(message="Email vide",
+     * groups={"email","connexion", "subscribe"}
      * )
      * @Assert\Email(message="Format email incorrect",
-     * groups={"email"}
+     * groups={"email","connexion", "subscribe"}
      * )
      */
     private string $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="{{ label }} vide",
-     * groups={"password"}
+     * @Assert\NotBlank(message="Password vide",
+     * groups={"password","connexion", "subscribe"}
      * )
      * @Assert\Regex(
      * pattern =  "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
      * message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
-     * groups={"password"}
+     * groups={"password","connexion", "subscribe"}
      * )
      */
     private string $password;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="Date de naissance vide",
+     * groups={"password","birthDate", "subscribe"}
+     * )
      */
     private DateTimeInterface $birthDate;
 

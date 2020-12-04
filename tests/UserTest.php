@@ -9,16 +9,14 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class UserTest extends KernelTestCase
 {
 
     public function testAssertInstanceOfUser()
     {
-     //   $this->user = $this->createValidator();
-        $this->user = new User();
-        $this->assertInstanceOf(User::class, $this->user);
+        $user = new User();
+        $this->assertInstanceOf(User::class, $user);
         $this->assertClassHasAttribute('id', User::class);
         $this->assertClassHasAttribute('lastName', User::class);
         $this->assertClassHasAttribute('firstName', User::class);
@@ -40,9 +38,9 @@ class UserTest extends KernelTestCase
      */
     public function testSetId($id)
     {
-        $this->user = new User();
-        $this->user->setId($id);
-        $this->assertSame($id, $this->user->getId());
+        $user = new User();
+        $user->setId($id);
+        $this->assertSame($id, $user->getId());
     }
 
     public function additionProviderId()
@@ -152,10 +150,10 @@ class UserTest extends KernelTestCase
      */
     public function testSetBirthDate($birthDate)
     {
-        $this->user = new User();
-        $this->user->setBirthDate($birthDate);
+        $user = new User();
+        $user->setBirthDate($birthDate);
 
-        $this->assertEquals($birthDate, $this->user->getBirthDate());
+        $this->assertEquals($birthDate, $user->getBirthDate());
     }
 
     public function additionProviderBirthDate()
@@ -174,8 +172,8 @@ class UserTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User();
-        $this->user->setBirthDate($birthDate);
+        $user = new User();
+        $user->setBirthDate($birthDate);
     }
 
     public function additionProviderFailBirthDate()
@@ -193,10 +191,10 @@ class UserTest extends KernelTestCase
      */
     public function testSetCreateDate($createDate)
     {
-        $this->user = new User();
-        $this->user->setCreateDate($createDate);
+        $user = new User();
+        $user->setCreateDate($createDate);
 
-        $this->assertEquals($createDate, $this->user->getCreateDate());
+        $this->assertEquals($createDate, $user->getCreateDate());
     }
 
     public function additionProviderCreateDate()
@@ -215,8 +213,8 @@ class UserTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User();
-        $this->user->setCreateDate($createDate);
+        $user = new User();
+        $user->setCreateDate($createDate);
     }
 
     public function additionProviderFailCreateDate()
@@ -233,9 +231,9 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserValidation($userValidation)
     {
-        $this->user = new User();
-        $this->user->setUserValidation($userValidation);
-        $this->assertSame($userValidation, $this->user->getUserValidation());
+        $user = new User();
+        $user->setUserValidation($userValidation);
+        $this->assertSame($userValidation, $user->getUserValidation());
     }
 
     public function additionProviderUserValidation()
@@ -252,10 +250,10 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserValidationDate($userValidationDate)
     {
-        $this->user = new User();
-        $this->user->setUserValidationDate($userValidationDate);
+        $user = new User();
+        $user->setUserValidationDate($userValidationDate);
 
-        $this->assertEquals($userValidationDate, $this->user->getUserValidationDate());
+        $this->assertEquals($userValidationDate, $user->getUserValidationDate());
     }
 
     public function additionProviderUserValidationDate()
@@ -275,8 +273,8 @@ class UserTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User();
-        $this->user->setUserValidationDate($userValidationDate);
+        $user = new User();
+        $user->setUserValidationDate($userValidationDate);
     }
 
     public function additionProviderFailUserValidationDate()
@@ -293,9 +291,9 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserSuspended($userSuspended)
     {
-        $this->user = new User();
-        $this->user->setUserSuspended($userSuspended);
-        $this->assertSame($userSuspended, $this->user->getUserSuspended());
+        $user = new User();
+        $user->setUserSuspended($userSuspended);
+        $this->assertSame($userSuspended, $user->getUserSuspended());
     }
 
     public function additionProviderUserSuspended()
@@ -312,10 +310,10 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserSuspendedDate($userSuspendedDate)
     {
-        $this->user = new User();
-        $this->user->setUserSuspendedDate($userSuspendedDate);
+        $user = new User();
+        $user->setUserSuspendedDate($userSuspendedDate);
 
-        $this->assertEquals($userSuspendedDate, $this->user->getUserSuspendedDate());
+        $this->assertEquals($userSuspendedDate, $user->getUserSuspendedDate());
     }
 
     public function additionProviderUserSuspendedDate()
@@ -335,8 +333,8 @@ class UserTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User();
-        $this->user->setUserSuspendedDate($userSuspendedDate);
+        $user = new User();
+        $user->setUserSuspendedDate($userSuspendedDate);
     }
 
     public function additionProviderFailUserSuspendedDate()
@@ -353,9 +351,9 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserDeleted($userDeleted)
     {
-        $this->user = new User();
-        $this->user->setUserDeleted($userDeleted);
-        $this->assertSame($userDeleted, $this->user->getUserDeleted());
+        $user = new User();
+        $user->setUserDeleted($userDeleted);
+        $this->assertSame($userDeleted, $user->getUserDeleted());
     }
 
     public function additionProviderUserDeleted()
@@ -372,10 +370,10 @@ class UserTest extends KernelTestCase
      */
     public function testSetUserDeletedDate($userDeletedDate)
     {
-        $this->user = new User();
-        $this->user->setUserDeletedDate($userDeletedDate);
+        $user = new User();
+        $user->setUserDeletedDate($userDeletedDate);
 
-        $this->assertEquals($userDeletedDate, $this->user->getUserDeletedDate());
+        $this->assertEquals($userDeletedDate, $user->getUserDeletedDate());
     }
 
     public function additionProviderUserDeletedDate()
@@ -395,8 +393,8 @@ class UserTest extends KernelTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->user = new User();
-        $this->user->setUserDeletedDate($userDeletedDate);
+        $user = new User();
+        $user->setUserDeletedDate($userDeletedDate);
     }
 
     public function additionProviderFailUserDeletedDate()

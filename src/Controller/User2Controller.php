@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserLoginType;
+use App\Form\UserSubscribeType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +25,9 @@ class User2Controller extends AbstractController
 
 
     /**
-     * @Route("/user/form", name="user_form")
+     * @Route("/home/connexion", name="home_connexion")
      */
-    public function userForm(Request $request): Response
+    public function userConnexion(Request $request): Response
     {
         $form = $this->createForm(UserLoginType::class);
 
@@ -35,10 +36,10 @@ class User2Controller extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userData = $form->getData();
 
-            return $this->redirectToRoute('user_logged');
+            return $this->redirectToRoute('home_logged');
         }
 
-        return $this->render('user2/index.html.twig', [
+        return $this->render('user2/connexionForm.html.twig', [
             'form' => $form->createView(),
 
         ]);
@@ -58,7 +59,7 @@ class User2Controller extends AbstractController
     }
 */
     /**
-     * @Route("/user/logged", name="user_logged")
+     * @Route("/home/logged", name="home_logged")
      */
     public function userLogged(Request $request): Response
     {
@@ -67,5 +68,27 @@ class User2Controller extends AbstractController
 
         //  var_dump($testUser);
         return $this->render('home/welcome.html.twig', []);
+    }
+
+
+    /**
+     * @Route("/home/subscribe", name="home_subscribe")
+     */
+    public function userSubscribe(Request $request): Response
+    {
+        $form = $this->createForm(UserSubscribeType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userData = $form->getData();
+
+            return $this->redirectToRoute('home_logged');
+        }
+
+        return $this->render('user2/subscribeForm.html.twig', [
+            'form' => $form->createView(),
+
+        ]);
     }
 }

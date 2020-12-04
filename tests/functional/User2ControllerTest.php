@@ -8,19 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class User2ControllerTest extends WebTestCase
 {
 
-    public function testUserFormReponse200()
+    public function testUserConnexionReponse200()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/user/form');
-        //    $this->assertResponseIsSuccessful();
-        //    $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/home/connexion');
         $this->assertResponseStatusCodeSame(200);
     }
 
-    public function testUserFormWithAllLabel()
+    public function testUserConnexionWithAllLabel()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/user/form');
+        $crawler = $client->request('GET', '/home/connexion');
         $this->assertSelectorExists('form');
         $this->assertSelectorExists('form input[type=submit]');
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
@@ -28,10 +26,10 @@ class User2ControllerTest extends WebTestCase
     }
 
 
-    public function testFormSubmitWithSuccess()
+    public function testConnexionSubmitWithSuccess()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/user/form');
+        $crawler = $client->request('GET', '/home/connexion');
 
         $form = $crawler->filter('form')->form();
 
@@ -40,24 +38,44 @@ class User2ControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertResponseRedirects('/user/logged');
+        $this->assertResponseRedirects('/home/logged');
         $crawler = $client->followRedirect();
 
         $this->assertSelectorTextContains('h1', 'Bienvenue User !');
     }
 
 
-    public function testInvalidFormSubmit()
+    public function testInvalidConnexionSubmit()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/user/form');
+        $crawler = $client->request('GET', '/home/connexion');
 
         $form = $crawler->filter('form')->form();
 
         $crawler = $client->submit($form);
 
-        $this->assertSelectorTextContains('', 'password incorrect');
-        $this->assertSelectorTextContains('', 'email incorrect');
+        $this->assertSelectorTextContains('', 'email vide');
+        $this->assertSelectorTextContains('', 'password vide');
+    }
+
+    public function testUserSubscribeResponse200()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/home/subscribe');
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    public function testUserSubscribeWithAllLabel()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/home/subscribe');
+        $this->assertSelectorExists('form');
+        $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
+        $this->assertSelectorExists('form input[type=submit]');
     }
 
 
