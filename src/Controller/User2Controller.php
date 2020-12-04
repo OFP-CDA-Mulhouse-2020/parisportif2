@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserLoginType;
+use App\Form\UserLoginType2;
 use App\Form\UserSubscribeType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +25,11 @@ class User2Controller extends AbstractController
 
 
     /**
-     * @Route("/home/connexion", name="home_connexion")
+     * @Route("/connexion", name="home_connexion")
      */
     public function userConnexion(Request $request): Response
     {
-        $form = $this->createForm(UserLoginType::class);
+        $form = $this->createForm(UserLoginType2::class);
 
         $form->handleRequest($request);
 
@@ -58,21 +58,9 @@ class User2Controller extends AbstractController
 
     }
 */
-    /**
-     * @Route("/home/logged", name="home_logged")
-     */
-    public function userLogged(Request $request): Response
-    {
-
-        // $testUser = $userRepository->findBy(['email'=>'daniel.cda@test.com']);
-
-        //  var_dump($testUser);
-        return $this->render('home/welcome.html.twig', []);
-    }
-
 
     /**
-     * @Route("/home/subscribe", name="home_subscribe")
+     * @Route("/subscribe", name="home_subscribe")
      */
     public function userSubscribe(Request $request): Response
     {
@@ -90,5 +78,17 @@ class User2Controller extends AbstractController
             'form' => $form->createView(),
 
         ]);
+    }
+
+    /**
+     * @Route("/home/logged", name="home_logged")
+     */
+    public function userLogged(Request $request): Response
+    {
+
+        // $testUser = $userRepository->findBy(['email'=>'daniel.cda@test.com']);
+
+        //  var_dump($testUser);
+        return $this->render('home/welcome.html.twig', []);
     }
 }

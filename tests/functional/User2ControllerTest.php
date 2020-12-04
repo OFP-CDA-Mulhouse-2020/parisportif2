@@ -11,14 +11,14 @@ class User2ControllerTest extends WebTestCase
     public function testUserConnexionReponse200()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/connexion');
+        $crawler = $client->request('GET', '/connexion');
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testUserConnexionWithAllLabel()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/connexion');
+        $crawler = $client->request('GET', '/connexion');
         $this->assertSelectorExists('form');
         $this->assertSelectorExists('form input[type=submit]');
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
@@ -29,12 +29,12 @@ class User2ControllerTest extends WebTestCase
     public function testConnexionSubmitWithSuccess()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/connexion');
+        $crawler = $client->request('GET', '/connexion');
 
         $form = $crawler->filter('form')->form();
 
-        $form['user_login[email]'] = 'daniel.cda@test.com';
-        $form['user_login[password]'] = 'M1cdacda8';
+        $form['user_login_type2[email]'] = 'daniel.cda@test.com';
+        $form['user_login_type2[password]'] = 'M1cdacda8';
 
         $crawler = $client->submit($form);
 
@@ -48,34 +48,34 @@ class User2ControllerTest extends WebTestCase
     public function testInvalidConnexionSubmit()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/connexion');
+        $crawler = $client->request('GET', '/connexion');
 
         $form = $crawler->filter('form')->form();
 
         $crawler = $client->submit($form);
 
-        $this->assertSelectorTextContains('', 'email vide');
-        $this->assertSelectorTextContains('', 'password vide');
+        $this->assertSelectorTextContains('', 'Email vide');
+        $this->assertSelectorTextContains('', 'Password vide');
     }
 
     public function testUserSubscribeResponse200()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/subscribe');
+        $crawler = $client->request('GET', '/subscribe');
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testUserSubscribeWithAllLabel()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/home/subscribe');
+        $crawler = $client->request('GET', '/subscribe');
         $this->assertSelectorExists('form');
         $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
-        $this->assertSelectorExists('form input[type=submit]');
+        $this->assertSelectorExists('form button[type=submit]');
     }
 
 

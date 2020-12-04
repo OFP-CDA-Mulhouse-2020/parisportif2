@@ -78,7 +78,7 @@ class User
      * groups={"password","connexion", "subscribe"}
      * )
      * @Assert\Regex(
-     * pattern =  "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
+     * pattern =  "/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
      * message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
      * groups={"password","connexion", "subscribe"}
      * )
@@ -88,18 +88,33 @@ class User
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Date de naissance vide",
-     * groups={"password","birthDate", "subscribe"}
+     * groups={"birthDate", "subscribe"}
+     * )
+     * @Assert\LessThanOrEqual(value="-18 years",
+     * message="Vous n'avez pas 18 ans minimum",
+     * groups={"birthDate", "subscribe"}
      * )
      */
-    private DateTimeInterface $birthDate;
+    private ?DateTimeInterface $birthDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="Date de création vide",
+     * groups={"createDate"}
+     * )
+     * @Assert\LessThanOrEqual(value="today",
+     * message="Date de création incorrecte",
+     * groups={"createDate", "subscribe"}
+     * )
      */
     private DateTimeInterface $createDate;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type(
+     * type="bool",
+     * message="{{ value }} n'est pas du type {{ type }}"
+     * )
      */
     private bool $userValidation;
 
@@ -258,13 +273,8 @@ class User
      *
      * @return  self
      */
-    public function setBirthDate(\DateTimeInterface $birthDate): self
+    public function setBirthDate(?\DateTimeInterface $birthDate): self
     {
-        $minAge18 = (new DateTime())->sub(new DateInterval('P18Y'));
-
-        if ($birthDate > $minAge18) {
-            throw new InvalidArgumentException('Utilisateur n\'a pas encore 18 ans');
-        }
         $this->birthDate = $birthDate;
 
         return $this;
@@ -277,11 +287,6 @@ class User
      */
     public function setCreateDate(\DateTimeInterface $createDate): self
     {
-        $minCreationDate = new DateTime();
-
-        if ($createDate > $minCreationDate) {
-            throw new InvalidArgumentException('Date de création invalide');
-        }
         $this->createDate = $createDate;
 
         return $this;
@@ -306,11 +311,6 @@ class User
      */
     public function setUserValidationDate(?\DateTimeInterface $userValidationDate): self
     {
-        $minValidationDate = new DateTime();
-
-        if ($userValidationDate > $minValidationDate && isset($userValidationDate)) {
-            throw new InvalidArgumentException('Date de validation invalide');
-        }
         $this->userValidationDate = $userValidationDate;
 
         return $this;
@@ -335,11 +335,12 @@ class User
      */
     public function setUserSuspendedDate(?\DateTimeInterface $userSuspendedDate): self
     {
+/*
         $minSuspendedDate = new DateTime();
 
         if ($userSuspendedDate > $minSuspendedDate && isset($userSuspendedDate)) {
             throw new InvalidArgumentException('Date de suspension invalide');
-        }
+        }*/
         $this->userSuspendedDate = $userSuspendedDate;
 
         return $this;
@@ -364,11 +365,6 @@ class User
      */
     public function setUserDeletedDate(?\DateTimeInterface $userDeletedDate): self
     {
-        $minDeletedDate = new DateTime();
-
-        if ($userDeletedDate > $minDeletedDate && isset($userDeletedDate)) {
-            throw new InvalidArgumentException('Date de suppression invalide');
-        }
         $this->userDeletedDate = $userDeletedDate;
 
         return $this;

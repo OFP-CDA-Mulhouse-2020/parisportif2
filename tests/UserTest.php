@@ -32,7 +32,7 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('userDeletedDate', User::class);
     }
 
-/************************$id**********************************/
+    /************************$id**********************************/
     /**
      * @dataProvider additionProviderId
      */
@@ -46,22 +46,14 @@ class UserTest extends KernelTestCase
     public function additionProviderId()
     {
         return [
-          [1],
-          [23],
-          [258],
-          [455]
+            [1],
+            [23],
+            [258],
+            [455]
         ];
     }
 
-/************************$lastName**********************************/
-
-
-
-/************************$firstName**********************************/
-
-
-
-/************************$email**********************************/
+    /************************$user**********************************/
 
     public function getKernel(): KernelInterface
     {
@@ -86,7 +78,6 @@ class UserTest extends KernelTestCase
      */
     public function testValidUser(User $user, $groups, $numberOfViolations)
     {
-       // var_dump($user);
         $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
@@ -97,14 +88,12 @@ class UserTest extends KernelTestCase
             [User::build('Jean-Pierre', 'V', null, null, null), ['username'], 0],
             [User::build('V', 'Jean-Pierre', null, null, null), ['username'], 0],
             [User::build("j'ai trente caractères", "j'ai trente caractères", null, null, null), ['username'], 0],
-            [User::build(null, null, 'daniel@test.fr', null, null), ['email'], 0],
-            [User::build(null, null, 'test@test.com', null, null), ['email'], 0],
-            [User::build(null, null, 'lalalla@d.fr', null, null), ['email'], 0],
-            [User::build(null, null, 'g@te.de', null, null), ['email'], 0],
-            [User::build(null, null, null, 'Jean2825', null), ['password'], 0],
-            [User::build(null, null, null, 'T4G5h2f3R0aaaa', null), ['password'], 0],
-            [User::build(null, null, null, 'Macron41Paris', null), ['password'], 0],
-            [User::build(null, null, null, 'M1cdacda', null), ['password'], 0]
+            [User::build(null, null, 'daniel@test.fr', 'Jean2825', null), ['connexion'], 0],
+            [User::build(null, null, 'test@test.com', 'T4G5h2f3R0aaaa', null), ['connexion'], 0],
+            [User::build(null, null, 'lalalla@d.fr', 'Macron41Paris', null), ['connexion'], 0],
+            [User::build(null, null, 'g@te.de', 'M1cdacda', null), ['connexion'], 0],
+            [User::build(null, null, null, null, '2002-11-12'), ['birthDate'], 0],
+            [User::build(null, null, null, null, '1995-12-12'), ['birthDate'], 0],
         ];
     }
 
@@ -114,7 +103,6 @@ class UserTest extends KernelTestCase
      */
     public function testInvalidUser(User $user, $groups, $numberOfViolations)
     {
-       // var_dump($user);
         $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
@@ -137,55 +125,13 @@ class UserTest extends KernelTestCase
             [User::build(null, null, 'gmail-dudu.*@tetest.fdsfd..de', null, null), ['email'], 1],
             [User::build(null, null, null, 'jean2825', null), ['password'], 1],
             [User::build(null, null, null, '123456rt', null), ['password'], 1],
-            [User::build(null, null, null, 'MacronParis', null), ['password'], 1]
+            [User::build(null, null, null, 'MacronParis', null), ['password'], 1],
+            [User::build(null, null, null, null, '2012-11-12'), ['birthDate'], 1],
+            [User::build(null, null, null, null, '2020-12-12'), ['birthDate'], 1],
         ];
     }
 
-
-/************************$password**********************************/
-
-/************************$birthDate**********************************/
-    /**
-     * @dataProvider additionProviderBirthDate
-     */
-    public function testSetBirthDate($birthDate)
-    {
-        $user = new User();
-        $user->setBirthDate($birthDate);
-
-        $this->assertEquals($birthDate, $user->getBirthDate());
-    }
-
-    public function additionProviderBirthDate()
-    {
-        return [
-          [DateTime::createFromFormat('Y-m-d', '2002-11-12')],
-          [DateTime::createFromFormat('Y-m-d', '1995-12-12')],
-          [(new DateTime())->sub(new DateInterval('P18Y'))]
-        ];
-    }
-
-    /**
-     * @dataProvider additionProviderFailBirthDate
-     */
-    public function testFailSetBirthDate($birthDate)
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $user = new User();
-        $user->setBirthDate($birthDate);
-    }
-
-    public function additionProviderFailBirthDate()
-    {
-        return [
-            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-            [DateTime::createFromFormat('Y-m-d', '2020-12-12')],
-            [new DateTime()]
-        ];
-    }
-
-/************************$createDate**********************************/
+    /************************$createDate**********************************/
     /**
      * @dataProvider additionProviderCreateDate
      */
@@ -200,16 +146,16 @@ class UserTest extends KernelTestCase
     public function additionProviderCreateDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2002-11-12')],
-          [DateTime::createFromFormat('Y-m-d', '1995-12-12')],
-          [(new DateTime())->sub(new DateInterval('P18Y'))]
+            [DateTime::createFromFormat('Y-m-d', '2002-11-12')],
+            [DateTime::createFromFormat('Y-m-d', '1995-12-12')],
+            [(new DateTime())->sub(new DateInterval('P18Y'))]
         ];
     }
 
     /**
      * @dataProvider additionProviderFailCreateDate
      */
-    public function testFailSetCreateDate($createDate)
+/*    public function testFailSetCreateDate($createDate)
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -220,12 +166,12 @@ class UserTest extends KernelTestCase
     public function additionProviderFailCreateDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-          [(new DateTime())->add(new DateInterval('P1D'))]
+            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
+            [(new DateTime())->add(new DateInterval('P1D'))]
         ];
     }
-
-/************************$userValidation**********************************/
+*/
+    /************************$userValidation**********************************/
     /**
      * @dataProvider additionProviderUserValidation
      */
@@ -239,12 +185,12 @@ class UserTest extends KernelTestCase
     public function additionProviderUserValidation()
     {
         return [
-          [true],
-          [false]
+            [true],
+            [false]
         ];
     }
 
-/************************$userValidationDate**********************************/
+    /************************$userValidationDate**********************************/
     /**
      * @dataProvider additionProviderUserValidationDate
      */
@@ -259,17 +205,17 @@ class UserTest extends KernelTestCase
     public function additionProviderUserValidationDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-          [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-          [new DateTime()],
-          [null]
+            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
+            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
+            [new DateTime()],
+            [null]
         ];
     }
 
     /**
      * @dataProvider additionProviderFailUserValidationDate
      */
-    public function testFailSetUserValidationDate($userValidationDate)
+ /*   public function testFailSetUserValidationDate($userValidationDate)
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -280,12 +226,12 @@ class UserTest extends KernelTestCase
     public function additionProviderFailUserValidationDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-          [(new DateTime())->add(new DateInterval('P1D'))]
+            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
+            [(new DateTime())->add(new DateInterval('P1D'))]
         ];
     }
-
-/************************$userSuspended**********************************/
+*/
+    /************************$userSuspended**********************************/
     /**
      * @dataProvider additionProviderUserSuspended
      */
@@ -299,12 +245,12 @@ class UserTest extends KernelTestCase
     public function additionProviderUserSuspended()
     {
         return [
-          [true],
-          [false]
+            [true],
+            [false]
         ];
     }
 
-/************************$userSuspendedDate**********************************/
+    /************************$userSuspendedDate**********************************/
     /**
      * @dataProvider additionProviderUserSuspendedDate
      */
@@ -319,17 +265,17 @@ class UserTest extends KernelTestCase
     public function additionProviderUserSuspendedDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-          [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-          [new DateTime()],
-          [null]
+            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
+            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
+            [new DateTime()],
+            [null]
         ];
     }
 
     /**
      * @dataProvider additionProviderFailUserSuspendedDate
      */
-    public function testFailSetUserSuspendedDate($userSuspendedDate)
+ /*   public function testFailSetUserSuspendedDate($userSuspendedDate)
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -340,12 +286,12 @@ class UserTest extends KernelTestCase
     public function additionProviderFailUserSuspendedDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-          [(new DateTime())->add(new DateInterval('P1D'))]
+            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
+            [(new DateTime())->add(new DateInterval('P1D'))]
         ];
     }
-
-/************************$userDeleted**********************************/
+*/
+    /************************$userDeleted**********************************/
     /**
      * @dataProvider additionProviderUserDeleted
      */
@@ -359,12 +305,12 @@ class UserTest extends KernelTestCase
     public function additionProviderUserDeleted()
     {
         return [
-          [true],
-          [false]
+            [true],
+            [false]
         ];
     }
 
-/************************$userDeletedDate**********************************/
+    /************************$userDeletedDate**********************************/
     /**
      * @dataProvider additionProviderUserDeletedDate
      */
@@ -379,17 +325,17 @@ class UserTest extends KernelTestCase
     public function additionProviderUserDeletedDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-          [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-          [new DateTime()],
-          [null]
+            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
+            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
+            [new DateTime()],
+            [null]
         ];
     }
 
     /**
      * @dataProvider additionProviderFailUserDeletedDate
      */
-    public function testFailSetUserDeletedDate($userDeletedDate)
+ /*   public function testFailSetUserDeletedDate($userDeletedDate)
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -400,8 +346,8 @@ class UserTest extends KernelTestCase
     public function additionProviderFailUserDeletedDate()
     {
         return [
-          [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-          [(new DateTime())->add(new DateInterval('P1D'))]
+            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
+            [(new DateTime())->add(new DateInterval('P1D'))]
         ];
-    }
+    }*/
 }
