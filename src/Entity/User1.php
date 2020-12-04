@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use DateTimeInterface;
 use DateTime;
-
+use DateTimeZone;
 
 /**
  * @ORM\Entity(repositoryClass=User1Repository::class)
@@ -19,32 +19,32 @@ class User1
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $password;
+    private string $password;
 
     // /**
-    //  * @ORM\Column(type="string", length=255)
+    //  * @ORM\Column(type="DateTimeInterface", length=255)
     //  */
-    private $birthDate;
+    private DatetimeInterface $birthDate;
 
 
     private const PATTERN_NAME = "/^[a-zA-ZÀ-ÿ '-]{1,30}$/";
@@ -78,7 +78,6 @@ class User1
     public function setName(string $name): self
     {
         if (!preg_match(self::PATTERN_NAME, $name)) {
-
             throw new InvalidArgumentException('The Name is Invalid');
         }
 
@@ -97,7 +96,6 @@ class User1
     public function setFirstName(string $firstName): self
     {
         if (!preg_match(self::PATTERN_NAME, $firstName)) {
-
             throw new InvalidArgumentException('The firstname is Invalid');
         }
 
@@ -135,14 +133,65 @@ class User1
         if (strlen($password) < 8) {
             throw new InvalidArgumentException('Password length is too short !');
         }
-        // if (preg_match(self::PATTERN_PASS, $password)) {
-        //     throw new InvalidArgumentException('Password must contain at least one number and an uppercase letter !');
-        // }
+        if (!preg_match(self::PATTERN_PASS, $password)) {
+            throw new InvalidArgumentException('Password must contain at least one number and an uppercase letter !');
+        }
 
-        $this->password = $password;
-        // $this->password = password_hash($password, PASSWORD_DEFAULT);
+        // $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
 
         return $this;
+    }
+
+
+
+
+    // final public function createdAt(): DateTimeInterface
+    // {
+    //     return $this->createdAt;
+    // }
+
+    // final public function setBirthDate(DateTimeInterface $birthDate): self
+    // {
+    //     $this->birthDate = $birthDate;
+
+    //     return $this;
+    // }
+
+    // final public function isUserOldEnough(): bool
+    // {
+    //     $now = new DateTime();
+    //     $now
+    //         ->setTimezone(new DateTimeZone("Europe/Paris"))
+    //         ->setTime(0, 0);
+
+    //     return $now->diff($this->getBirthDate()) >= "18";
+    // }
+
+    // private function getBirthDate(): DateTimeInterface
+    // {
+    //     return $this->birthDate;
+    // }
+
+    // final public function getTimeZone(): DateTimeZone
+    // {
+    //     return $this->timeZone;
+    // }
+
+
+
+
+    public function setBirthDate(DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+
+    public function getBirthDate(): DateTimeInterface
+    {
+        return $this->birthDate;
     }
 
 
