@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\User1;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -15,7 +15,7 @@ class UserLoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('lastName', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Entrez votre identifiant',
                     'class' => 'name'
@@ -36,7 +36,7 @@ class UserLoginType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User1::class,
+            'data_class' => User::class,
         ]);
     }
 }

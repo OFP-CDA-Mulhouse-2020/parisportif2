@@ -2,4 +2,6 @@ parameters:
 	level: 5
 	paths:
 		- src
-
+		- tests
+	bootstrapFiles:
+		- vendor/bin/.phpunit/phpunit-9.3-0/vendor/autoload.php

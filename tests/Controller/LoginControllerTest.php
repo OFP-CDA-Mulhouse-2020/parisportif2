@@ -44,7 +44,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/login');
 
         $form = $crawler->filter('button[class="loginForm_submit"]')->form([
-            'user_login[name]' => 'John',
+            'user_login[lastName]' => 'John',
             'user_login[password]' => '1epppdpdpdpE'
         ]);
 

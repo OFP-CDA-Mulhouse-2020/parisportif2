@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,16 +14,28 @@ class UserFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
         $user = new User();
-        $user->setLogin('danytest')
-            ->setMail('daniel.cda@test.com')
-            ->setPassword('123456789');
+        $user->setFirstName('danytest')
+            ->setLastName('danytest')
+            ->setEmail('daniel.cda@test.com')
+            ->setPassword('M1cdacda8')
+            ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
+            ->setCreateDate(new DateTime())
+            ->setUserValidation(false)
+            ->setUserSuspended(true)
+            ->setUserDeleted(false);
 
         $manager->persist($user);
 
         $user = new User();
-        $user->setLogin('ladjitest')
-            ->setMail('ladji.cda@test.com')
-            ->setPassword('123456789');
+        $user->setFirstName('ladjitest')
+            ->setLastName('ladjitest')
+            ->setEmail('ladji.cda@test.com')
+            ->setPassword('M1cdacda8')
+            ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
+            ->setCreateDate(new DateTime())
+            ->setUserValidation(false)
+            ->setUserSuspended(true)
+            ->setUserDeleted(false);
 
         $manager->persist($user);
 
