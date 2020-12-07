@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class LoginControllerTest extends WebTestCase
 {
@@ -57,5 +58,18 @@ class LoginControllerTest extends WebTestCase
         // $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertResponseRedirects('/login/check');
         $client->followRedirect();
+    }
+
+    public function testInvalidConnexionSubmit()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/connexion');
+
+        $form = $crawler->filter('form')->form();
+
+        $crawler = $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Email vide');
+        $this->assertSelectorTextContains('', 'Password vide');
     }
 }
