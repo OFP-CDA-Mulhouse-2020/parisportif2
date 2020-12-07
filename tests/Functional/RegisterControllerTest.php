@@ -5,20 +5,20 @@ namespace App\Tests\Functional;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class User2ControllerTest extends WebTestCase
+class RegisterControllerTest extends WebTestCase
 {
 
-    public function testUserConnexionReponse200()
+    public function testLoginReponse200()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/connexion');
+        $crawler = $client->request('GET', '/login');
         $this->assertResponseStatusCodeSame(200);
     }
 
-    public function testUserConnexionWithAllLabel()
+    public function testLoginWithAllLabel()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/connexion');
+        $crawler = $client->request('GET', '/login');
         $this->assertSelectorExists('form');
         $this->assertSelectorExists('form input[type=submit]');
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
@@ -26,10 +26,10 @@ class User2ControllerTest extends WebTestCase
     }
 
 
-    public function testConnexionSubmitWithSuccess()
+    public function testLoginSubmitWithSuccess()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/connexion');
+        $crawler = $client->request('GET', '/login');
 
         $form = $crawler->filter('form')->form();
 
@@ -42,13 +42,26 @@ class User2ControllerTest extends WebTestCase
      //   $crawler = $client->followRedirect();
 
       //  $this->assertSelectorTextContains('h1', 'Bienvenue User !');
+
+        $userRepository = static::$container->get(UserRepository::class);
+
+        // retrieve the test user
+        $testUser = $userRepository->findOneByEmail('daniel.cda@test.com');
+
+        // simulate $testUser being logged in
+      //  $client->loginUser($testUser);
+
+        // test e.g. the profile page
+        $client->request('GET', '/profile');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Hello John!');
     }
 
 
-    public function testInvalidConnexionSubmit()
+    public function testInvalidLoginSubmit()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/connexion');
+        $crawler = $client->request('GET', '/login');
 
         $form = $crawler->filter('form')->form();
 
@@ -58,17 +71,17 @@ class User2ControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Password vide');
     }
 
-    public function testUserSubscribeResponse200()
+    public function testRegisterResponse200()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/subscribe');
+        $crawler = $client->request('GET', '/register');
         $this->assertResponseStatusCodeSame(200);
     }
 
-    public function testUserSubscribeWithAllLabel()
+    public function testRegisterWithAllLabel()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/subscribe');
+        $crawler = $client->request('GET', '/register');
         $this->assertSelectorExists('form');
         $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
@@ -79,18 +92,18 @@ class User2ControllerTest extends WebTestCase
     }
 
 
-    public function testSubscribeSubmitWithSuccess()
+    public function testRegisterSubmitWithSuccess()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/subscribe');
+        $crawler = $client->request('GET', '/register');
 
         $form = $crawler->filter('form')->form();
 
-        $form['user_subscribe[lastName]'] = 'cda';
-        $form['user_subscribe[firstName]'] = 'daniel';
-        $form['user_subscribe[email]'] = 'daniel.test@phpunit.com';
-        $form['user_subscribe[password]'] = 'M1cdacda8';
-        $form['user_subscribe[birthDate]'] = '2000-10-02';
+        $form['user_register[lastName]'] = 'cda';
+        $form['user_register[firstName]'] = 'daniel';
+        $form['user_register[email]'] = 'daniel.test@phpunit.com';
+        $form['user_register[password]'] = 'M1cdacda8';
+        $form['user_register[birthDate]'] = '2000-10-02';
 
         $crawler = $client->submit($form);
 
@@ -101,10 +114,10 @@ class User2ControllerTest extends WebTestCase
     }
 
 
-    public function testInvalidSubscribeSubmit()
+    public function testInvalidRegisterSubmit()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/subscribe');
+        $crawler = $client->request('GET', '/register');
 
         $form = $crawler->filter('form')->form();
 
