@@ -6,9 +6,12 @@ use App\Entity\User;
 use App\Form\UserLoginType2;
 use App\Form\UserSubscribeType;
 use App\Repository\UserRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 class User2Controller extends AbstractController
@@ -27,16 +30,27 @@ class User2Controller extends AbstractController
     /**
      * @Route("/connexion", name="home_connexion")
      */
-    public function userConnexion(Request $request): Response
+    public function userConnexion(Request $request, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserLoginType2::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userData = $form->getData();
+            $user = $form->getData();
+            $userFromDb = $userRepository->findOneBy(['email' => $user->getEmail()]);
 
-            return $this->redirectToRoute('home_logged');
+            var_dump($userFromDb);
+
+            if ($user->getPassword() === $userFromDb->getPassword()) {
+                $this->get('session')->set('user', $userFromDb);
+                return $this->redirectToRoute('home_logged');
+            }
+
+            return $this->render('user2/subscribeForm.html.twig', [
+                'form' => $form->createView(),
+
+            ]);
         }
 
         return $this->render('user2/connexionForm.html.twig', [
@@ -62,16 +76,38 @@ class User2Controller extends AbstractController
     /**
      * @Route("/subscribe", name="home_subscribe")
      */
-    public function userSubscribe(Request $request): Response
+    public function userSubscribe(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserSubscribeType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userData = $form->getData();
+            $user = $form->getData();
+            $user->setCreateDate(new DateTime())
+            ->setUserValidation(false)
+            ->setUserSuspended(true)
+            ->setUserDeleted(false);
 
-            return $this->redirectToRoute('home_logged');
+            $userAlreadyOnDb = $userRepository->findBy(['email' => $user->getEmail()]);
+
+            if (! empty($userAlreadyOnDb)) {
+                $em->persist($user);
+                $em->flush();
+
+                $userFromDb = $userRepository->findOneBy(['email' => $user->getEmail()]);
+
+                $this->get('session')->set('user', $userFromDb);
+
+                return $this->redirectToRoute('home_logged');
+            }
+
+            var_dump($userAlreadyOnDb);
+
+            return $this->render('user2/subscribeForm.html.twig', [
+                'form' => $form->createView(),
+
+            ]);
         }
 
         return $this->render('user2/subscribeForm.html.twig', [
@@ -85,10 +121,10 @@ class User2Controller extends AbstractController
      */
     public function userLogged(Request $request): Response
     {
+        $session = $request->getSession();
+        $user = $session->get('user');
+      //  dd($session->get('user'));
 
-        // $testUser = $userRepository->findBy(['email'=>'daniel.cda@test.com']);
-
-        //  var_dump($testUser);
         return $this->render('home/welcome.html.twig', []);
     }
 }
