@@ -3,21 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use InvalidArgumentException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User
+class User implements UserInterface
 {
-    private const PATTERN_NAME = "/^[a-zA-ZÀ-ÿ '-]{1,30}$/";
-    private const PATTERN_EMAIL = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
-    private const PATTERN_PASS = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/";
 
     /**
      * @ORM\Id
@@ -38,12 +36,12 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Nom vide",
-     * groups={"username", "subscribe"}
+     * groups={"username", "register"}
      * )
      * @Assert\Regex(
      * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
      * message="Nom : {{ value }} incorrect",
-     * groups={"username", "subscribe"}
+     * groups={"username", "register"}
      * )
      */
     private string $lastName;
@@ -51,48 +49,54 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Prénom vide",
-     * groups={"username", "subscribe"}
+     * groups={"username", "register"}
      * )
      * @Assert\Regex(
      * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
      * message="Prénom : {{ value }} incorrect",
-     * groups={"username", "subscribe"}
+     * groups={"username", "register"}
      * )
      */
     private string $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Email vide",
-     * groups={"email","connexion", "subscribe"}
+     * groups={"email","login", "register"}
      * )
      * @Assert\Email(message="Format email incorrect",
-     * groups={"email","connexion", "subscribe"}
+     * groups={"email","login", "register"}
      * )
      */
     private string $email;
 
     /**
+     * @var string The hashed password
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Password vide",
-     * groups={"password","connexion", "subscribe"}
+     * groups={"password","login", "register"}
      * )
      * @Assert\Regex(
      * pattern =  "/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
      * message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
-     * groups={"password","connexion", "subscribe"}
+     * groups={"password","login", "register"}
      * )
      */
     private string $password;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    private array $roles = [];
+
+    /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Date de naissance vide",
-     * groups={"birthDate", "subscribe"}
+     * groups={"birthDate", "register"}
      * )
      * @Assert\LessThanOrEqual(value="-18 years",
      * message="Vous n'avez pas 18 ans minimum",
-     * groups={"birthDate", "subscribe"}
+     * groups={"birthDate", "register"}
      * )
      */
     private ?DateTimeInterface $birthDate;
@@ -100,7 +104,7 @@ class User
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Date de création vide",
-     * groups={"createDate"}
+     * groups={"createDate", "subscribe"}
      * )
      * @Assert\LessThanOrEqual(value="today",
      * message="Date de création incorrecte",
@@ -161,11 +165,6 @@ class User
     public function getEmail(): ?string
     {
         return $this->email;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
     }
 
     public function getBirthDate(): ?\DateTimeInterface
@@ -252,18 +251,6 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of password
-     *
-     * @return  self
-     */
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
 
         return $this;
     }
@@ -395,5 +382,68 @@ class User
             ->setUserDeleted(false);
 
         return $user;
+    }
+
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
