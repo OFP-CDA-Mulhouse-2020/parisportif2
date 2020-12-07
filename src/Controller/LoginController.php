@@ -6,17 +6,17 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\UserLoginType;
+use App\Form\LoginType;
 use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends AbstractController
 {
     /**
-     * @Route("/login", name="login")
+     * @Route("/login2", name="login2")
      */
     public function index(Request $request): Response
     {
-        $form = $this->createForm(UserLoginType::class);
+        $form = $this->createForm(LoginType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

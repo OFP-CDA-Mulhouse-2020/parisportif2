@@ -99,3 +99,11 @@ services:
 networks:
   proxy:
     name: proxy
+
+    
+# - "traefik.enable=true"
+# - "traefik.tcp.routers.mysql.tls=false"
+# - "traefik.tcp.routers.mysql.rule=HostSNI(`*`)"
+# - "traefik.tcp.routers.mysql.entrypoints=mysql"
+# - "traefik.tcp.routers.mysql.service=mysql-service"
+# - "traefik.tcp.services.mysql-service.loadbalancer.server.port=3306"
