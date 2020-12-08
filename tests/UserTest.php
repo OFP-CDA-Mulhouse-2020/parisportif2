@@ -84,14 +84,14 @@ class UserTest extends KernelTestCase
     public function validUserProvider()
     {
         return [
-            [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), null, 0],
+            [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
             [User::build('Jean-Pierre', 'V', null, null, null), ['username'], 0],
             [User::build('V', 'Jean-Pierre', null, null, null), ['username'], 0],
             [User::build("j'ai trente caractères", "j'ai trente caractères", null, null, null), ['username'], 0],
-            [User::build(null, null, 'daniel@test.fr', 'Jean2825', null), ['connexion'], 0],
-            [User::build(null, null, 'test@test.com', 'T4G5h2f3R0aaaa', null), ['connexion'], 0],
-            [User::build(null, null, 'lalalla@d.fr', 'Macron41Paris', null), ['connexion'], 0],
-            [User::build(null, null, 'g@te.de', 'M1cdacda', null), ['connexion'], 0],
+            [User::build(null, null, 'daniel@test.fr', 'Jean2825', null), ['login'], 0],
+            [User::build(null, null, 'test@test.com', 'T4G5h2f3R0aaaa', null), ['login'], 0],
+            [User::build(null, null, 'lalalla@d.fr', 'Macron41Paris', null), ['login'], 0],
+            [User::build(null, null, 'g@te.de', 'M1cdacda', null), ['login'], 0],
             [User::build(null, null, null, null, '2002-11-12'), ['birthDate'], 0],
             [User::build(null, null, null, null, '1995-12-12'), ['birthDate'], 0],
         ];

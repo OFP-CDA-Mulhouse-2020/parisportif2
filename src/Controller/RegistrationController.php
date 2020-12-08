@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,11 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+
+            $user->setCreateDate(new DateTime())
+            ->setUserValidation(false)
+            ->setUserSuspended(true)
+            ->setUserDeleted(false);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

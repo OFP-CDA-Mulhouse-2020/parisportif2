@@ -31,7 +31,6 @@ class LoginController extends AbstractController
     /**
      * @Route("/login/check", name="loginCheck")
      */
-
     public function loginFormCheck(): Response
     {
         return $this->render('login/check.html.twig', [

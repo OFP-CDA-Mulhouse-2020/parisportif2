@@ -14,7 +14,7 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/login');
         $this->assertResponseStatusCodeSame(200);
     }
-
+/*
     public function testLoginWithAllLabel()
     {
         $client = static::createClient();
@@ -70,7 +70,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Email vide');
         $this->assertSelectorTextContains('', 'Password vide');
     }
-
+*/
     public function testRegisterResponse200()
     {
         $client = static::createClient();
@@ -88,9 +88,9 @@ class RegisterControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="agreeTerms"]'));
         $this->assertSelectorExists('form button[type=submit]');
     }
-
 
     public function testRegisterSubmitWithSuccess()
     {
@@ -99,18 +99,18 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $form['user_register[lastName]'] = 'cda';
-        $form['user_register[firstName]'] = 'daniel';
-        $form['user_register[email]'] = 'daniel.test@phpunit.com';
-        $form['user_register[password]'] = 'M1cdacda8';
-        $form['user_register[birthDate]'] = '2000-10-02';
+        $form['registration_form[lastName]'] = 'cda';
+        $form['registration_form[firstName]'] = 'daniel';
+        $form['registration_form[email]'] = 'daniel.test@phpunit.com';
+        $form['registration_form[password]'] = 'M1cdacda8';
+        $form['registration_form[birthDate]'] = '2000-10-02';
 
         $crawler = $client->submit($form);
 
-    //    $this->assertResponseRedirects('/home/logged');
-    //    $crawler = $client->followRedirect();
+        $this->assertResponseRedirects('/login/check');
+        $crawler = $client->followRedirect();
 
-     //   $this->assertSelectorTextContains('h1', 'Bienvenue User !');
+        $this->assertSelectorTextContains('h1', 'Le Formulaire  a été validé');
     }
 
 
@@ -128,6 +128,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Email vide');
         $this->assertSelectorTextContains('', 'Password vide');
         $this->assertSelectorTextContains('', 'Date de naissance vide');
+        $this->assertSelectorTextContains('', 'Vous devez accepter les termes du contrat');
     }
 
 /*
