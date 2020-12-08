@@ -46,7 +46,7 @@ class UserTest extends KernelTestCase
     public function additionProviderId()
     {
         return [
-            [1],
+            [2],
             [23],
             [258],
             [455]
