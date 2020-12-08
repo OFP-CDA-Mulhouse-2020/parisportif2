@@ -8,5 +8,5 @@ notifications:
   failingTests: false
 phpunit:
   binaryPath: vendor/bin/simple-phpunit
-  arguments: '--coverage-html tests/.coverage'
+  #arguments: '--coverage-html tests/coverage'
   timeout: 180

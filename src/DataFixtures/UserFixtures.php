@@ -19,10 +19,10 @@ class UserFixtures extends Fixture
             ->setEmail('daniel.cda@test.com')
             ->setPassword('M1cdacda8')
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
-            ->setCreateDate(new DateTime())
-            ->setUserValidation(false)
-            ->setUserSuspended(true)
-            ->setUserDeleted(false);
+            ->setCreateAt(new DateTime())
+            ->setIsValid(false)
+            ->setIsSuspended(true)
+            ->setIsDeleted(false);
 
         $manager->persist($user);
 
@@ -32,10 +32,10 @@ class UserFixtures extends Fixture
             ->setEmail('ladji.cda@test.com')
             ->setPassword('M1cdacda8')
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
-            ->setCreateDate(new DateTime())
-            ->setUserValidation(false)
-            ->setUserSuspended(true)
-            ->setUserDeleted(false);
+            ->setCreateAt(new DateTime())
+            ->setIsValid(false)
+            ->setIsSuspended(true)
+            ->setIsDeleted(false);
 
         $manager->persist($user);
 

@@ -30,7 +30,7 @@ class User implements UserInterface
      * @Assert\GreaterThan(
      * value = 0,
      * message="Id incorrect",
-     * groups={"login"}
+     * groups={"id", "login"}
      * )
      */
     private int $id;
@@ -106,48 +106,80 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Date de création vide",
-     * groups={"createDate", "subscribe"}
+     * groups={"createAt"}
      * )
-     * @Assert\LessThanOrEqual(value="today",
-     * message="Date de création incorrecte",
-     * groups={"createDate", "subscribe"}
+     * @Assert\LessThanOrEqual(value="+1 hours",
+     * message="Date de création incorrecte : {{ value }}",
+     * groups={"createAt"}
      * )
      */
-    private DateTimeInterface $createDate;
+    private DateTimeInterface $createAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(message="Status validation null",
+     * groups={"valid"}
+     * )
      * @Assert\Type(
      * type="bool",
-     * message="{{ value }} n'est pas du type {{ type }}"
+     * message="{{ value }} n'est pas du type {{ type }}",
+     * groups={"valid"}
      * )
      */
-    private bool $userValidation;
+    private bool $isValid;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(value="+1 hours",
+     * message="Date de validation incorrecte : {{ value }}",
+     * groups={"validAt"}
+     * )
      */
-    private ?\DateTimeInterface $userValidationDate;
+    private ?\DateTimeInterface $isValidAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(message="Status suspendu null",
+     * groups={"suspended"}
+     * )
+     * @Assert\Type(
+     * type="bool",
+     * message="{{ value }} n'est pas du type {{ type }}",
+     * groups={"suspended"}
+     * )
      */
-    private bool $userSuspended;
+    private bool $isSuspended;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(value="+1 hours",
+     * message="Date de suspension incorrecte : {{ value }}",
+     * groups={"suspendedAt"}
+     * )
      */
-    private ?\DateTimeInterface $userSuspendedDate;
+    private ?\DateTimeInterface $isSuspendedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(message="Status supprimé null",
+     * groups={"deleted"}
+     * )
+     * @Assert\Type(
+     * type="bool",
+     * message="{{ value }} n'est pas du type {{ type }}",
+     * groups={"deleted"}
+     * )
      */
-    private bool $userDeleted;
+    private bool $isDeleted;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(value="+1 hours",
+     * message="Date de suppression incorrecte : {{ value }}",
+     * groups={"deletedAt"}
+     * )
      */
-    private ?\DateTimeInterface $userDeletedDate;
+    private ?\DateTimeInterface $isDeletedAt;
 
     public function getId(): ?int
     {
@@ -174,39 +206,39 @@ class User implements UserInterface
         return $this->birthDate;
     }
 
-    public function getCreateDate(): ?\DateTimeInterface
+    public function getCreateAt(): ?\DateTimeInterface
     {
-        return $this->createDate;
+        return $this->createAt;
     }
 
-    public function getUserValidation(): ?bool
+    public function getIsValid(): ?bool
     {
-        return $this->userValidation;
+        return $this->isValid;
     }
 
-    public function getUserValidationDate(): ?\DateTimeInterface
+    public function getIsValidAt(): ?\DateTimeInterface
     {
-        return $this->userValidationDate;
+        return $this->isValidAt;
     }
 
-    public function getUserSuspended(): ?bool
+    public function getIsSuspended(): ?bool
     {
-        return $this->userSuspended;
+        return $this->isSuspended;
     }
 
-    public function getUserSuspendedDate(): ?\DateTimeInterface
+    public function getIsSuspendedAt(): ?\DateTimeInterface
     {
-        return $this->userSuspendedDate;
+        return $this->isSuspendedAt;
     }
 
-    public function getUserDeleted(): ?bool
+    public function getIsDeleted(): ?bool
     {
-        return $this->userDeleted;
+        return $this->isDeleted;
     }
 
-    public function getUserDeletedDate(): ?\DateTimeInterface
+    public function getIsDeletedAt(): ?\DateTimeInterface
     {
-        return $this->userDeletedDate;
+        return $this->isDeletedAt;
     }
 
     /**
@@ -270,91 +302,85 @@ class User implements UserInterface
     }
 
     /**
-     * Set the value of createDate
+     * Set the value of createAt
      *
      * @return  self
      */
-    public function setCreateDate(\DateTimeInterface $createDate): self
+    public function setCreateAt(\DateTimeInterface $createAt): self
     {
-        $this->createDate = $createDate;
+        $this->createAt = $createAt;
 
         return $this;
     }
 
     /**
-     * Set the value of userValidation
+     * Set the value of isValid
      *
      * @return  self
      */
-    public function setUserValidation(bool $userValidation): self
+    public function setIsValid(bool $isValid): self
     {
-        $this->userValidation = $userValidation;
+        $this->isValid = $isValid;
 
         return $this;
     }
 
     /**
-     * Set the value of userValidationDate
+     * Set the value of isValidAt
      *
      * @return  self
      */
-    public function setUserValidationDate(?\DateTimeInterface $userValidationDate): self
+    public function setIsValidAt(?\DateTimeInterface $isValidAt): self
     {
-        $this->userValidationDate = $userValidationDate;
+        $this->isValidAt = $isValidAt;
 
         return $this;
     }
 
     /**
-     * Set the value of userSuspended
+     * Set the value of isSuspended
      *
      * @return  self
      */
-    public function setUserSuspended(bool $userSuspended)
+    public function setIsSuspended(bool $isSuspended): self
     {
-        $this->userSuspended = $userSuspended;
+        $this->isSuspended = $isSuspended;
 
         return $this;
     }
 
     /**
-     * Set the value of userSuspendedDate
+     * Set the value of isSuspendedAt
      *
      * @return  self
      */
-    public function setUserSuspendedDate(?\DateTimeInterface $userSuspendedDate): self
+    public function setIsSuspendedAt(?\DateTimeInterface $isSuspendedAt): self
     {
-/*
-        $minSuspendedDate = new DateTime();
-
-        if ($userSuspendedDate > $minSuspendedDate && isset($userSuspendedDate)) {
-            throw new InvalidArgumentException('Date de suspension invalide');
-        }*/
-        $this->userSuspendedDate = $userSuspendedDate;
+        $this->isSuspendedAt = $isSuspendedAt;
 
         return $this;
     }
 
     /**
-     * Set the value of userDeleted
+     * Set the value of isDeleted
      *
      * @return  self
      */
-    public function setUserDeleted(bool $userDeleted)
+    public function setIsDeleted(bool $isDeleted): self
     {
-        $this->userDeleted = $userDeleted;
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }
 
     /**
-     * Set the value of userDeletedDate
+     * Set the value of isDeletedAt
      *
      * @return  self
      */
-    public function setUserDeletedDate(?\DateTimeInterface $userDeletedDate): self
+    public function setIsDeletedAt(?\DateTimeInterface $isDeletedAt): self
     {
-        $this->userDeletedDate = $userDeletedDate;
+        $this->isDeletedAt = $isDeletedAt;
 
         return $this;
     }
@@ -378,10 +404,10 @@ class User implements UserInterface
         $password ? $user->setPassword($password) : null ;
         $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
 
-        $user->setCreateDate(new DateTime())
-            ->setUserValidation(false)
-            ->setUserSuspended(true)
-            ->setUserDeleted(false);
+        $user->setcreateAt(new DateTime())
+            ->setIsValid(false)
+            ->setIsSuspended(true)
+            ->setIsDeleted(false);
 
         return $user;
     }

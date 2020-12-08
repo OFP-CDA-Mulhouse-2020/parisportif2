@@ -37,10 +37,10 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setCreateDate(new DateTime())
-            ->setUserValidation(false)
-            ->setUserSuspended(true)
-            ->setUserDeleted(false);
+            $user->setCreateAt(new DateTime())
+            ->setIsValid(false)
+            ->setIsSuspended(true)
+            ->setIsDeleted(false);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

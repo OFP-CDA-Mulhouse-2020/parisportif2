@@ -5,8 +5,6 @@ namespace App\Tests;
 use App\Entity\User;
 use DateInterval;
 use DateTime;
-use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -23,37 +21,15 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('email', User::class);
         $this->assertClassHasAttribute('password', User::class);
         $this->assertClassHasAttribute('birthDate', User::class);
-        $this->assertClassHasAttribute('createDate', User::class);
-        $this->assertClassHasAttribute('userValidation', User::class);
-        $this->assertClassHasAttribute('userValidationDate', User::class);
-        $this->assertClassHasAttribute('userSuspended', User::class);
-        $this->assertClassHasAttribute('userSuspendedDate', User::class);
-        $this->assertClassHasAttribute('userDeleted', User::class);
-        $this->assertClassHasAttribute('userDeletedDate', User::class);
+        $this->assertClassHasAttribute('createAt', User::class);
+        $this->assertClassHasAttribute('isValid', User::class);
+        $this->assertClassHasAttribute('isValidAt', User::class);
+        $this->assertClassHasAttribute('isSuspended', User::class);
+        $this->assertClassHasAttribute('isSuspendedAt', User::class);
+        $this->assertClassHasAttribute('isDeleted', User::class);
+        $this->assertClassHasAttribute('isDeletedAt', User::class);
     }
 
-    /************************$id**********************************/
-    /**
-     * @dataProvider additionProviderId
-     */
-    public function testSetId($id)
-    {
-        $user = new User();
-        $user->setId($id);
-        $this->assertSame($id, $user->getId());
-    }
-
-    public function additionProviderId()
-    {
-        return [
-            [2],
-            [23],
-            [258],
-            [455]
-        ];
-    }
-
-    /************************$user**********************************/
 
     public function getKernel(): KernelInterface
     {
@@ -69,9 +45,33 @@ class UserTest extends KernelTestCase
 
         $validator = $kernel->getContainer()->get('validator');
         $violationList = $validator->validate($user, null, $groups);
-
+        //var_dump($violationList);
         return count($violationList);
     }
+
+
+    /************************$id**********************************/
+    /**
+     * @dataProvider idProvider
+     */
+    public function testId(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+    }
+
+    public function idProvider()
+    {
+        return [
+            [(new User())->setId(2), ['id'], 0],
+            [(new User())->setId(23), ['id'], 0],
+            [(new User())->setId(258), ['id'], 0],
+            [(new User())->setId(-45), ['id'], 1],
+        ];
+    }
+
+    /************************$user**********************************/
+
+
 
     /**
      * @dataProvider validUserProvider
@@ -84,7 +84,7 @@ class UserTest extends KernelTestCase
     public function validUserProvider()
     {
         return [
-            [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
+        //    [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
             [User::build('Jean-Pierre', 'V', null, null, null), ['username'], 0],
             [User::build('V', 'Jean-Pierre', null, null, null), ['username'], 0],
             [User::build("j'ai trente caractères", "j'ai trente caractères", null, null, null), ['username'], 0],
@@ -131,223 +131,140 @@ class UserTest extends KernelTestCase
         ];
     }
 
-    /************************$createDate**********************************/
-    /**
-     * @dataProvider additionProviderCreateDate
-     */
-    public function testSetCreateDate($createDate)
-    {
-        $user = new User();
-        $user->setCreateDate($createDate);
+    /************************$createAt**********************************/
 
-        $this->assertEquals($createDate, $user->getCreateDate());
+    /**
+     * @dataProvider createAtProvider
+     */
+    public function testCreationDate(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderCreateDate()
+    public function createAtProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2002-11-12')],
-            [DateTime::createFromFormat('Y-m-d', '1995-12-12')],
-            [(new DateTime())->sub(new DateInterval('P18Y'))]
+            [(new User())->setCreateAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['createAt'], 0],
+            [(new User())->setCreateAt(new DateTime()), ['createAt'], 0],
+            [(new User())->setCreateAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['createAt'], 1],
+            [(new User())->setCreateAt((new DateTime())->add(new DateInterval('P1D'))), ['createAt'], 1],
         ];
     }
 
-    /**
-     * @dataProvider additionProviderFailCreateDate
-     */
-/*    public function testFailSetCreateDate($createDate)
-    {
-        $this->expectException(InvalidArgumentException::class);
+    /************************$isValid**********************************/
 
-        $user = new User();
-        $user->setCreateDate($createDate);
+    /**
+     * @dataProvider isValidProvider
+     */
+    public function testIsValid(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderFailCreateDate()
+    public function isValidProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-            [(new DateTime())->add(new DateInterval('P1D'))]
-        ];
-    }
-*/
-    /************************$userValidation**********************************/
-    /**
-     * @dataProvider additionProviderUserValidation
-     */
-    public function testSetUserValidation($userValidation)
-    {
-        $user = new User();
-        $user->setUserValidation($userValidation);
-        $this->assertSame($userValidation, $user->getUserValidation());
-    }
-
-    public function additionProviderUserValidation()
-    {
-        return [
-            [true],
-            [false]
+            [(new User())->setIsValid(true), ['valid'], 0],
+            [(new User())->setIsValid(false), ['valid'], 0],
         ];
     }
 
-    /************************$userValidationDate**********************************/
-    /**
-     * @dataProvider additionProviderUserValidationDate
-     */
-    public function testSetUserValidationDate($userValidationDate)
-    {
-        $user = new User();
-        $user->setUserValidationDate($userValidationDate);
+    /************************$isValidAt**********************************/
 
-        $this->assertEquals($userValidationDate, $user->getUserValidationDate());
+    /**
+     * @dataProvider isValidAtProvider
+     */
+    public function testIsValidAt(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderUserValidationDate()
+    public function isValidAtProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-            [new DateTime()],
-            [null]
+            [(new User())->setIsValidAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['validAt'], 0],
+            [(new User())->setIsValidAt(new DateTime()), ['validAt'], 0],
+            [(new User())->setIsValidAt(null), ['validAt'], 0],
+            [(new User())->setIsValidAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['validAt'], 1],
+            [(new User())->setIsValidAt((new DateTime())->add(new DateInterval('P1D'))), ['validAt'], 1],
         ];
     }
 
-    /**
-     * @dataProvider additionProviderFailUserValidationDate
-     */
- /*   public function testFailSetUserValidationDate($userValidationDate)
-    {
-        $this->expectException(InvalidArgumentException::class);
+    /************************$isSuspended**********************************/
 
-        $user = new User();
-        $user->setUserValidationDate($userValidationDate);
+    /**
+     * @dataProvider isSuspendedProvider
+     */
+    public function testIsSuspended(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderFailUserValidationDate()
+    public function isSuspendedProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-            [(new DateTime())->add(new DateInterval('P1D'))]
-        ];
-    }
-*/
-    /************************$userSuspended**********************************/
-    /**
-     * @dataProvider additionProviderUserSuspended
-     */
-    public function testSetUserSuspended($userSuspended)
-    {
-        $user = new User();
-        $user->setUserSuspended($userSuspended);
-        $this->assertSame($userSuspended, $user->getUserSuspended());
-    }
-
-    public function additionProviderUserSuspended()
-    {
-        return [
-            [true],
-            [false]
+            [(new User())->setIsSuspended(true), ['suspended'], 0],
+            [(new User())->setIsSuspended(false), ['suspended'], 0],
         ];
     }
 
-    /************************$userSuspendedDate**********************************/
-    /**
-     * @dataProvider additionProviderUserSuspendedDate
-     */
-    public function testSetUserSuspendedDate($userSuspendedDate)
-    {
-        $user = new User();
-        $user->setUserSuspendedDate($userSuspendedDate);
+    /************************$isSuspendedAt**********************************/
 
-        $this->assertEquals($userSuspendedDate, $user->getUserSuspendedDate());
+    /**
+     * @dataProvider isSuspendedAtProvider
+     */
+    public function testIsSuspendedAt(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderUserSuspendedDate()
+    public function isSuspendedAtProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-            [new DateTime()],
-            [null]
+            [(new User())->setIsSuspendedAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['suspendedAt'], 0],
+            [(new User())->setIsSuspendedAt(new DateTime()), ['suspendedAt'], 0],
+            [(new User())->setIsSuspendedAt(null), ['suspendedAt'], 0],
+            [(new User())->setIsSuspendedAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['suspendedAt'], 1],
+            [(new User())->setIsSuspendedAt((new DateTime())->add(new DateInterval('P1D'))), ['suspendedAt'], 1],
         ];
     }
 
-    /**
-     * @dataProvider additionProviderFailUserSuspendedDate
-     */
- /*   public function testFailSetUserSuspendedDate($userSuspendedDate)
-    {
-        $this->expectException(InvalidArgumentException::class);
+    /************************$isDeleted**********************************/
 
-        $user = new User();
-        $user->setUserSuspendedDate($userSuspendedDate);
+    /**
+     * @dataProvider isDeleteProvider
+     */
+    public function testIsDeleted(User $user, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderFailUserSuspendedDate()
+    public function isDeleteProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-            [(new DateTime())->add(new DateInterval('P1D'))]
-        ];
-    }
-*/
-    /************************$userDeleted**********************************/
-    /**
-     * @dataProvider additionProviderUserDeleted
-     */
-    public function testSetUserDeleted($userDeleted)
-    {
-        $user = new User();
-        $user->setUserDeleted($userDeleted);
-        $this->assertSame($userDeleted, $user->getUserDeleted());
-    }
-
-    public function additionProviderUserDeleted()
-    {
-        return [
-            [true],
-            [false]
+            [(new User())->setIsDeleted(true), ['deleted'], 0],
+            [(new User())->setIsDeleted(false), ['deleted'], 0],
         ];
     }
 
-    /************************$userDeletedDate**********************************/
-    /**
-     * @dataProvider additionProviderUserDeletedDate
-     */
-    public function testSetUserDeletedDate($userDeletedDate)
-    {
-        $user = new User();
-        $user->setUserDeletedDate($userDeletedDate);
-
-        $this->assertEquals($userDeletedDate, $user->getUserDeletedDate());
-    }
-
-    public function additionProviderUserDeletedDate()
-    {
-        return [
-            [DateTime::createFromFormat('Y-m-d', '2012-11-12')],
-            [DateTime::createFromFormat('Y-m-d', '2020-10-12')],
-            [new DateTime()],
-            [null]
-        ];
-    }
+    /************************$isDeletedAt**********************************/
 
     /**
-     * @dataProvider additionProviderFailUserDeletedDate
+     * @dataProvider isDeletedAtProvider
      */
- /*   public function testFailSetUserDeletedDate($userDeletedDate)
+    public function testIsDeletedAt(User $user, $groups, $numberOfViolations)
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        $user = new User();
-        $user->setUserDeletedDate($userDeletedDate);
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
     }
 
-    public function additionProviderFailUserDeletedDate()
+    public function isDeletedAtProvider()
     {
         return [
-            [DateTime::createFromFormat('Y-m-d', '2022-11-12')],
-            [(new DateTime())->add(new DateInterval('P1D'))]
+            [(new User())->setIsDeletedAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['deletedAt'], 0],
+            [(new User())->setIsDeletedAt(new DateTime()), ['deletedAt'], 0],
+            [(new User())->setIsDeletedAt(null), ['deletedAt'], 0],
+            [(new User())->setIsDeletedAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['deletedAt'], 1],
+            [(new User())->setIsDeletedAt((new DateTime())->add(new DateInterval('P1D'))), ['deletedAt'], 1],
         ];
-    }*/
+    }
 }
