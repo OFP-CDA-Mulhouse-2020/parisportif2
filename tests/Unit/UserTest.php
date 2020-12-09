@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Entity\User;
 use DateInterval;
@@ -22,12 +22,12 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('password', User::class);
         $this->assertClassHasAttribute('birthDate', User::class);
         $this->assertClassHasAttribute('createAt', User::class);
-        $this->assertClassHasAttribute('isValid', User::class);
-        $this->assertClassHasAttribute('isValidAt', User::class);
-        $this->assertClassHasAttribute('isSuspended', User::class);
-        $this->assertClassHasAttribute('isSuspendedAt', User::class);
-        $this->assertClassHasAttribute('isDeleted', User::class);
-        $this->assertClassHasAttribute('isDeletedAt', User::class);
+        $this->assertClassHasAttribute('valid', User::class);
+        $this->assertClassHasAttribute('validAt', User::class);
+        $this->assertClassHasAttribute('suspended', User::class);
+        $this->assertClassHasAttribute('suspendedAt', User::class);
+        $this->assertClassHasAttribute('deleted', User::class);
+        $this->assertClassHasAttribute('deletedAt', User::class);
     }
 
 
@@ -84,7 +84,7 @@ class UserTest extends KernelTestCase
     public function validUserProvider()
     {
         return [
-        //    [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
+            [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
             [User::build('Jean-Pierre', 'V', null, null, null), ['username'], 0],
             [User::build('V', 'Jean-Pierre', null, null, null), ['username'], 0],
             [User::build("j'ai trente caractères", "j'ai trente caractères", null, null, null), ['username'], 0],
@@ -164,29 +164,8 @@ class UserTest extends KernelTestCase
     public function isValidProvider()
     {
         return [
-            [(new User())->setIsValid(true), ['valid'], 0],
-            [(new User())->setIsValid(false), ['valid'], 0],
-        ];
-    }
-
-    /************************$isValidAt**********************************/
-
-    /**
-     * @dataProvider isValidAtProvider
-     */
-    public function testIsValidAt(User $user, $groups, $numberOfViolations)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-    }
-
-    public function isValidAtProvider()
-    {
-        return [
-            [(new User())->setIsValidAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['validAt'], 0],
-            [(new User())->setIsValidAt(new DateTime()), ['validAt'], 0],
-            [(new User())->setIsValidAt(null), ['validAt'], 0],
-            [(new User())->setIsValidAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['validAt'], 1],
-            [(new User())->setIsValidAt((new DateTime())->add(new DateInterval('P1D'))), ['validAt'], 1],
+            [(new User())->setIsValid(), ['valid'], 0],
+            [(new User())->setIsNotValid(), ['valid'], 0],
         ];
     }
 
@@ -203,29 +182,8 @@ class UserTest extends KernelTestCase
     public function isSuspendedProvider()
     {
         return [
-            [(new User())->setIsSuspended(true), ['suspended'], 0],
-            [(new User())->setIsSuspended(false), ['suspended'], 0],
-        ];
-    }
-
-    /************************$isSuspendedAt**********************************/
-
-    /**
-     * @dataProvider isSuspendedAtProvider
-     */
-    public function testIsSuspendedAt(User $user, $groups, $numberOfViolations)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-    }
-
-    public function isSuspendedAtProvider()
-    {
-        return [
-            [(new User())->setIsSuspendedAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['suspendedAt'], 0],
-            [(new User())->setIsSuspendedAt(new DateTime()), ['suspendedAt'], 0],
-            [(new User())->setIsSuspendedAt(null), ['suspendedAt'], 0],
-            [(new User())->setIsSuspendedAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['suspendedAt'], 1],
-            [(new User())->setIsSuspendedAt((new DateTime())->add(new DateInterval('P1D'))), ['suspendedAt'], 1],
+            [(new User())->setIsSuspended(), ['suspended'], 0],
+            [(new User())->setIsNotSuspended(), ['suspended'], 0],
         ];
     }
 
@@ -242,29 +200,8 @@ class UserTest extends KernelTestCase
     public function isDeleteProvider()
     {
         return [
-            [(new User())->setIsDeleted(true), ['deleted'], 0],
-            [(new User())->setIsDeleted(false), ['deleted'], 0],
-        ];
-    }
-
-    /************************$isDeletedAt**********************************/
-
-    /**
-     * @dataProvider isDeletedAtProvider
-     */
-    public function testIsDeletedAt(User $user, $groups, $numberOfViolations)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-    }
-
-    public function isDeletedAtProvider()
-    {
-        return [
-            [(new User())->setIsDeletedAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['deletedAt'], 0],
-            [(new User())->setIsDeletedAt(new DateTime()), ['deletedAt'], 0],
-            [(new User())->setIsDeletedAt(null), ['deletedAt'], 0],
-            [(new User())->setIsDeletedAt(DateTime::createFromFormat('Y-m-d', '2022-12-12')), ['deletedAt'], 1],
-            [(new User())->setIsDeletedAt((new DateTime())->add(new DateInterval('P1D'))), ['deletedAt'], 1],
+            [(new User())->setIsDeleted(), ['deleted'], 0],
+            [(new User())->setIsNotDeleted(), ['deleted'], 0],
         ];
     }
 }

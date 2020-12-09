@@ -24,6 +24,7 @@ class RegistrationController extends AbstractController
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator
     ): Response {
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -37,10 +38,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setCreateAt(new DateTime())
-            ->setIsValid(false)
-            ->setIsSuspended(true)
-            ->setIsDeleted(false);
+            $user->setCreateAt(new DateTime());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
