@@ -156,16 +156,18 @@ class UserTest extends KernelTestCase
     /**
      * @dataProvider isValidProvider
      */
-    public function testIsValid(User $user, $groups, $numberOfViolations)
+    public function testIsValid(User $user, $groups, $numberOfViolations, $validValue, $validAtValue)
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($user->getValid(), $validValue);
+        $this->assertEqualsWithDelta($user->getValidAt(), $validAtValue, 1);
     }
 
     public function isValidProvider()
     {
         return [
-            [(new User())->setIsValid(), ['valid'], 0],
-            [(new User())->setIsNotValid(), ['valid'], 0],
+            [(new User())->setIsValid(), ['valid'], 0, true, new DateTime()],
+            [(new User())->setIsNotValid(), ['valid'], 0, false, null],
         ];
     }
 
@@ -174,16 +176,18 @@ class UserTest extends KernelTestCase
     /**
      * @dataProvider isSuspendedProvider
      */
-    public function testIsSuspended(User $user, $groups, $numberOfViolations)
+    public function testIsSuspended(User $user, $groups, $numberOfViolations, $suspendedValue, $suspendedAtValue)
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($user->getSuspended(), $suspendedValue);
+        $this->assertEqualsWithDelta($user->getSuspendedAt(), $suspendedAtValue, 1);
     }
 
     public function isSuspendedProvider()
     {
         return [
-            [(new User())->setIsSuspended(), ['suspended'], 0],
-            [(new User())->setIsNotSuspended(), ['suspended'], 0],
+            [(new User())->setIsSuspended(), ['suspended'], 0, true, new DateTime()],
+            [(new User())->setIsNotSuspended(), ['suspended'], 0, false, null],
         ];
     }
 
@@ -192,16 +196,18 @@ class UserTest extends KernelTestCase
     /**
      * @dataProvider isDeleteProvider
      */
-    public function testIsDeleted(User $user, $groups, $numberOfViolations)
+    public function testIsDeleted(User $user, $groups, $numberOfViolations, $deletedValue, $deletedAtValue)
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($user->getDeleted(), $deletedValue);
+        $this->assertEqualsWithDelta($user->getDeletedAt(), $deletedAtValue, 1);
     }
 
     public function isDeleteProvider()
     {
         return [
-            [(new User())->setIsDeleted(), ['deleted'], 0],
-            [(new User())->setIsNotDeleted(), ['deleted'], 0],
+            [(new User())->setIsDeleted(), ['deleted'], 0, true, new DateTime()],
+            [(new User())->setIsNotDeleted(), ['deleted'], 0, false, null],
         ];
     }
 }

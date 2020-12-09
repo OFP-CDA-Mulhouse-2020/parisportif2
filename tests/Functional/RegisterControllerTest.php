@@ -90,17 +90,17 @@ class RegisterControllerTest extends WebTestCase
 
         $form['registration_form[lastName]'] = 'cda';
         $form['registration_form[firstName]'] = 'daniel';
-        $form['registration_form[email]'] = 'daniel.cda@phpunit5.com';
+        $form['registration_form[email]'] = 'daniel.cda@phpunit15.com';
         $form['registration_form[password]'] = 'M1cdacda8';
         $form['registration_form[birthDate]'] = '2000-10-02';
         $form['registration_form[agreeTerms]'] = "1";
 
         $crawler = $client->submit($form);
 
-      //  $this->assertResponseRedirects('/home');
-       // $crawler = $client->followRedirect();
+        $this->assertResponseRedirects('/app');
+        $crawler = $client->followRedirect();
 
-        //$this->assertSelectorTextContains('h1', 'Le Formulaire  a été validé');
+        $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
     }
 
 
@@ -144,13 +144,9 @@ class RegisterControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
-     //   var_dump($userRepository);
 
-        // retrieve the test user
         $user = $userRepository->findOneBy(['email' => 'daniel.cda@test.com']);
 
         $this->assertInstanceOf(User::class, $user);
-
-      //  var_dump($testUser);
     }
 }
