@@ -11,22 +11,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends AbstractController
 {
-    /**
-     * @Route("/login2", name="login2")
-     */
-    public function index(Request $request): Response
-    {
-        $form = $this->createForm(LoginType::class);
-        $form->handleRequest($request);
+    // /**
+    //  * @Route("/login", name="login")
+    //  */
+    // public function index(Request $request): Response
+    // {
+    //     $form = $this->createForm(LoginType::class);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('loginCheck');
-        }
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         return $this->redirectToRoute('loginCheck');
+    //     }
 
-        return $this->render('login/index.html.twig', [
-            'login_form' => $form->createView(),
-        ]);
-    }
+    //     return $this->render('security/login.html.twig', [
+    //         'login_form' => $form->createView(),
+    //     ]);
+    //     // return $this->render('login/index.html.twig', [
+    //     //     'login_form' => $form->createView(),
+    //     // ]);
+    // }
 
     /**
      * @Route("/login/check", name="loginCheck")
