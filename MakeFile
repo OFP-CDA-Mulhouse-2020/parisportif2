@@ -1,13 +1,26 @@
-php bin/console cache:clear --env=test
+.PHONY: start stop ps prepare test cache-clear
+
+start:
+	docker-compose up -d
+
+stop:
+	docker-compose down
+
+ps:
+	docker-compose ps
+
+prepare:
+	php bin/console cache:clear --env=test
 	php bin/console doctrine:database:drop --if-exists -f --env=test
 	php bin/console doctrine:database:create --env=test
 	php bin/console doctrine:schema:update -f --env=test
 	php bin/console doctrine:fixtures:load -n --env=test
 
-    .PHONY: tests
-tests:
-	php bin/phpunit
+test:
+	"vendor/bin/simple-phpunit"
 
+cache-clear:
+	docker-compose exec php7.4 php bin/console cache:clear
 
-
-	make prepare-test && make tests
+clean:
+	rm -f *.dat
