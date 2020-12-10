@@ -17,6 +17,7 @@
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
+/tests/coverage/*
 ###< symfony/phpunit-bridge ###
 
 db/*

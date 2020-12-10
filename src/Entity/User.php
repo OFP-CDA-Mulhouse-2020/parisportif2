@@ -12,7 +12,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"},
+ * groups={"register"},
+ * message="Il y a déjà un compte avec cet email")
  */
 class User implements UserInterface
 {
@@ -21,65 +23,71 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer",
-     * message="Id incorrect",
-     * groups={"login"}
+     * @Assert\Type(
+     *  type="integer",
+     *  message="Id incorrect",
+     *  groups={"login"}
      * )
      * @Assert\GreaterThan(
-     * value = 0,
-     * message="Id incorrect",
-     * groups={"login"}
+     *  value = 0,
+     *  message="Id incorrect",
+     *  groups={"id", "login"}
      * )
      */
     private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Nom vide",
-     * groups={"username", "register"}
+     * @Assert\NotBlank(
+     *  message="Nom vide",
+     *  groups={"username", "register"}
      * )
      * @Assert\Regex(
-     * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     * message="Nom : {{ value }} incorrect",
-     * groups={"username", "register"}
+     *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
+     *  message="Nom : {{ value }} incorrect",
+     *  groups={"username", "register"}
      * )
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Prénom vide",
-     * groups={"username", "register"}
+     * @Assert\NotBlank(
+     *  message="Prénom vide",
+     *  groups={"username", "register"}
      * )
      * @Assert\Regex(
-     * pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     * message="Prénom : {{ value }} incorrect",
-     * groups={"username", "register"}
+     *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
+     *  message="Prénom : {{ value }} incorrect",
+     *  groups={"username", "register"}
      * )
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Email vide",
-     * groups={"email","login", "register"}
+     * @Assert\NotBlank(
+     *  message="Email vide",
+     *  groups={"email","login", "register"}
      * )
-     * @Assert\Email(message="Format email incorrect",
-     * groups={"email","login", "register"}
+     * @Assert\Email(
+     *  message="Format email incorrect",
+     *  groups={"email","login", "register"}
      * )
      */
     private string $email;
 
     /**
-     * @var string The hashed password
+     * @var string the hashed password
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Password vide",
-     * groups={"password","login", "register"}
+     * @Assert\NotBlank(
+     *  message="Password vide",
+     *  groups={"password","login", "register"}
      * )
      * @Assert\Regex(
-     * pattern =  "/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
-     * message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
-     * groups={"password","login", "register"}
+     *  pattern =  "/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/",
+     *  message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
+     *  groups={"password","login", "register"}
      * )
      */
     private string $password;
@@ -91,61 +99,102 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank(message="Date de naissance vide",
-     * groups={"birthDate", "register"}
+     * @Assert\NotBlank(
+     *  message="Date de naissance vide",
+     *  groups={"birthDate", "register"}
      * )
      * @Assert\LessThanOrEqual(value="-18 years",
-     * message="Vous n'avez pas 18 ans minimum",
-     * groups={"birthDate", "register"}
+     *  message="Vous n'avez pas 18 ans minimum",
+     *  groups={"birthDate", "register"}
      * )
      */
     private ?DateTimeInterface $birthDate;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank(message="Date de création vide",
-     * groups={"createDate", "subscribe"}
+     * @Assert\NotBlank(
+     *  message="Date de création vide",
+     *  groups={"createAt"}
      * )
-     * @Assert\LessThanOrEqual(value="today",
-     * message="Date de création incorrecte",
-     * groups={"createDate", "subscribe"}
+     * @Assert\LessThanOrEqual(
+     *  value="+1 hours",
+     *  message="Date de création incorrecte : {{ value }}",
+     *  groups={"createAt"}
      * )
      */
-    private DateTimeInterface $createDate;
+    private DateTimeInterface $createAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(
+     *  message="Status validation null",
+     *  groups={"valid"}
+     * )
      * @Assert\Type(
-     * type="bool",
-     * message="{{ value }} n'est pas du type {{ type }}"
+     *  type="bool",
+     *  message="{{ value }} n'est pas du type {{ type }}",
+     *  groups={"valid"}
      * )
      */
-    private bool $userValidation;
+    private bool $valid = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(
+     *  value="+1 hours",
+     *  message="Date de validation incorrecte : {{ value }}",
+     *  groups={"valid"}
+     * )
      */
-    private ?\DateTimeInterface $userValidationDate;
+    private ?\DateTimeInterface $validAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(
+     *  message="Status suspendu null",
+     *  groups={"suspended"}
+     * )
+     * @Assert\Type(
+     *  type="bool",
+     *  message="{{ value }} n'est pas du type {{ type }}",
+     *  groups={"suspended"}
+     * )
      */
-    private bool $userSuspended;
+    private bool $suspended = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(
+     *  value="+1 hours",
+     *  message="Date de suspension incorrecte : {{ value }}",
+     *  groups={"suspended"}
+     * )
      */
-    private ?\DateTimeInterface $userSuspendedDate;
+    private ?\DateTimeInterface $suspendedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(
+     *  message="Status supprimé null",
+     *  groups={"deleted"}
+     * )
+     * @Assert\Type(
+     *  type="bool",
+     *  message="{{ value }} n'est pas du type {{ type }}",
+     *  groups={"deleted"}
+     * )
      */
-    private bool $userDeleted;
+    private bool $deleted = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual(
+     *  value="+1 hours",
+     *  message="Date de suppression incorrecte : {{ value }}",
+     *  groups={"deleted"}
+     * )
      */
-    private ?\DateTimeInterface $userDeletedDate;
+    private ?\DateTimeInterface $deletedAt;
 
     public function getId(): ?int
     {
@@ -172,39 +221,39 @@ class User implements UserInterface
         return $this->birthDate;
     }
 
-    public function getCreateDate(): ?\DateTimeInterface
+    public function getCreateAt(): ?\DateTimeInterface
     {
-        return $this->createDate;
+        return $this->createAt;
     }
 
-    public function getUserValidation(): ?bool
+    public function getValid(): ?bool
     {
-        return $this->userValidation;
+        return $this->valid;
     }
 
-    public function getUserValidationDate(): ?\DateTimeInterface
+    public function getValidAt(): ?\DateTimeInterface
     {
-        return $this->userValidationDate;
+        return $this->validAt;
     }
 
-    public function getUserSuspended(): ?bool
+    public function getSuspended(): ?bool
     {
-        return $this->userSuspended;
+        return $this->suspended;
     }
 
-    public function getUserSuspendedDate(): ?\DateTimeInterface
+    public function getSuspendedAt(): ?\DateTimeInterface
     {
-        return $this->userSuspendedDate;
+        return $this->suspendedAt;
     }
 
-    public function getUserDeleted(): ?bool
+    public function getDeleted(): ?bool
     {
-        return $this->userDeleted;
+        return $this->deleted;
     }
 
-    public function getUserDeletedDate(): ?\DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
-        return $this->userDeletedDate;
+        return $this->deletedAt;
     }
 
     /**
@@ -268,97 +317,97 @@ class User implements UserInterface
     }
 
     /**
-     * Set the value of createDate
+     * Set the value of createAt
      *
      * @return  self
      */
-    public function setCreateDate(\DateTimeInterface $createDate): self
+    public function setCreateAt(\DateTimeInterface $createAt): self
     {
-        $this->createDate = $createDate;
+        $this->createAt = $createAt;
 
         return $this;
     }
 
     /**
-     * Set the value of userValidation
+     * Set user valid
      *
      * @return  self
      */
-    public function setUserValidation(bool $userValidation): self
+    public function setIsValid(): self
     {
-        $this->userValidation = $userValidation;
+        $this->valid = true;
+        $this->validAt = new DateTime();
 
         return $this;
     }
 
     /**
-     * Set the value of userValidationDate
+     * Set user not valid
      *
      * @return  self
      */
-    public function setUserValidationDate(?\DateTimeInterface $userValidationDate): self
+    public function setIsNotValid(): self
     {
-        $this->userValidationDate = $userValidationDate;
+        $this->valid = false;
+        $this->validAt = null;
 
         return $this;
     }
 
     /**
-     * Set the value of userSuspended
+     * Set user suspended
      *
      * @return  self
      */
-    public function setUserSuspended(bool $userSuspended)
+    public function setIsSuspended(): self
     {
-        $this->userSuspended = $userSuspended;
+        $this->suspended = true;
+        $this->suspendedAt = new DateTime();
 
         return $this;
     }
 
     /**
-     * Set the value of userSuspendedDate
+     * Set user not suspended
      *
      * @return  self
      */
-    public function setUserSuspendedDate(?\DateTimeInterface $userSuspendedDate): self
+    public function setIsNotSuspended(): self
     {
-/*
-        $minSuspendedDate = new DateTime();
-
-        if ($userSuspendedDate > $minSuspendedDate && isset($userSuspendedDate)) {
-            throw new InvalidArgumentException('Date de suspension invalide');
-        }*/
-        $this->userSuspendedDate = $userSuspendedDate;
+        $this->suspended = false;
+        $this->suspendedAt = null;
 
         return $this;
     }
 
     /**
-     * Set the value of userDeleted
+     * Set user delete
      *
      * @return  self
      */
-    public function setUserDeleted(bool $userDeleted)
+    public function setIsDeleted(): self
     {
-        $this->userDeleted = $userDeleted;
+        $this->deleted = true;
+        $this->deletedAt = new DateTime();
 
         return $this;
     }
 
     /**
-     * Set the value of userDeletedDate
+     * Set user not delete
      *
      * @return  self
      */
-    public function setUserDeletedDate(?\DateTimeInterface $userDeletedDate): self
+    public function setIsNotDeleted(): self
     {
-        $this->userDeletedDate = $userDeletedDate;
+        $this->deleted = false;
+        $this->deletedAt = null;
 
         return $this;
     }
 
     /**
-     * Entity builder with requested parameters
+     * Entity builder withis requested parameters
      *
      * @return  self
      */
@@ -367,26 +416,24 @@ class User implements UserInterface
         ?string $lastName,
         ?string $email,
         ?string $password,
-        ?string $birthDate
+        ?string $birthisDate
     ): User {
         $user = new User();
         $firstName ? $user->setFirstName($firstName) : null ;
         $lastName ? $user->setLastName($lastName) : null ;
         $email ? $user->setEmail($email) : null ;
         $password ? $user->setPassword($password) : null ;
-        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
+        $birthisDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthisDate)) : null ;
 
-        $user->setCreateDate(new DateTime())
-            ->setUserValidation(false)
-            ->setUserSuspended(true)
-            ->setUserDeleted(false);
+        $user->setCreateAt(new DateTime());
+
 
         return $user;
     }
 
 
     /**
-     * A visual identifier that represents this user.
+     * A vual identifier thisat represents this user.
      *
      * @see UserInterface
      */
@@ -434,7 +481,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        // not needed when using the "bcrypt" algorithism in security.yaml
         return null;
     }
 
@@ -444,6 +491,6 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // $this->password = null;
     }
 }
