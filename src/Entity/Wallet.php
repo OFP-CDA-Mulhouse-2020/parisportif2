@@ -20,20 +20,25 @@ class Wallet
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotNull(
+     *  message="Balance incorrect",
+     * )
      * @Assert\Type(
      *  type="integer",
      *  message="{{ value }} n'est pas du type {{ type }}",
-     *  groups={"balance"}
      * )
      * @Assert\PositiveOrZero(
      *  message="Balance not less than 0",
-     *  groups={"balance"}
      * )
      */
     private int $balance;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotNull(
+     *  message="Limite incorrecte",
+     *  groups={"limitAmountPerWeek"}
+     * )
      * @Assert\PositiveOrZero(
      *  message="Limite incorrecte",
      *  groups={"limitAmountPerWeek"}
@@ -48,6 +53,9 @@ class Wallet
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull(
+     *  message="Money incorrect",
+     * )
      */
     private bool $realMoney;
 
@@ -65,14 +73,6 @@ class Wallet
     public function getBalance(): int
     {
         return $this->balance;
-    }
-
-    /**
-     * @param int $balance
-     */
-    public function setBalance(int $balance): void
-    {
-        $this->balance = $balance;
     }
 
     /**
@@ -107,26 +107,45 @@ class Wallet
         $this->realMoney = $realMoney;
     }
 
-    public static function build(int $balance, int $limitAmountPerWeek, bool $realMoney): Wallet
+    public function initializeWallet(bool $realMoney): void
     {
-        $wallet = new Wallet();
-        $wallet->setBalance($balance);
-
-        return $wallet;
+        if ($realMoney) {
+            $this->balance = 0;
+        } else {
+            $this->balance = 100;
+        }
+            $this->realMoney = $realMoney;
     }
 
-    /**
-     * @Assert\IsFalse(
-     *  message="Montant incorrect, transaction rejetée",
-     *  groups={"addMoney"}
-     * )
-     */
-    public function hasAddedMoney(int $amount): bool
+    public function addMoney(int $amount): bool
     {
         if ($amount <= 0) {
             return false;
         }
         $this->balance += $amount;
+
+        return true;
+    }
+
+    public function withdrawMoney(int $amount): bool
+    {
+        if ($amount <= 0 or $amount > $this->getBalance()) {
+            return false;
+        }
+        $this->balance -= $amount;
+
+        return true;
+    }
+
+    public function betPayment(int $amount, int $amountBetPaymentLastWeek): bool
+    {
+        if ($amount <= 0 or $amount > $this->getBalance()) {
+            return false;
+        }
+        if ($amount > $this->getLimitAmountPerWeek() / 100 - $amountBetPaymentLastWeek) {
+            return false;
+        }
+        $this->balance -= $amount;
 
         return true;
     }

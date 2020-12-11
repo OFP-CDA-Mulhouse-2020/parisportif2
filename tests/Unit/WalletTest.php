@@ -38,42 +38,32 @@ class WalletTest extends KernelTestCase
     }
 
 
-    /************************$balance*********************************/
+    /************************initializeWallet*********************************/
 
-    /**
-     * @dataProvider validBalanceProvider
-     */
-    public function testValidBalance($balance, $groups, $expectedViolationsCount): void
+
+    public function testInitializeWalletWithRealMoney(): void
     {
         $wallet = new Wallet();
-        $wallet->setBalance($balance);
-        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($wallet, $groups));
+        $wallet->initializeWallet(true);
+        $this->assertTrue($wallet->isRealMoney());
+        $this->assertSame(0, $wallet->getBalance());
+        $this->assertSame(0, $this->getViolationsCount($wallet, null));
     }
 
-    public function validBalanceProvider(): array
-    {
-        return [
-            [2, ['balance'], 0],
-            [23, ['balance'], 0],
-        ];
-    }
 
-    /**
-     * @dataProvider invalidBalanceProvider
-     */
-    public function testInvalidBalance($balance, $groups, $expectedViolationsCount): void
+    public function testInitializeWalletWithFakeMoney(): void
     {
         $wallet = new Wallet();
-        $wallet->setBalance($balance);
-        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($wallet, $groups));
+        $wallet->initializeWallet(false);
+        $this->assertFalse($wallet->isRealMoney());
+        $this->assertSame(100, $wallet->getBalance());
+        $this->assertSame(0, $this->getViolationsCount($wallet, null));
     }
 
-    public function invalidBalanceProvider(): array
+    public function testInvalidInitializeWallet(): void
     {
-        return [
-            [-258, ['balance'], 1],
-            [-45, ['balance'], 1],
-        ];
+        $wallet = new Wallet();
+        $this->assertSame(2, $this->getViolationsCount($wallet, null));
     }
 
     /************************$limitAmountPerWeek*********************************/
@@ -86,6 +76,7 @@ class WalletTest extends KernelTestCase
         $wallet = new Wallet();
         $wallet->setLimitAmountPerWeek($limitAmountPerWeek);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($wallet, $groups));
+        $this->assertSame($limitAmountPerWeek, $wallet->getLimitAmountPerWeek());
     }
 
     public function validLimitAmountPerWeekProvider(): array
@@ -114,17 +105,19 @@ class WalletTest extends KernelTestCase
         ];
     }
 
+    /************************addMoney*********************************/
+
     /**
      * @dataProvider addMoneySuccessfullyProvider
      */
-    public function testAddMoneySuccessfully($amount, $balance)
+    public function testAddMoneySuccessfully($amount, $realMoney)
     {
         $wallet = new Wallet();
-        $wallet->setBalance($balance);
+        $wallet->initializeWallet($realMoney);
 
         $expectedBalance = $wallet->getBalance() + $amount;
 
-        $transactionStatus = $wallet->hasAddedMoney($amount);
+        $transactionStatus = $wallet->addMoney($amount);
 
         $this->assertSame($expectedBalance, $wallet->getBalance());
         $this->assertTrue($transactionStatus);
@@ -133,29 +126,134 @@ class WalletTest extends KernelTestCase
     public function addMoneySuccessfullyProvider(): array
     {
         return [
-            [1, 0],
-            [100000, 145],
+            [1, false],
+            [100000, true],
         ];
     }
 
     /**
      * @dataProvider addMoneyFailProvider
      */
-    public function testAddMoneyFail($amount, $balance, $groups)
+    public function testAddMoneyFail($amount, $realMoney)
     {
         $wallet = new Wallet();
-        $wallet->setBalance($balance);
+        $wallet->initializeWallet($realMoney);
+        $balance = $wallet->getBalance();
 
-        $transactionStatus = $wallet->hasAddedMoney($amount);
-        $this->assertSame(1, $this->getViolationsCount($wallet, $groups));
+        $transactionStatus = $wallet->addMoney($amount);
+        $this->assertSame($balance, $wallet->getBalance());
+
         $this->assertFalse($transactionStatus);
     }
 
     public function addMoneyFailProvider(): array
     {
         return [
-            [-20, 0, ['addMoney']],
-            [-100, 145, ['addMoney']],
+            [-20, true],
+            [-100, false],
+        ];
+    }
+
+    /************************withdrawMoney*********************************/
+
+    /**
+     * @dataProvider withdrawMoneySuccessfullyProvider
+     */
+    public function testWithdrawMoneySuccessfully($withdrawAmount, $realMoney)
+    {
+        $wallet = new Wallet();
+        $wallet->initializeWallet($realMoney);
+        $wallet->addMoney(100);
+
+        $expectedBalance = $wallet->getBalance() - $withdrawAmount;
+        $transactionStatus = $wallet->withdrawMoney($withdrawAmount);
+
+        $this->assertSame($expectedBalance, $wallet->getBalance());
+        $this->assertTrue($transactionStatus);
+    }
+
+    public function withdrawMoneySuccessfullyProvider(): array
+    {
+        return [
+            [100, true],
+            [200, false],
+        ];
+    }
+
+    /**
+     * @dataProvider withdrawMoneyFailProvider
+     */
+    public function testWithdrawMoneyFail($amount, $realMoney)
+    {
+        $wallet = new Wallet();
+        $wallet->initializeWallet($realMoney);
+        $wallet->addMoney(100);
+
+        $balance = $wallet->getBalance();
+
+        $transactionStatus = $wallet->withdrawMoney($amount);
+        $this->assertSame($balance, $wallet->getBalance());
+
+        $this->assertFalse($transactionStatus);
+    }
+
+    public function withdrawMoneyFailProvider(): array
+    {
+        return [
+            [-10, true],
+            [120, true],
+            [-10, false],
+            [201, false],
+        ];
+    }
+
+    /************************betPayment*********************************/
+    /**
+     * @dataProvider validBetPaymentProvider
+     */
+    public function testValidBetPayment($amount, $amountBetPaymentLastWeek)
+    {
+        $wallet = new Wallet();
+        $wallet->initializeWallet(true);
+        $wallet->addMoney(100);
+
+        $expectedBalance = $wallet->getBalance() - $amount;
+        $transactionStatus = $wallet->betPayment($amount, $amountBetPaymentLastWeek);
+
+        $this->assertSame($expectedBalance, $wallet->getBalance());
+        $this->assertTrue($transactionStatus);
+    }
+
+    public function validBetPaymentProvider(): array
+    {
+        return [
+            [50, 50],
+            [10, 90],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidBetPaymentProvider
+     */
+    public function testInvalidBetPayment($amount, $amountBetPaymentLastWeek)
+    {
+        $wallet = new Wallet();
+        $wallet->initializeWallet(true);
+        $wallet->addMoney(100);
+
+        $expectedBalance = $wallet->getBalance();
+        $transactionStatus = $wallet->betPayment($amount, $amountBetPaymentLastWeek);
+
+        $this->assertSame($expectedBalance, $wallet->getBalance());
+        $this->assertFalse($transactionStatus);
+    }
+
+    public function invalidBetPaymentProvider(): array
+    {
+        return [
+            [-50, 50],
+            [11, 90],
+            [55, 50],
         ];
     }
 }
