@@ -23,16 +23,6 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Assert\Type(
-     *  type="integer",
-     *  message="Id incorrect",
-     *  groups={"login"}
-     * )
-     * @Assert\GreaterThan(
-     *  value = 0,
-     *  message="Id incorrect",
-     *  groups={"id", "login"}
-     * )
      */
     private int $id;
 
@@ -128,36 +118,36 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      * @Assert\NotNull(
      *  message="Status validation null",
-     *  groups={"valid"}
+     *  groups={"active"}
      * )
      * @Assert\Type(
      *  type="bool",
      *  message="{{ value }} n'est pas du type {{ type }}",
-     *  groups={"valid"}
+     *  groups={"active"}
      * )
      */
-    private bool $valid = false;
+    private bool $active = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
      *  value="+1 hours",
      *  message="Date de validation incorrecte : {{ value }}",
-     *  groups={"valid"}
+     *  groups={"active"}
      * )
      */
-    private ?\DateTimeInterface $validAt;
+    private ?DateTimeInterface $activeAt;
 
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotNull(
      *  message="Status suspendu null",
-     *  groups={"suspended"}
+     *  groups={"suspend"}
      * )
      * @Assert\Type(
      *  type="bool",
      *  message="{{ value }} n'est pas du type {{ type }}",
-     *  groups={"suspended"}
+     *  groups={"suspend"}
      * )
      */
     private bool $suspended = false;
@@ -167,21 +157,21 @@ class User implements UserInterface
      * @Assert\LessThanOrEqual(
      *  value="+1 hours",
      *  message="Date de suspension incorrecte : {{ value }}",
-     *  groups={"suspended"}
+     *  groups={"suspend"}
      * )
      */
-    private ?\DateTimeInterface $suspendedAt;
+    private ?DateTimeInterface $suspendedAt;
 
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotNull(
      *  message="Status supprimé null",
-     *  groups={"deleted"}
+     *  groups={"delete"}
      * )
      * @Assert\Type(
      *  type="bool",
      *  message="{{ value }} n'est pas du type {{ type }}",
-     *  groups={"deleted"}
+     *  groups={"delete"}
      * )
      */
     private bool $deleted = false;
@@ -191,10 +181,10 @@ class User implements UserInterface
      * @Assert\LessThanOrEqual(
      *  value="+1 hours",
      *  message="Date de suppression incorrecte : {{ value }}",
-     *  groups={"deleted"}
+     *  groups={"delete"}
      * )
      */
-    private ?\DateTimeInterface $deletedAt;
+    private ?DateTimeInterface $deletedAt;
 
     public function getId(): ?int
     {
@@ -216,61 +206,50 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    public function getBirthDate(): ?DateTimeInterface
     {
         return $this->birthDate;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreateAt(): ?DateTimeInterface
     {
         return $this->createAt;
     }
 
-    public function getValid(): ?bool
+    public function isActive(): ?bool
     {
-        return $this->valid;
+        return $this->active;
     }
 
-    public function getValidAt(): ?\DateTimeInterface
+    public function getActiveAt(): ?DateTimeInterface
     {
-        return $this->validAt;
+        return $this->activeAt;
     }
 
-    public function getSuspended(): ?bool
+    public function isSuspended(): ?bool
     {
         return $this->suspended;
     }
 
-    public function getSuspendedAt(): ?\DateTimeInterface
+    public function getSuspendedAt(): ?DateTimeInterface
     {
         return $this->suspendedAt;
     }
 
-    public function getDeleted(): ?bool
+    public function isDeleted(): ?bool
     {
         return $this->deleted;
     }
 
-    public function getDeletedAt(): ?\DateTimeInterface
+    public function getDeletedAt(): ?DateTimeInterface
     {
         return $this->deletedAt;
     }
 
     /**
-     * Set the value of id
-     *
-     * @return  self
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Set the value of lastName
      *
+     * @param string $lastName
      * @return  self
      */
     public function setLastName(string $lastName): self
@@ -283,6 +262,7 @@ class User implements UserInterface
     /**
      * Set the value of firstName
      *
+     * @param string $firstName
      * @return  self
      */
     public function setFirstName(string $firstName): self
@@ -295,6 +275,7 @@ class User implements UserInterface
     /**
      * Set the value of email
      *
+     * @param string $email
      * @return  self
      */
     public function setEmail(string $email): self
@@ -307,9 +288,10 @@ class User implements UserInterface
     /**
      * Set the value of birthDate
      *
+     * @param DateTimeInterface|null $birthDate
      * @return  self
      */
-    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    public function setBirthDate(?DateTimeInterface $birthDate): self
     {
         $this->birthDate = $birthDate;
 
@@ -319,9 +301,10 @@ class User implements UserInterface
     /**
      * Set the value of createAt
      *
+     * @param DateTimeInterface $createAt
      * @return  self
      */
-    public function setCreateAt(\DateTimeInterface $createAt): self
+    public function setCreateAt(DateTimeInterface $createAt): self
     {
         $this->createAt = $createAt;
 
@@ -333,10 +316,10 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsValid(): self
+    public function activate(): self
     {
-        $this->valid = true;
-        $this->validAt = new DateTime();
+        $this->active = true;
+        $this->activeAt = new DateTime();
 
         return $this;
     }
@@ -346,10 +329,10 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsNotValid(): self
+    public function deactivate(): self
     {
-        $this->valid = false;
-        $this->validAt = null;
+        $this->active = false;
+        $this->activeAt = null;
 
         return $this;
     }
@@ -359,7 +342,7 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsSuspended(): self
+    public function suspend(): self
     {
         $this->suspended = true;
         $this->suspendedAt = new DateTime();
@@ -372,7 +355,7 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsNotSuspended(): self
+    public function unsuspended(): self
     {
         $this->suspended = false;
         $this->suspendedAt = null;
@@ -385,7 +368,7 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsDeleted(): self
+    public function delete(): self
     {
         $this->deleted = true;
         $this->deletedAt = new DateTime();
@@ -398,7 +381,7 @@ class User implements UserInterface
      *
      * @return  self
      */
-    public function setIsNotDeleted(): self
+    public function undelete(): self
     {
         $this->deleted = false;
         $this->deletedAt = null;
@@ -407,8 +390,13 @@ class User implements UserInterface
     }
 
     /**
-     * Entity builder withis requested parameters
+     * Entity builder with the requested parameters
      *
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param string|null $email
+     * @param string|null $password
+     * @param string|null $birthDate
      * @return  self
      */
     public static function build(
@@ -416,14 +404,14 @@ class User implements UserInterface
         ?string $lastName,
         ?string $email,
         ?string $password,
-        ?string $birthisDate
+        ?string $birthDate
     ): User {
         $user = new User();
         $firstName ? $user->setFirstName($firstName) : null ;
         $lastName ? $user->setLastName($lastName) : null ;
         $email ? $user->setEmail($email) : null ;
         $password ? $user->setPassword($password) : null ;
-        $birthisDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthisDate)) : null ;
+        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
 
         $user->setCreateAt(new DateTime());
 
@@ -433,7 +421,7 @@ class User implements UserInterface
 
 
     /**
-     * A vual identifier thisat represents this user.
+     * A visual identifier that represents this user.
      *
      * @see UserInterface
      */
@@ -481,7 +469,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithism in security.yaml
+        // not needed when using the "bcrypt" algorithm in security.yaml
         return null;
     }
 
