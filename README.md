@@ -1,4 +1,7 @@
 
+
+![PHPUnit](https://github.com/OFP-CDA-Mulhouse-2020/parisportif2/workflows/CI/badge.svg?branch=develop)
+
 # parisportif2
 
 ## Target : Design App for online bet, with several sport available, pokerstars like 

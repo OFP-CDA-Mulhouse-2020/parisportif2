@@ -22,8 +22,8 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('password', User::class);
         $this->assertClassHasAttribute('birthDate', User::class);
         $this->assertClassHasAttribute('createAt', User::class);
-        $this->assertClassHasAttribute('valid', User::class);
-        $this->assertClassHasAttribute('validAt', User::class);
+        $this->assertClassHasAttribute('active', User::class);
+        $this->assertClassHasAttribute('activeAt', User::class);
         $this->assertClassHasAttribute('suspended', User::class);
         $this->assertClassHasAttribute('suspendedAt', User::class);
         $this->assertClassHasAttribute('deleted', User::class);
@@ -39,7 +39,7 @@ class UserTest extends KernelTestCase
         return $kernel;
     }
 
-    public function numberOfViolations(User $user, $groups)
+    public function getViolationsCount(User $user, $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -50,38 +50,21 @@ class UserTest extends KernelTestCase
     }
 
 
-    /************************$id**********************************/
-    /**
-     * @dataProvider idProvider
-     */
-    public function testId(User $user, $groups, $numberOfViolations)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-    }
-
-    public function idProvider()
-    {
-        return [
-            [(new User())->setId(2), ['id'], 0],
-            [(new User())->setId(23), ['id'], 0],
-            [(new User())->setId(258), ['id'], 0],
-            [(new User())->setId(-45), ['id'], 1],
-        ];
-    }
-
     /************************$user**********************************/
-
 
 
     /**
      * @dataProvider validUserProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
      */
-    public function testValidUser(User $user, $groups, $numberOfViolations)
+    public function testValidUser(User $user, array $groups, int $expectedViolationsCount)
     {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
 
-    public function validUserProvider()
+    public function validUserProvider(): array
     {
         return [
             [User::build('daniel', 'test', 'daniel@test.fr', 'M1cdacda', '1995-12-12'), ['register'], 0],
@@ -100,13 +83,16 @@ class UserTest extends KernelTestCase
 
     /**
      * @dataProvider invalidUserProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
      */
-    public function testInvalidUser(User $user, $groups, $numberOfViolations)
+    public function testInvalidUser(User $user, array $groups, int $expectedViolationsCount)
     {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
 
-    public function invalidUserProvider()
+    public function invalidUserProvider(): array
     {
         return [
             [User::build(
@@ -135,13 +121,16 @@ class UserTest extends KernelTestCase
 
     /**
      * @dataProvider createAtProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
      */
-    public function testCreationDate(User $user, $groups, $numberOfViolations)
+    public function testCreationDate(User $user, array $groups, int $expectedViolationsCount)
     {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
 
-    public function createAtProvider()
+    public function createAtProvider(): array
     {
         return [
             [(new User())->setCreateAt(DateTime::createFromFormat('Y-m-d', '2019-12-12')), ['createAt'], 0],
@@ -154,60 +143,90 @@ class UserTest extends KernelTestCase
     /************************$isValid**********************************/
 
     /**
-     * @dataProvider isValidProvider
+     * @dataProvider activateProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
+     * @param bool $expectedActiveValue
+     * @param ?DateTime $expectedActiveAtValue
      */
-    public function testIsValid(User $user, $groups, $numberOfViolations, $validValue, $validAtValue)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-        $this->assertSame($user->getValid(), $validValue);
-        $this->assertEqualsWithDelta($user->getValidAt(), $validAtValue, 1);
+    public function testActivate(
+        User $user,
+        array $groups,
+        int $expectedViolationsCount,
+        bool $expectedActiveValue,
+        ?DateTime $expectedActiveAtValue
+    ) {
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
+        $this->assertSame($expectedActiveValue, $user->isActive());
+        $this->assertEqualsWithDelta($expectedActiveAtValue, $user->getActiveAt(), 1);
     }
 
-    public function isValidProvider()
+    public function activateProvider(): array
     {
         return [
-            [(new User())->setIsValid(), ['valid'], 0, true, new DateTime()],
-            [(new User())->setIsNotValid(), ['valid'], 0, false, null],
+            [(new User())->activate(), ['active'], 0, true, new DateTime()],
+            [(new User())->deactivate(), ['active'], 0, false, null],
         ];
     }
 
     /************************$isSuspended**********************************/
 
     /**
-     * @dataProvider isSuspendedProvider
+     * @dataProvider suspendProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
+     * @param bool $expectedSuspendedValue
+     * @param ?DateTime $expectedsuspendedAtValue
      */
-    public function testIsSuspended(User $user, $groups, $numberOfViolations, $suspendedValue, $suspendedAtValue)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-        $this->assertSame($user->getSuspended(), $suspendedValue);
-        $this->assertEqualsWithDelta($user->getSuspendedAt(), $suspendedAtValue, 1);
+    public function testSuspend(
+        User $user,
+        array $groups,
+        int $expectedViolationsCount,
+        bool $expectedSuspendedValue,
+        ?DateTime $expectedsuspendedAtValue
+    ) {
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
+        $this->assertSame($expectedSuspendedValue, $user->isSuspended());
+        $this->assertEqualsWithDelta($expectedsuspendedAtValue, $user->getSuspendedAt(), 1);
     }
 
-    public function isSuspendedProvider()
+    public function suspendProvider(): array
     {
         return [
-            [(new User())->setIsSuspended(), ['suspended'], 0, true, new DateTime()],
-            [(new User())->setIsNotSuspended(), ['suspended'], 0, false, null],
+            [(new User())->suspend(), ['suspend'], 0, true, new DateTime()],
+            [(new User())->unsuspended(), ['suspend'], 0, false, null],
         ];
     }
 
     /************************$isDeleted**********************************/
 
     /**
-     * @dataProvider isDeleteProvider
+     * @dataProvider deleteProvider
+     * @param User $user
+     * @param array $groups
+     * @param int $expectedViolationsCount
+     * @param bool $expectedDeletedValue
+     * @param ?DateTime $expectedDeletedAtValue
      */
-    public function testIsDeleted(User $user, $groups, $numberOfViolations, $deletedValue, $deletedAtValue)
-    {
-        $this->assertSame($numberOfViolations, $this->numberOfViolations($user, $groups));
-        $this->assertSame($user->getDeleted(), $deletedValue);
-        $this->assertEqualsWithDelta($user->getDeletedAt(), $deletedAtValue, 1);
+    public function testDelete(
+        User $user,
+        array $groups,
+        int $expectedViolationsCount,
+        bool $expectedDeletedValue,
+        ?DateTime $expectedDeletedAtValue
+    ) {
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
+        $this->assertSame($expectedDeletedValue, $user->isDeleted());
+        $this->assertEqualsWithDelta($expectedDeletedAtValue, $user->getDeletedAt(), 1);
     }
 
-    public function isDeleteProvider()
+    public function deleteProvider(): array
     {
         return [
-            [(new User())->setIsDeleted(), ['deleted'], 0, true, new DateTime()],
-            [(new User())->setIsNotDeleted(), ['deleted'], 0, false, null],
+            [(new User())->delete(), ['delete'], 0, true, new DateTime()],
+            [(new User())->undelete(), ['delete'], 0, false, null],
         ];
     }
 }
