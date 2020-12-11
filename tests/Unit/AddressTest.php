@@ -21,26 +21,7 @@ class AddressTest extends KernelTestCase
     }
 
 
-    /************ $id ***************/
-    /**
-     * @dataProvider additionProviderId
-     */
-    public function testSetId($id)
-    {
-        $address = new Address();
-        $address->setId($id);
-        $this->assertSame($id, $address->getId());
-    }
-
-    public function additionProviderId()
-    {
-        return [
-            [1],
-            [23],
-            [258],
-            [455]
-        ];
-    }
+    /************ Kernel ***************/
 
 
     public function getKernel(): KernelInterface
@@ -73,8 +54,33 @@ class AddressTest extends KernelTestCase
     public function validAddressProvider()
     {
         return [
-            [Address::build('12 rue du test', 77777, 'TestCity', 'Testland'), null, 0]
+            [Address::build('12 rue du test', 77777, 'TestCity', 'Testland'), ['adress'], 0]
             // [Address::build('12 rue du test', null, null, null), ['addressNumberAndStreet'], 0]
+        ];
+    }
+
+
+    /**
+     * @dataProvider invalidAddressProvider
+     */
+    public function testInvalidAddress(Address $address, $groups, $numberOfViolations)
+    {
+        $this->assertSame($numberOfViolations, $this->numberOfViolations($address, $groups));
+    }
+
+    public function invalidAddressProvider()
+    {
+        return [
+            [Address::build(null, null, null, null), ['address'], 4],
+            [Address::build("rue vaugirard", null, null, null), ['addressNumberAndStreet'], 1],
+            [Address::build("1", null, null, null), ['addressNumberAndStreet'], 1],
+            [Address::build(null, 12, null, null), ['zipCode'], 1],
+            [Address::build(null, 123456, null, null), ['zipCode'], 1],
+            [Address::build(null, null, "1555jfdjf", null), ['city'], 1],
+            [Address::build(null, null, "le nom de la ville à plus de quarante caractères", null), ['city'], 1],
+            [Address::build(null, null, null, "1555jfdjf"), ['country'], 1],
+            [Address::build(null, null, null, "le nom du pays à plus de quarante caractères"), ['country'], 1]
+
         ];
     }
 }

@@ -97,18 +97,6 @@ class Address
         return $this->id;
     }
 
-    /**
-     * Set value of id
-     *
-     * @return  self
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
 
     /********************* Address Street Number ********************** */
 
