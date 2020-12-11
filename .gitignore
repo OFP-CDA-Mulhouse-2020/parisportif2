@@ -7,7 +7,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-/.vscode/
+
 ###> squizlabs/php_codesniffer ###
 /.phpcs-cache
 /phpcs.xml
@@ -21,3 +21,6 @@
 ###< symfony/phpunit-bridge ###
 
 db/*
+
+/.vscode/
+/.idea/

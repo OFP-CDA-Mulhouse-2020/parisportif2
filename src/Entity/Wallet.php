@@ -20,6 +20,11 @@ class Wallet
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type(
+     *  type="integer",
+     *  message="{{ value }} n'est pas du type {{ type }}",
+     *  groups={"balance"}
+     * )
      * @Assert\PositiveOrZero(
      *  message="Balance not less than 0",
      *  groups={"balance"}
