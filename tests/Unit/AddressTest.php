@@ -23,7 +23,6 @@ class AddressTest extends KernelTestCase
 
     /************ Kernel ***************/
 
-
     public function getKernel(): KernelInterface
     {
         $kernel = self::bootKernel();
