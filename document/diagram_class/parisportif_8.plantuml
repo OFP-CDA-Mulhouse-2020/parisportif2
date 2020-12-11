@@ -58,6 +58,7 @@ class BankAccount {
     - id :int
     - userId :int
     - ibanCode :string
+    - bicCode :string
 
     + createBankAccount()
     + editBankAccount()
@@ -65,7 +66,7 @@ class BankAccount {
     + checkBankAccount()
 }
 
-class BankOfWebsite {
+class WebsiteWallet {
     - id: int
     - amount: float
 }
@@ -244,7 +245,7 @@ User "1..*" *-- "1..*" Payment
 Payment "1..*" -down-* "1..*" Wallet
 Payment "1..*" -left- "Order"
 Payment "1" -- "1" BankAccount
-Payment "1" -right- "1" BankOfWebsite
+Payment "1" -right- "1" WebsiteWallet
 Payment "1" -up- "1..*" TypeOfPayment
 
 Cart "1..*" -up- "1..*" Bet
