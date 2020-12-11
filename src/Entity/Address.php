@@ -43,7 +43,7 @@ class Address
 
 
     /**
-     * @ORM\Column(type="int", length=255)
+     * @ORM\Column(type="integer", length=255)
      * @Assert\NotBlank(message="Code postal vide",
      *  groups={"address"}
      * )
