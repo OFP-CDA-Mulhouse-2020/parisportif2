@@ -21,27 +21,7 @@ class AddressTest extends KernelTestCase
     }
 
 
-    /************ $id ***************/
-    /**
-     * @dataProvider additionProviderId
-     */
-    public function testSetId($id)
-    {
-        $address = new Address();
-        $address->setId($id);
-        $this->assertSame($id, $address->getId());
-    }
-
-    public function additionProviderId()
-    {
-        return [
-            [1],
-            [23],
-            [258],
-            [0]
-        ];
-    }
-
+    /************ Kernel ***************/
 
     public function getKernel(): KernelInterface
     {
