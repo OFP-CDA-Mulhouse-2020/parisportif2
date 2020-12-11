@@ -33,8 +33,8 @@ class Address
      *  groups={"address"}
      * )
      * @Assert\Regex(
-     *  pattern ="/^[#.0-9a-zA-Z\s,-]+$/",
-     *  message="Adresse : {{ value}} incorrect",
+     *  pattern ="/^[0-9]{1,3}[a-zA-Z\s,-]+$/",
+     *  message="Adresse : {{value}} incorrect",
      *  groups={"addressNumberAndStreet", "address"}
      * )
      *
@@ -42,48 +42,48 @@ class Address
     private string $addressNumberAndStreet;
 
 
-    // /**
-    //  * @ORM\Column(type="int", length=255)
-    //  * @Assert\NotBlank(message="Code postal vide",
-    //  *  groups={"address"}
-    //  * )
-    //  * @Assert\Regex(
-    //  *  pattern ="/^[0-9]{5}$/",
-    //  *  message="Code postal : {{ value}} incorrect",
-    //  *  groups={"codeZip", "address"}
-    //  * )
-    //  *
-    //  */
+    /**
+     * @ORM\Column(type="int", length=255)
+     * @Assert\NotBlank(message="Code postal vide",
+     *  groups={"address"}
+     * )
+     * @Assert\Regex(
+     *  pattern ="/^[0-9]{5}$/",
+     *  message="Code postal : {{ value}} incorrect",
+     *  groups={"zipCode", "address"}
+     * )
+     *
+     */
     private int $zipCode;
 
 
-    // /**
-    //  * @ORM\Column(type="string", length=255)
-    //  * @Assert\NotBlank(message="Ville non renseignée",
-    //  *  groups={"city", "address"}
-    //  * )
-    //  * @Assert\Regex(
-    //  *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-    //  *  message="Ville : {{ value}} incorrect",
-    //  *  groups={"address"}
-    //  * )
-    //  *
-    //  */
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Ville non renseignée",
+     *  groups={"city", "address"}
+     * )
+     * @Assert\Regex(
+     *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,40}$/",
+     *  message="Ville : {{ value}} incorrect",
+     *  groups={"city","address"}
+     * )
+     *
+     */
     private string $city;
 
 
-    // /**
-    //  * @ORM\Column(type="string", length=255)
-    //  * @Assert\NotBlank(message="Pays non renseignée",
-    //  *  groups={"country", "address"}
-    //  * )
-    //  * @Assert\Regex(
-    //  *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-    //  *  message="Pays : {{ value}} incorrect",
-    //  *  groups={"address"}
-    //  * )
-    //  *
-    //  */
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Pays non renseignée",
+     *  groups={"country", "address"}
+     * )
+     * @Assert\Regex(
+     *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,40}$/",
+     *  message="Pays : {{ value}} incorrect",
+     *  groups={"country", "address"}
+     * )
+     *
+     */
     private string $country;
 
 
@@ -95,18 +95,6 @@ class Address
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set value of id
-     *
-     * @return  self
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
 
