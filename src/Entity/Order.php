@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -42,7 +44,7 @@ class Order
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Bet Id incorrect",
+     *  message="recordedOdds incorrect",
      * )
      * @Assert\Type(
      *  type="integer",
@@ -52,12 +54,12 @@ class Order
      *  message="Bet Id must be positive",
      * )
      */
-    private int $recordedOdd;
+    private int $recordedOdds;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Bet Id incorrect",
+     *  message="Amount incorrect",
      * )
      * @Assert\Type(
      *  type="integer",
@@ -73,12 +75,10 @@ class Order
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(
      *  message="Date de commande vide",
-     *  groups={"createAt"}
      * )
      * @Assert\LessThanOrEqual(
      *  value="+1 hours",
      *  message="Date de commande incorrecte : {{ value }}",
-     *  groups={"createAt"}
      * )
      */
     private DateTimeInterface $orderAt;
@@ -86,34 +86,74 @@ class Order
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Bet Id incorrect",
-     * )
-     * @Assert\Type(
-     *  type="integer",
-     *  message="{{ value }} n'est pas du type {{ type }}",
+     *  message="Order Status incorrect",
+     * groups={"orderStatus"}
      * )
      * @Assert\Choice(
-     *  choices=Order::ORDER_STATUS, message="Status incorrect")
+     *  choices=Order::ORDER_STATUS,
+     *  message="Status incorrect",
+     *  groups={"orderStatus"}
      * )
      */
-    private $orderStatus;
-
+    private int $orderStatus;
 
 
     public function getId(): ?int
     {
         return $this->id;
     }
-/*
-    public static function build(int $betId, int $recordedOdd, int $amount): Order
+
+    /**
+     * @return int
+     */
+    public function getBetId(): int
     {
-
-        $this->betId = $betId;
-        $this->recordedOdd = $recordedOdd;
-        $this->amount = $amount;
-
-
+        return $this->betId;
     }
 
-*/
+    /**
+     * @return int
+     */
+    public function getRecordedOdds(): int
+    {
+        return $this->recordedOdds;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
+    public function getOrderAt(): DateTimeInterface
+    {
+        return $this->orderAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderStatus(): int
+    {
+        return $this->orderStatus;
+    }
+
+    public function placeAnOrder(int $betId, int $recordedOdds, int $amount)
+    {
+        $this->betId = $betId;
+        $this->recordedOdds = $recordedOdds;
+        $this->amount = $amount;
+        $this->orderAt = new DateTime();
+        $this->orderStatus = 0;
+    }
+
+    public function setOrderStatus(int $orderStatus): void
+    {
+        $this->orderStatus = $orderStatus;
+    }
 }

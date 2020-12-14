@@ -1,4 +1,4 @@
-### Liste des activité phase1 : conception graphique et logique (9 jours)
+### Liste des activités phase1 : conception graphique et logique (9 jours)
 
 03/11 lecture specs, analyse, et veille concurentielle (ladji & daniel)
 
@@ -18,7 +18,7 @@
 13/11 uml review (tous), correction (ladji) et projet solidaire (daniel)
 
 ---
-### Liste des activité phase2 : installation environnement, docker, tdd, création entity (XX jours)
+### Liste des activités phase2 : installation environnement, docker, tdd, création entity (XX jours)
 
 16/11 installation environnement symfony (tous), réinstallation de symfony (ladji), projet solidaire (daniel)
 

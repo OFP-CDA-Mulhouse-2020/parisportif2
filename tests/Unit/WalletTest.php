@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class WalletTest extends KernelTestCase
 {
-    public function testAssertInstanceOfWallet()
+    public function testAssertInstanceOfWallet(): void
     {
         $wallet = new Wallet();
         $this->assertInstanceOf(Wallet::class, $wallet);
@@ -27,7 +27,7 @@ class WalletTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Wallet $wallet, $groups): int
+    public function getViolationsCount(Wallet $wallet, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -71,8 +71,11 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider validLimitAmountPerWeekProvider
      */
-    public function testValidLimitAmountPerWeek($limitAmountPerWeek, $groups, $expectedViolationsCount): void
-    {
+    public function testValidLimitAmountPerWeek(
+        int $limitAmountPerWeek,
+        ?array $groups,
+        int $expectedViolationsCount
+    ): void {
         $wallet = new Wallet();
         $wallet->setLimitAmountPerWeek($limitAmountPerWeek);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($wallet, $groups));
@@ -90,8 +93,11 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider invalidLimitAmountPerWeekProvider
      */
-    public function testInvalidLimitAmountPerWeek($limitAmountPerWeek, $groups, $expectedViolationsCount): void
-    {
+    public function testInvalidLimitAmountPerWeek(
+        int $limitAmountPerWeek,
+        ?array $groups,
+        int $expectedViolationsCount
+    ): void {
         $wallet = new Wallet();
         $wallet->setLimitAmountPerWeek($limitAmountPerWeek);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($wallet, $groups));
@@ -110,7 +116,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider addMoneySuccessfullyProvider
      */
-    public function testAddMoneySuccessfully($amount, $realMoney)
+    public function testAddMoneySuccessfully(int $amount, bool $realMoney): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet($realMoney);
@@ -134,7 +140,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider addMoneyFailProvider
      */
-    public function testAddMoneyFail($amount, $realMoney)
+    public function testAddMoneyFail(int $amount, bool $realMoney): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet($realMoney);
@@ -159,7 +165,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider withdrawMoneySuccessfullyProvider
      */
-    public function testWithdrawMoneySuccessfully($withdrawAmount, $realMoney)
+    public function testWithdrawMoneySuccessfully(int $withdrawAmount, bool $realMoney): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet($realMoney);
@@ -183,7 +189,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider withdrawMoneyFailProvider
      */
-    public function testWithdrawMoneyFail($amount, $realMoney)
+    public function testWithdrawMoneyFail(int $amount, bool $realMoney): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet($realMoney);
@@ -211,7 +217,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider validBetPaymentProvider
      */
-    public function testValidBetPayment($amount, $amountBetPaymentLastWeek)
+    public function testValidBetPayment(int $amount, int $amountBetPaymentLastWeek): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet(true);
@@ -235,7 +241,7 @@ class WalletTest extends KernelTestCase
     /**
      * @dataProvider invalidBetPaymentProvider
      */
-    public function testInvalidBetPayment($amount, $amountBetPaymentLastWeek)
+    public function testInvalidBetPayment(int $amount, int $amountBetPaymentLastWeek): void
     {
         $wallet = new Wallet();
         $wallet->initializeWallet(true);
