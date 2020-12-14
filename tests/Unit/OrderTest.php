@@ -97,6 +97,8 @@ class OrderTest extends KernelTestCase
             [0],
             [1],
             [2],
+            [3],
+            [4],
         ];
     }
 
@@ -116,7 +118,32 @@ class OrderTest extends KernelTestCase
         return [
             [-1],
             [12],
-            [3],
+            [5],
+        ];
+    }
+
+    /**
+     * @dataProvider validCalculateProfitsProvider
+     */
+    public function testValidCalculateProfits(int $orderStatus, ?int $expectedValue)
+    {
+        $order = new Order();
+        $order->placeAnOrder(1, 222, 1000);
+        $order->setOrderStatus($orderStatus);
+
+        $profits = $order->calculateProfits();
+        $this->assertSame($expectedValue, $profits);
+    }
+
+    public function validCalculateProfitsProvider(): array
+    {
+        return [
+            [0, null],
+            [1, 1000],
+            [2,(222 * 1000) / 100],
+            [3, null],
+            [4, 1000],
+
         ];
     }
 }

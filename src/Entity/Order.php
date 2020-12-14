@@ -15,9 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Order
 {
     public const ORDER_STATUS = [
-        0, // order payment => joueur à payé son ticket
-        1, // order delivered => joueur à gagné ou perdu son pari
-        2, // order cancelled => pari à été annulé et la mise aussi avec remboursement
+        0, // order init => attente du paiement
+        1, // order payment => joueur à payé son ticket
+        2, // order delivered => joueur à gagné son pari
+        3, // order delivered => joueur à perdu son pari
+        4, // order cancelled => pari à été annulé et la mise aussi avec remboursement
         ];
     /**
      * @ORM\Id
@@ -155,5 +157,27 @@ class Order
     public function setOrderStatus(int $orderStatus): void
     {
         $this->orderStatus = $orderStatus;
+    }
+
+    public function calculateProfits(): ?int
+    {
+        $profits = null;
+
+        switch ($this->getOrderStatus()) {
+            case 0:
+            case 3:
+                $profits = null;
+                break;
+            case 2:
+                $profits = $this->getRecordedOdds() * $this->getAmount();
+                $profits /= 100;
+                break;
+            case 1:
+            case 4:
+                $profits = $this->getAmount();
+                break;
+        }
+
+        return $profits;
     }
 }
