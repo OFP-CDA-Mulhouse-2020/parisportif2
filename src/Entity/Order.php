@@ -38,7 +38,7 @@ class Order
      *  type="integer",
      *  message="{{ value }} n'est pas du type {{ type }}",
      * )
-     * @Assert\Positive(
+     * @Assert\PositiveOrZero(
      *  message="Bet Id must be positive",
      * )
      */

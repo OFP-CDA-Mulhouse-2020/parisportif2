@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OrderStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OrderStatusRepository::class)
@@ -15,7 +16,7 @@ class OrderStatus
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -24,7 +25,7 @@ class OrderStatus
      *     message="Format incorrect"
      * )
      */
-    private $status;
+    private string $status;
 
     public function getId(): ?int
     {
