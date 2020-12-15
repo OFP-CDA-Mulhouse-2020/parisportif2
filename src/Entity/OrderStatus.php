@@ -19,6 +19,10 @@ class OrderStatus
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type(
+     *     type="string",
+     *     message="Format incorrect"
+     * )
      */
     private $status;
 

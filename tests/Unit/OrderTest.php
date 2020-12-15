@@ -11,14 +11,14 @@ class OrderTest extends KernelTestCase
 {
     public function testAssertInstanceOfOrder(): void
     {
-        $order = new Order();
+        $order = new Order(1, 2.22);
         $this->assertInstanceOf(Order::class, $order);
         $this->assertClassHasAttribute('id', Order::class);
         $this->assertClassHasAttribute('betId', Order::class);
         $this->assertClassHasAttribute('recordedOdds', Order::class);
         $this->assertClassHasAttribute('amount', Order::class);
         $this->assertClassHasAttribute('orderAt', Order::class);
-        $this->assertClassHasAttribute('orderStatus', Order::class);
+        $this->assertClassHasAttribute('orderStatusId', Order::class);
     }
 
     public function getKernel(): KernelInterface
@@ -42,108 +42,128 @@ class OrderTest extends KernelTestCase
     /**
      * @dataProvider validOrderProvider
      */
-    public function testValidOrder(int $betId, int $recordedOdds, int $amount, int $expectedViolationsCount): void
+    public function testValidOrder(int $betId, float $recordedOdds, float $amount, int $expectedViolationsCount): void
     {
-        $order = new Order();
-        $order->placeAnOrder($betId, $recordedOdds, $amount);
+        $order = new Order($betId, $recordedOdds);
+        $order->setAmount($amount);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($order, null));
+
+        $this->assertSame($betId, $order->getBetId());
+        $this->assertSame($recordedOdds, $order->getRecordedOdds());
+        $this->assertSame($amount, $order->getAmount());
+        $this->assertEqualsWithDelta(new DateTime(), $order->getOrderAt(), 1);
+        $this->assertSame(0, $order->getOrderStatusId());
     }
 
     public function validOrderProvider(): array
     {
         return [
-            [2, 123, 5, 0],
-            [23, 150, 5, 0],
+            [2, 1.23, 5.5, 0],
+            [23, 2.52, 15, 0],
         ];
     }
 
     /**
      * @dataProvider invalidOrderProvider
      */
-    public function testInvalidOrder(int $betId, int $recordedOdds, int $amount, int $expectedViolationsCount): void
+    public function testInvalidOrder(int $betId, float $recordedOdds, float $amount, int $expectedViolationsCount): void
     {
-        $order = new Order();
-        $order->placeAnOrder($betId, $recordedOdds, $amount);
+        $order = new Order($betId, $recordedOdds);
+        $order->setAmount($amount);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($order, null));
-        $this->assertSame($betId, $order->getBetId());
-        $this->assertSame($recordedOdds, $order->getRecordedOdds());
-        $this->assertSame($amount, $order->getAmount());
-        $this->assertEqualsWithDelta(new DateTime(), $order->getOrderAt(), 1);
-        $this->assertSame(0, $order->getOrderStatus());
     }
 
     public function invalidOrderProvider(): array
     {
         return [
             [-2, 123, 5, 1],
+            [2, 0.99, 5.2, 1],
             [23, -150, -5, 2],
         ];
     }
 
-    /**
-     * @dataProvider validOrderStatusProvider
-     */
-    public function testValidSetOrderStatus(int $orderStatus): void
+
+    public function testValidOrderStatus(): void
     {
-        $order = new Order();
-        $order->setOrderStatus($orderStatus);
+        $order = new Order(5, 22);
         $this->assertSame(0, $this->getViolationsCount($order, ['orderStatus']));
-        $this->assertSame($orderStatus, $order->getOrderStatus());
+        $this->assertSame(0, $order->getOrderStatusId());
+
+        $order->payOrder();
+        $this->assertSame(1, $order->getOrderStatusId());
+
+        $order->winOrder();
+        $this->assertSame(2, $order->getOrderStatusId());
+
+        $order->looseOrder();
+        $this->assertSame(3, $order->getOrderStatusId());
+
+        $order->refundOrder();
+        $this->assertSame(4, $order->getOrderStatusId());
+
+        $order->closeOrder();
+        $this->assertSame(5, $order->getOrderStatusId());
     }
 
-    public function validOrderStatusProvider(): array
+
+
+
+    public function testValidCalculateProfitsForOrderNotPayed(): void
     {
-        return [
-            [0],
-            [1],
-            [2],
-            [3],
-            [4],
-        ];
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+
+        $order->calculateProfits();
+        $this->assertSame(-10.00, $order->calculateProfits());
     }
 
-    /**
-     * @dataProvider invalidOrderStatusProvider
-     */
-    public function testInvalidSetOrderStatus(int $orderStatus): void
+    public function testValidCalculateProfitsForOrderPayed(): void
     {
-        $order = new Order();
-        $order->setOrderStatus($orderStatus);
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+        $order->payOrder();
 
-        $this->assertSame(1, $this->getViolationsCount($order, ['orderStatus']));
+        $order->calculateProfits();
+        $this->assertSame(null, $order->calculateProfits());
     }
 
-    public function invalidOrderStatusProvider(): array
+    public function testValidCalculateProfitsForWinOrder(): void
     {
-        return [
-            [-1],
-            [12],
-            [5],
-        ];
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+        $order->winOrder();
+
+        $order->calculateProfits();
+        $this->assertSame(22.2, $order->calculateProfits());
     }
 
-    /**
-     * @dataProvider validCalculateProfitsProvider
-     */
-    public function testValidCalculateProfits(int $orderStatus, ?int $expectedValue)
+    public function testValidCalculateProfitsForLooseOrder(): void
     {
-        $order = new Order();
-        $order->placeAnOrder(1, 222, 1000);
-        $order->setOrderStatus($orderStatus);
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+        $order->looseOrder();
 
-        $profits = $order->calculateProfits();
-        $this->assertSame($expectedValue, $profits);
+        $order->calculateProfits();
+        $this->assertSame(null, $order->calculateProfits());
     }
 
-    public function validCalculateProfitsProvider(): array
+    public function testValidCalculateProfitsForRefundOrder(): void
     {
-        return [
-            [0, null],
-            [1, 1000],
-            [2,(222 * 1000) / 100],
-            [3, null],
-            [4, 1000],
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+        $order->refundOrder();
 
-        ];
+        $order->calculateProfits();
+        $this->assertSame(10.00, $order->calculateProfits());
+    }
+
+    public function testValidCalculateProfitsForCloseOrder(): void
+    {
+        $order = new Order(1, 2.22);
+        $order->setAmount(10);
+        $order->closeOrder();
+
+        $order->calculateProfits();
+        $this->assertSame(null, $order->calculateProfits());
     }
 }

@@ -20,6 +20,7 @@ class Order
         2, // order delivered => joueur à gagné son pari
         3, // order delivered => joueur à perdu son pari
         4, // order cancelled => pari à été annulé et la mise aussi avec remboursement
+        5, // order closed => commande soldée
         ];
     /**
      * @ORM\Id
@@ -52,8 +53,9 @@ class Order
      *  type="integer",
      *  message="{{ value }} n'est pas du type {{ type }}",
      * )
-     * @Assert\Positive(
-     *  message="Bet Id must be positive",
+     * @Assert\GreaterThan(
+     *  value=100,
+     *  message="recordedOdds must be positive",
      * )
      */
     private int $recordedOdds;
@@ -61,14 +63,14 @@ class Order
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Amount incorrect",
+     *      message="Amount incorrect",
      * )
      * @Assert\Type(
-     *  type="integer",
-     *  message="{{ value }} n'est pas du type {{ type }}",
+     *      type="integer",
+     *      message="{{ value }} n'est pas du type {{ type }}",
      * )
      * @Assert\Positive(
-     *  message="Bet Id must be positive",
+     *      message="Bet Id must be positive",
      * )
      */
     private int $amount;
@@ -76,11 +78,11 @@ class Order
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(
-     *  message="Date de commande vide",
+     *      message="Date de commande vide",
      * )
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
-     *  message="Date de commande incorrecte : {{ value }}",
+     *      value="+1 hours",
+     *      message="Date de commande incorrecte : {{ value }}",
      * )
      */
     private DateTimeInterface $orderAt;
@@ -88,17 +90,24 @@ class Order
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Order Status incorrect",
-     * groups={"orderStatus"}
+     *      message="Order Status incorrect",
+     *      groups={"orderStatus"}
      * )
      * @Assert\Choice(
-     *  choices=Order::ORDER_STATUS,
-     *  message="Status incorrect",
-     *  groups={"orderStatus"}
+     *      choices=Order::ORDER_STATUS,
+     *      message="Status incorrect",
+     *      groups={"orderStatus"}
      * )
      */
-    private int $orderStatus;
+    private int $orderStatusId;
 
+    public function __construct(int $betId, float $recordedOdds)
+    {
+        $this->betId = $betId;
+        $this->recordedOdds = (int) ($recordedOdds * 100);
+        $this->orderAt = new DateTime();
+        $this->orderStatusId = 0;
+    }
 
     public function getId(): ?int
     {
@@ -114,19 +123,19 @@ class Order
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getRecordedOdds(): int
+    public function getRecordedOdds(): float
     {
-        return $this->recordedOdds;
+        return $this->recordedOdds / 100;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getAmount(): int
+    public function getAmount(): float
     {
-        return $this->amount;
+        return $this->amount / 100;
     }
 
     /**
@@ -140,44 +149,64 @@ class Order
     /**
      * @return int
      */
-    public function getOrderStatus(): int
+    public function getOrderStatusId(): int
     {
-        return $this->orderStatus;
+        return $this->orderStatusId;
     }
 
-    public function placeAnOrder(int $betId, int $recordedOdds, int $amount)
+    /**
+     * @param float $amount
+     */
+    public function setAmount(float $amount): void
     {
-        $this->betId = $betId;
-        $this->recordedOdds = $recordedOdds;
-        $this->amount = $amount;
-        $this->orderAt = new DateTime();
-        $this->orderStatus = 0;
+        $this->amount = (int) ($amount * 100);
     }
 
-    public function setOrderStatus(int $orderStatus): void
+    public function payOrder(): void
     {
-        $this->orderStatus = $orderStatus;
+        $this->orderStatusId = 1;
     }
 
-    public function calculateProfits(): ?int
+    public function winOrder(): void
+    {
+        $this->orderStatusId = 2;
+    }
+
+    public function looseOrder(): void
+    {
+        $this->orderStatusId = 3;
+    }
+
+    public function refundOrder(): void
+    {
+        $this->orderStatusId = 4;
+    }
+
+    public function closeOrder(): void
+    {
+        $this->orderStatusId = 5;
+    }
+
+    public function calculateProfits(): ?float
     {
         $profits = null;
 
-        switch ($this->getOrderStatus()) {
+        switch ($this->getOrderStatusId()) {
             case 0:
+                $profits = - $this->getAmount();
+                break;
+            case 1:
             case 3:
+            case 5:
                 $profits = null;
                 break;
             case 2:
                 $profits = $this->getRecordedOdds() * $this->getAmount();
-                $profits /= 100;
                 break;
-            case 1:
             case 4:
                 $profits = $this->getAmount();
                 break;
         }
-
         return $profits;
     }
 }
