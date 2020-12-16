@@ -20,11 +20,18 @@ class OrderStatus
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *      message="Status vide",
+     * )
      * @Assert\Type(
      *     type="string",
      *     message="Format incorrect"
      * )
-     */
+     * @Assert\Regex(
+     *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,30}$/",
+     *  message="Format status incorrect, 2 caractères minimum, 20 maximum",
+     * )
+    */
     private string $status;
 
     public function getId(): ?int

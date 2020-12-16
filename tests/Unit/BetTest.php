@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class BetTest extends KernelTestCase
 {
-    public function testAssertInstanceOfOBet(): void
+    public function testAssertInstanceOfBet(): void
     {
         $bet = new Bet();
         $this->assertInstanceOf(Bet::class, $bet);
