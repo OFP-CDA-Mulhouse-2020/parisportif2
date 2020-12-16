@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TypeOfPaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TypeOfPaymentRepository::class)
