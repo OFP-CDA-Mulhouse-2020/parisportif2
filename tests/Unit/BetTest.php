@@ -51,12 +51,12 @@ class BetTest extends KernelTestCase
     public function validBetProvider(): array
     {
         return [
-            [Bet::build('2002-12-12', [
+            [Bet::build('2021-12-12', [
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
                 2 => ['V2' => 3.2],
             ], 0), null , 0],
-            [Bet::build('2022-12-12', null, 5), ['datetime'], 0],
+            [Bet::build('2022-12-12', null, 5), ['limitTime'], 0],
             [Bet::build('2022-12-12', [
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
@@ -84,14 +84,26 @@ class BetTest extends KernelTestCase
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
                 2 => ['V2' => 3.2],
-            ], 0), null , 0],
-            [Bet::build('2022-12-12', null, 5), ['datetime'], 0],
-            [Bet::build('2022-12-12', [
-                0 => ['V1' => 1.2],
-                1 => ['N' => 2.2],
-                2 => ['V2' => 3.2],
-            ], 3), null, 0],
+            ], -1), null , 1],
+            [Bet::build(null, null, 5), ['limitTime'], 1],
+            [Bet::build('2022-12-12', null, 3), null, 1],
 
         ];
+    }
+
+    public function testBetOpened()
+    {
+        $bet = new Bet();
+        $bet->openBet();
+
+        $this->assertTrue($bet->isOpen());
+    }
+
+    public function testBetClosed()
+    {
+        $bet = new Bet();
+        $bet->closeBet();
+
+        $this->assertFalse($bet->isOpen());
     }
 }

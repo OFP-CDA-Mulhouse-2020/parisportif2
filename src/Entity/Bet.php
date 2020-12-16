@@ -47,7 +47,7 @@ class Bet
      *  message="Type de pari vide",
      * )
      * @Assert\PositiveOrZero(
-     *  message="Type of Bet Id positive or zero",
+     *  message="Type of Bet Id positive or zero"
      * )
      */
     private int $typeOfBetId;
@@ -132,7 +132,7 @@ class Bet
         $bet = new Bet();
         $betLimitTime ? $bet->setBetLimitTime(DateTime::createFromFormat('Y-m-d', $betLimitTime)) : null ;
         $listOfOdds ? $bet->setListOfOdds($listOfOdds) : null ;
-        $typeOfBetId ? $bet->setTypeOfBetId($typeOfBetId) : null ;
+        $typeOfBetId !== null ? $bet->setTypeOfBetId($typeOfBetId) : null ;
 
         $bet->openBet();
 

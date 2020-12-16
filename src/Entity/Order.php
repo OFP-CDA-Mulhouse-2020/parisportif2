@@ -70,7 +70,7 @@ class Order
      *      message="{{ value }} n'est pas du type {{ type }}",
      * )
      * @Assert\Positive(
-     *      message="Bet Id must be positive",
+     *      message="Amount must be positive",
      * )
      */
     private int $amount;
@@ -157,9 +157,11 @@ class Order
     /**
      * @param float $amount
      */
-    public function setAmount(float $amount): void
+    public function setAmount(float $amount): self
     {
         $this->amount = (int) ($amount * 100);
+
+        return $this;
     }
 
     public function payOrder(): void
