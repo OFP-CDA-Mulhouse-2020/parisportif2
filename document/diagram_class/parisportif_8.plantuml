@@ -107,16 +107,11 @@ class OrderStatus {
 class Bet {
     - id :int
     - name :string
-    - dateBet :DateTime
-    - orderFinishTime :DateTime
-    - odds :float
-    - score :string
-    - result :bool
+    - BetLimitTime :DateTime
+    - listOfOdds :array
+    - result :array
     - eventId :int
 
-    + createBet()
-    + editBet()
-    + deleteBet()
     + getResultofBet()
     + setBonusToParticipantId()
 }
