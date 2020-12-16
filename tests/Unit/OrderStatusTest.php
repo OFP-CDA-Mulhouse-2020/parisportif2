@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class OrderStatusTest extends KernelTestCase
 {
-    public function testAssertInstanceOfOrder(): void
+    public function testAssertInstanceOfOrderStatus(): void
     {
         $order = new OrderStatus();
         $this->assertInstanceOf(OrderStatus::class, $order);

@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderStatusRepository;
+use App\Repository\TypeOfBetRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=OrderStatusRepository::class)
+ * @ORM\Entity(repositoryClass=TypeOfBetRepository::class)
  */
-class OrderStatus
+class TypeOfBet
 {
     /**
      * @ORM\Id
@@ -25,21 +24,21 @@ class OrderStatus
      *     message="Format incorrect"
      * )
      */
-    private string $status;
+    private string $typeOfBet;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStatus(): ?string
+    public function getTypeOfBet(): ?string
     {
-        return $this->status;
+        return $this->typeOfBet;
     }
 
-    public function setStatus(string $status): self
+    public function setTypeOfBet(string $typeOfBet): self
     {
-        $this->status = $status;
+        $this->typeOfBet = $typeOfBet;
 
         return $this;
     }
