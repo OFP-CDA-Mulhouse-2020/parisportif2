@@ -22,13 +22,15 @@ class TypeOfPayment
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(
-     *  message="type de paiement vide",
-     *  groups={"typeOfPayment"}
+     *      message="type de paiement vide",
+     * )
+     * @Assert\Type(
+     *     type="string",
+     *     message="Format incorrect"
      * )
      * @Assert\Regex(
-     *  pattern =  "/^[a-zA-ZÀ-ÿ -]{1,30}$/",
-     *  message=" : {{ value }} incorrect",
-     *  groups={"typeOfPayment"}
+     *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,30}$/",
+     *  message="Format type de paiement incorrect, 2 caractères minimum, 20 maximum",
      * )
      */
     private string $typeOfPayment;

@@ -3,8 +3,8 @@
 namespace App\Tests;
 
 use App\Entity\PaymentStatus;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class PaymentStatusTest extends KernelTestCase
 {
@@ -16,18 +16,61 @@ class PaymentStatusTest extends KernelTestCase
         $this->assertClassHasAttribute('paymentStatus', PaymentStatus::class);
     }
 
-    public function testValidPaymentStatus()
+
+
+    public function getKernel(): KernelInterface
+    {
+        $kernel = self::bootKernel();
+        $kernel->boot();
+
+        return $kernel;
+    }
+
+    public function getViolationsCount(PaymentStatus $paymentStatus, $groups): int
+    {
+        $kernel = $this->getKernel();
+
+        $validator = $kernel->getContainer()->get('validator');
+        $violationList = $validator->validate($paymentStatus, null, $groups);
+        return count($violationList);
+    }
+
+
+    /**
+     * @dataProvider validPaymentStatusProvider
+     */
+    public function testValidPaymentStatus(string $status, int $expectedViolationsCount): void
     {
         $paymentStatus = new PaymentStatus();
-        $this->assertSame('Paiement en cours', $paymentStatus->getPaymentStatus());
+        $paymentStatus->setPaymentStatus($status);
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($paymentStatus, null));
+    }
 
-        $paymentStatus->onGoPayment();
-        $this->assertSame('Paiement en cours', $paymentStatus->getPaymentStatus());
+    public function validPaymentStatusProvider(): array
+    {
+        return [
+            ['en attente', 0],
+            ['Paiement refusé', 0],
+            ['Paiement accepté', 0],
+        ];
+    }
 
-        $paymentStatus->refusePayment();
-        $this->assertSame('Paiement refusé', $paymentStatus->getPaymentStatus());
 
-        $paymentStatus->acceptPayment();
-        $this->assertSame('Paiement accepté', $paymentStatus->getPaymentStatus());
+    /**
+     * @dataProvider invalidPaymentStatusProvider
+     */
+    public function testInvalidOrder(string $status, int $expectedViolationsCount): void
+    {
+        $paymentStatus = new PaymentStatus();
+        $paymentStatus->setPaymentStatus($status);
+        $this->assertSame($expectedViolationsCount, $this->getViolationsCount($paymentStatus, null));
+    }
+
+    public function invalidPaymentStatusProvider(): array
+    {
+        return [
+            ['', 1],
+            ['1', 1],
+        ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PaymentStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PaymentStatusRepository::class)
@@ -18,13 +19,22 @@ class PaymentStatus
     private $id;
 
 
-    private $paymentStatus;
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *      message="Status vide",
+     * )
+     * @Assert\Type(
+     *     type="string",
+     *     message="Format incorrect"
+     * )
+     * @Assert\Regex(
+     *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,30}$/",
+     *  message="Format status incorrect, 2 caractères minimum, 20 maximum",
+     * )
+     */
+    private string $paymentStatus;
 
-
-    public function __construct()
-    {
-        $this->paymentStatus = "Paiement en cours";
-    }
 
 
 
@@ -35,26 +45,16 @@ class PaymentStatus
     }
 
 
-    public function getPaymentStatus()
+    public function getPaymentStatus(): ?string
     {
         return $this->paymentStatus;
     }
 
 
-    public function onGoPayment(): void
+    public function setPaymentStatus(string $paymentStatus): self
     {
-        $this->paymentStatus = 'Paiement en cours';
-    }
+        $this->paymentStatus = $paymentStatus;
 
-
-    public function refusePayment(): void
-    {
-        $this->paymentStatus = 'Paiement refusé';
-    }
-
-
-    public function acceptPayment(): void
-    {
-        $this->paymentStatus = 'Paiement accepté';
+        return $this;
     }
 }
