@@ -49,7 +49,7 @@ class Wallet
      *  groups={"limitAmountPerWeek"}
      * )
      */
-    private int $limitAmountPerWeek = 10000;
+    private int $limitAmountPerWeek;
 
     /**
      * @ORM\Column(type="boolean")
@@ -68,11 +68,11 @@ class Wallet
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getBalance(): int
+    public function getBalance(): float
     {
-        return $this->balance;
+        return $this->balance / 100;
     }
 
     /**
@@ -80,7 +80,7 @@ class Wallet
      */
     public function getLimitAmountPerWeek(): int
     {
-        return $this->limitAmountPerWeek;
+        return $this->limitAmountPerWeek / 100;
     }
 
     /**
@@ -88,7 +88,7 @@ class Wallet
      */
     public function setLimitAmountPerWeek(int $limitAmountPerWeek): void
     {
-        $this->limitAmountPerWeek = $limitAmountPerWeek;
+        $this->limitAmountPerWeek = $limitAmountPerWeek * 100;
     }
 
     /**
@@ -112,40 +112,41 @@ class Wallet
         if ($realMoney) {
             $this->balance = 0;
         } else {
-            $this->balance = 100;
+            $this->balance = 10000;
         }
             $this->realMoney = $realMoney;
+            $this->limitAmountPerWeek = 10000;
     }
 
-    public function addMoney(int $amount): bool
+    public function addMoney(float $amount): bool
     {
         if ($amount <= 0) {
             return false;
         }
-        $this->balance += $amount;
+        $this->balance += (int) $amount * 100;
 
         return true;
     }
 
-    public function withdrawMoney(int $amount): bool
+    public function withdrawMoney(float $amount): bool
     {
         if ($amount <= 0 or $amount > $this->getBalance()) {
             return false;
         }
-        $this->balance -= $amount;
+        $this->balance -= (int) $amount * 100;
 
         return true;
     }
 
-    public function betPayment(int $amount, int $amountBetPaymentLastWeek): bool
+    public function betPayment(float $amount, int $amountBetPaymentLastWeek): bool
     {
         if ($amount <= 0 or $amount > $this->getBalance()) {
             return false;
         }
-        if ($amount > $this->getLimitAmountPerWeek() / 100 - $amountBetPaymentLastWeek) {
+        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
             return false;
         }
-        $this->balance -= $amount;
+        $this->balance -= (int) $amount * 100;
 
         return true;
     }

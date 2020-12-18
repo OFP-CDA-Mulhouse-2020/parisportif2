@@ -4,6 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Entity\Wallet;
 use DateInterval;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class UserTest extends KernelTestCase
 {
 
-    public function testAssertInstanceOfUser()
+    public function testAssertInstanceOfUser(): void
     {
         $user = new User();
         $this->assertInstanceOf(User::class, $user);
@@ -29,8 +30,10 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('suspendedAt', User::class);
         $this->assertClassHasAttribute('deleted', User::class);
         $this->assertClassHasAttribute('deletedAt', User::class);
+        $this->assertClassHasAttribute('address', User::class);
+        $this->assertClassHasAttribute('wallet', User::class);
+        $this->assertClassHasAttribute('bankAccount', User::class);
     }
-
 
     public function getKernel(): KernelInterface
     {
@@ -40,7 +43,7 @@ class UserTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(User $user, $groups): int
+    public function getViolationsCount($user, array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -49,7 +52,6 @@ class UserTest extends KernelTestCase
         //var_dump($violationList);
         return count($violationList);
     }
-
 
     /************************$user**********************************/
 
@@ -60,7 +62,7 @@ class UserTest extends KernelTestCase
      * @param array $groups
      * @param int $expectedViolationsCount
      */
-    public function testValidUser(User $user, array $groups, int $expectedViolationsCount)
+    public function testValidUser(User $user, ?array $groups, int $expectedViolationsCount): void
     {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
@@ -81,14 +83,13 @@ class UserTest extends KernelTestCase
         ];
     }
 
-
     /**
      * @dataProvider invalidUserProvider
      * @param User $user
      * @param array $groups
      * @param int $expectedViolationsCount
      */
-    public function testInvalidUser(User $user, array $groups, int $expectedViolationsCount)
+    public function testInvalidUser(User $user, array $groups, int $expectedViolationsCount): void
     {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
@@ -126,7 +127,7 @@ class UserTest extends KernelTestCase
      * @param array $groups
      * @param int $expectedViolationsCount
      */
-    public function testCreationDate(User $user, array $groups, int $expectedViolationsCount)
+    public function testCreationDate(User $user, array $groups, int $expectedViolationsCount): void
     {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
     }
@@ -157,7 +158,7 @@ class UserTest extends KernelTestCase
         int $expectedViolationsCount,
         bool $expectedActiveValue,
         ?DateTime $expectedActiveAtValue
-    ) {
+    ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedActiveValue, $user->isActive());
         $this->assertEqualsWithDelta($expectedActiveAtValue, $user->getActiveAt(), 1);
@@ -187,7 +188,7 @@ class UserTest extends KernelTestCase
         int $expectedViolationsCount,
         bool $expectedSuspendedValue,
         ?DateTime $expectedsuspendedAtValue
-    ) {
+    ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedSuspendedValue, $user->isSuspended());
         $this->assertEqualsWithDelta($expectedsuspendedAtValue, $user->getSuspendedAt(), 1);
@@ -217,7 +218,7 @@ class UserTest extends KernelTestCase
         int $expectedViolationsCount,
         bool $expectedDeletedValue,
         ?DateTime $expectedDeletedAtValue
-    ) {
+    ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedDeletedValue, $user->isDeleted());
         $this->assertEqualsWithDelta($expectedDeletedAtValue, $user->getDeletedAt(), 1);
@@ -232,11 +233,44 @@ class UserTest extends KernelTestCase
     }
 
 
-    public function testValidAddress()
+    public function testValidAddress(): void
     {
         $address = Address::build('8 rue des champs', 68000, 'Colmar', 'France');
         $user = new User();
         $user->setAddress($address);
         $this->assertInstanceOf(Address::class, $user->getAddress());
+        $this->assertSame(0, $this->getViolationsCount($user, ['address']));
+    }
+
+    public function testInvalidAddress(): void
+    {
+        $address = Address::build('8 rue des champs', 68000, 'Colmar', '');
+        $user = new User();
+        $user->setAddress($address);
+        $this->assertInstanceOf(Address::class, $user->getAddress());
+        $this->assertSame(1, $this->getViolationsCount($user, ['address']));
+    }
+
+    public function testValidWallet(): void
+    {
+        $wallet = new Wallet();
+       // $wallet->initializeWallet(true);
+        $user = new User();
+        $user->setWallet($wallet);
+        $this->assertInstanceOf(Wallet::class, $user->getWallet());
+        var_dump($user->getWallet());
+        $this->assertSame(0, $this->getViolationsCount($user, ['userWallet']));
+    }
+
+    public function testInvalidWallet(): void
+    {
+        $wallet = new Wallet();
+        $user = new User();
+        $wallet->setLimitAmountPerWeek(10000000);
+        $user->setWallet($wallet);
+        $this->assertInstanceOf(Wallet::class, $user->getWallet());
+        var_dump($user->getWallet());
+
+        $this->assertSame(1, $this->getViolationsCount($user, ['wallet']));
     }
 }

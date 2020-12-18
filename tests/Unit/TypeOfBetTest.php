@@ -24,7 +24,7 @@ class TypeOfBetTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(TypeOfBet $typeOfBet, $groups): int
+    public function getViolationsCount(TypeOfBet $typeOfBet, ?array $groups): int
     {
         $kernel = $this->getKernel();
 

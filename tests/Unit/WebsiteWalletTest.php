@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class WebsiteWalletTest extends KernelTestCase
 {
-    public function testWebsiteWalletInstance()
+    public function testWebsiteWalletInstance(): void
     {
         $websiteWallet = new WebsiteWallet();
         $this->assertInstanceOf(WebsiteWallet::class, $websiteWallet);
@@ -29,7 +29,7 @@ class WebsiteWalletTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(WebsiteWallet $websiteWallet, $groups): int
+    public function getViolationsCount(WebsiteWallet $websiteWallet, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -67,23 +67,15 @@ class WebsiteWalletTest extends KernelTestCase
     /**
      * @dataProvider generateAddMoney
      */
-    public function testAddMoneyToAccount($money, $groups, $numberOfViolations)
+    public function testAddMoneyToAccount($money, ?array $groups, int $numberOfViolations): void
     {
         $websiteWallet = new WebsiteWallet();
-
         $websiteWallet->initializeWallet();
-
-        //
-        var_dump($websiteWallet->getBalance());
 
         $newBalance = $websiteWallet->addToBalance($money);
 
         $this->assertSame($websiteWallet->getBalance() * 100, $newBalance);
-
         $this->assertSame($numberOfViolations, $this->getViolationsCount($websiteWallet, $groups));
-
-        //
-        var_dump($websiteWallet->getBalance());
     }
 
     public function generateAddMoney(): array
@@ -99,23 +91,15 @@ class WebsiteWalletTest extends KernelTestCase
     /**
      * @dataProvider generateRemoveMoney
      */
-    public function testRemoveMoneyToWallet($money, $groups, $numberOfViolations)
+    public function testRemoveMoneyToWallet($money, ?array $groups, int $numberOfViolations): void
     {
         $websiteWallet = new WebsiteWallet();
-
         $websiteWallet->initializeWallet();
-
-        //
-        var_dump($websiteWallet->getBalance());
 
         $newBalance = $websiteWallet->removeFromBalance($money);
 
         $this->assertSame($websiteWallet->getBalance() * 100, $newBalance);
-
         $this->assertSame($numberOfViolations, $this->getViolationsCount($websiteWallet, $groups));
-
-        //
-        var_dump($websiteWallet->getBalance());
     }
 
     public function generateRemoveMoney(): array

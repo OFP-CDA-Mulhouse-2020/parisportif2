@@ -46,7 +46,7 @@ class WalletTest extends KernelTestCase
         $wallet = new Wallet();
         $wallet->initializeWallet(true);
         $this->assertTrue($wallet->isRealMoney());
-        $this->assertSame(0, $wallet->getBalance());
+        $this->assertSame(0.0, $wallet->getBalance());
         $this->assertSame(0, $this->getViolationsCount($wallet, null));
     }
 
@@ -56,7 +56,7 @@ class WalletTest extends KernelTestCase
         $wallet = new Wallet();
         $wallet->initializeWallet(false);
         $this->assertFalse($wallet->isRealMoney());
-        $this->assertSame(100, $wallet->getBalance());
+        $this->assertSame(100.0, $wallet->getBalance());
         $this->assertSame(0, $this->getViolationsCount($wallet, null));
     }
 

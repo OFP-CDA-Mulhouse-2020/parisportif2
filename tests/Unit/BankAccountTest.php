@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class BankAccountTest extends KernelTestCase
 {
-    public function testAssertBankAccountInstance()
+    public function testAssertBankAccountInstance(): void
     {
         $bankAccount = new BankAccount();
         $this->assertInstanceOf(BankAccount::class, $bankAccount);
@@ -29,7 +29,7 @@ class BankAccountTest extends KernelTestCase
         return $kernel;
     }
 
-    public function numberOfViolations(BankAccount $bankAccount, $groups)
+    public function numberOfViolations(BankAccount $bankAccount, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -44,12 +44,12 @@ class BankAccountTest extends KernelTestCase
      * @dataProvider validBankAccountProvider
      */
 
-    public function testValidBankAccount(BankAccount $bankAccount, $groups, $numberOfViolations)
+    public function testValidBankAccount(BankAccount $bankAccount, ?array $groups, int $numberOfViolations): void
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($bankAccount, $groups));
     }
 
-    public function validBankAccountProvider()
+    public function validBankAccountProvider(): array
     {
         return [
             [BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS'), null, 0],
@@ -60,12 +60,12 @@ class BankAccountTest extends KernelTestCase
     /**
      * @dataProvider invalidBankAccountProvider
      */
-    public function testInvalidBankAccount(BankAccount $bankAccount, $groups, $numberOfViolations)
+    public function testInvalidBankAccount(BankAccount $bankAccount, array $groups, int $numberOfViolations): void
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($bankAccount, $groups));
     }
 
-    public function invalidBankAccountProvider()
+    public function invalidBankAccountProvider(): array
     {
         return [
             [BankAccount::build('1', '1'), ['bankInfo'], 2],

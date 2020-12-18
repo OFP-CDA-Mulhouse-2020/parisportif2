@@ -188,16 +188,20 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"address"})
      */
     private ?Address $address;
 
     /**
      * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccount"})
      */
     private ?BankAccount $bankAccount;
 
     /**
      * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     * @Assert\Valid
+     *
      */
     private ?Wallet $wallet;
 
