@@ -52,7 +52,7 @@ class BankAccountTest extends KernelTestCase
     public function validBankAccountProvider(): array
     {
         return [
-            [BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS'), null, 0],
+            [BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS'), ['bankAccount'], 0],
         ];
     }
 
@@ -68,10 +68,9 @@ class BankAccountTest extends KernelTestCase
     public function invalidBankAccountProvider(): array
     {
         return [
-            [BankAccount::build('1', '1'), ['bankInfo'], 2],
+            [BankAccount::build('1', '1'), ['bankAccount'], 2],
             [BankAccount::build(null, 'F0rmatB1CInval1d3'), ['bicCode'], 1],
             [BankAccount::build('F0rmat1B4NInval1d3', null), ['ibanCode'], 1]
-
         ];
     }
 }

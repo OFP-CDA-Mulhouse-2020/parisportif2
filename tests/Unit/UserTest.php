@@ -3,6 +3,7 @@
 namespace App\Tests\Unit;
 
 use App\Entity\Address;
+use App\Entity\BankAccount;
 use App\Entity\User;
 use App\Entity\Wallet;
 use DateInterval;
@@ -43,7 +44,7 @@ class UserTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount($user, array $groups): int
+    public function getViolationsCount(User $user, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -254,23 +255,39 @@ class UserTest extends KernelTestCase
     public function testValidWallet(): void
     {
         $wallet = new Wallet();
-       // $wallet->initializeWallet(true);
+        $wallet->initializeWallet(true);
         $user = new User();
         $user->setWallet($wallet);
         $this->assertInstanceOf(Wallet::class, $user->getWallet());
-        var_dump($user->getWallet());
-        $this->assertSame(0, $this->getViolationsCount($user, ['userWallet']));
+        $this->assertSame(0, $this->getViolationsCount($user, ['wallet']));
     }
 
     public function testInvalidWallet(): void
     {
         $wallet = new Wallet();
         $user = new User();
-        $wallet->setLimitAmountPerWeek(10000000);
         $user->setWallet($wallet);
         $this->assertInstanceOf(Wallet::class, $user->getWallet());
-        var_dump($user->getWallet());
 
-        $this->assertSame(1, $this->getViolationsCount($user, ['wallet']));
+        $this->assertSame(3, $this->getViolationsCount($user, ['wallet']));
+    }
+
+
+    public function testValidBankAccount(): void
+    {
+        $bankAccount = BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS');
+        $user = new User();
+        $user->setBankAccount($bankAccount);
+        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
+        $this->assertSame(0, $this->getViolationsCount($user, ['bankAccount']));
+    }
+
+    public function testInvalidBankAccount(): void
+    {
+        $bankAccount = BankAccount::build('1', '1');
+        $user = new User();
+        $user->setBankAccount($bankAccount);
+        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
+        $this->assertSame(2, $this->getViolationsCount($user, ['bankAccount']));
     }
 }

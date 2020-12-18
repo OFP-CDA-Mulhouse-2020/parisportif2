@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginControllerTest extends WebTestCase
 {
-    public function testShowPost()
+    public function testShowPost(): void
     {
         $client = static::createClient();
 
@@ -15,7 +15,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testLoginPageTextContent()
+    public function testLoginPageTextContent(): void
     {
         $client = static::createClient();
         $client->request('GET', '/login');
@@ -26,7 +26,7 @@ class LoginControllerTest extends WebTestCase
     }
 
 
-    public function testUserFormWithAllLabel()
+    public function testUserFormWithAllLabel(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
@@ -38,7 +38,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]'));
     }
 
-    public function testSubmitFormWithSuccess()
+    public function testSubmitFormWithSuccess(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', 'login');

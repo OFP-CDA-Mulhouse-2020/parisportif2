@@ -21,14 +21,17 @@ class Wallet
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Balance incorrect",
+     *      message="Balance incorrect",
+     *      groups={"wallet"}
      * )
      * @Assert\Type(
-     *  type="integer",
-     *  message="{{ value }} n'est pas du type {{ type }}",
+     *      type="integer",
+     *      message="{{ value }} n'est pas du type {{ type }}",
+     *      groups={"wallet"}
      * )
      * @Assert\PositiveOrZero(
-     *  message="Balance not less than 0",
+     *      message="Balance not less than 0",
+     *      groups={"wallet"}
      * )
      */
     private int $balance;
@@ -37,16 +40,16 @@ class Wallet
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
      *  message="Limite incorrecte",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      * @Assert\PositiveOrZero(
      *  message="Limite incorrecte",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      * @Assert\LessThanOrEqual(
      *  value = 10000,
      *  message="Limite maximum 100,00 euros",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      */
     private int $limitAmountPerWeek;
@@ -54,7 +57,8 @@ class Wallet
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotNull(
-     *  message="Money incorrect",
+     *      message="Money incorrect",
+     *      groups={"wallet"}
      * )
      */
     private bool $realMoney;

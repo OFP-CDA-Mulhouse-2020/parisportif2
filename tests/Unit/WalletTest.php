@@ -47,7 +47,7 @@ class WalletTest extends KernelTestCase
         $wallet->initializeWallet(true);
         $this->assertTrue($wallet->isRealMoney());
         $this->assertSame(0.0, $wallet->getBalance());
-        $this->assertSame(0, $this->getViolationsCount($wallet, null));
+        $this->assertSame(0, $this->getViolationsCount($wallet, ['wallet']));
     }
 
 
@@ -57,13 +57,13 @@ class WalletTest extends KernelTestCase
         $wallet->initializeWallet(false);
         $this->assertFalse($wallet->isRealMoney());
         $this->assertSame(100.0, $wallet->getBalance());
-        $this->assertSame(0, $this->getViolationsCount($wallet, null));
+        $this->assertSame(0, $this->getViolationsCount($wallet, ['wallet']));
     }
 
     public function testInvalidInitializeWallet(): void
     {
         $wallet = new Wallet();
-        $this->assertSame(2, $this->getViolationsCount($wallet, null));
+        $this->assertSame(3, $this->getViolationsCount($wallet, ['wallet']));
     }
 
     /************************$limitAmountPerWeek*********************************/

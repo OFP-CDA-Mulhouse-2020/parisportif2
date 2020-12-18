@@ -200,8 +200,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
-     * @Assert\Valid
-     *
+     * @Assert\Valid(groups={"wallet"})
      */
     private ?Wallet $wallet;
 
@@ -496,7 +495,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->password = null;

@@ -67,7 +67,7 @@ class WebsiteWalletTest extends KernelTestCase
     /**
      * @dataProvider generateAddMoney
      */
-    public function testAddMoneyToAccount($money, ?array $groups, int $numberOfViolations): void
+    public function testAddMoneyToAccount(float $money, ?array $groups, int $numberOfViolations): void
     {
         $websiteWallet = new WebsiteWallet();
         $websiteWallet->initializeWallet();
@@ -91,7 +91,7 @@ class WebsiteWalletTest extends KernelTestCase
     /**
      * @dataProvider generateRemoveMoney
      */
-    public function testRemoveMoneyToWallet($money, ?array $groups, int $numberOfViolations): void
+    public function testRemoveMoneyToWallet(float $money, ?array $groups, int $numberOfViolations): void
     {
         $websiteWallet = new WebsiteWallet();
         $websiteWallet->initializeWallet();

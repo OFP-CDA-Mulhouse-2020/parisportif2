@@ -27,7 +27,7 @@ class BetTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Bet $bet, $groups): int
+    public function getViolationsCount(Bet $bet, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -91,7 +91,7 @@ class BetTest extends KernelTestCase
         ];
     }
 
-    public function testBetOpened()
+    public function testBetOpened(): void
     {
         $bet = new Bet();
         $bet->openBet();
@@ -99,7 +99,7 @@ class BetTest extends KernelTestCase
         $this->assertTrue($bet->isOpen());
     }
 
-    public function testBetClosed()
+    public function testBetClosed(): void
     {
         $bet = new Bet();
         $bet->closeBet();

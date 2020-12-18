@@ -16,8 +16,7 @@ class WebsiteWallet
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
-
+    private int $id;
 
     /**
      * @ORM\Column(type="integer")
@@ -34,18 +33,15 @@ class WebsiteWallet
      */
     private int $balance;
 
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function initializeWallet()
+    public function initializeWallet(): void
     {
         $this->balance = 100000 * 100;
     }
-
-
 
     /******************************** balance ****************************** */
 
@@ -54,18 +50,18 @@ class WebsiteWallet
         return $this->balance / 100;
     }
 
-    public function addToBalance($money): float
+    public function addToBalance(float $money): float
     {
         if ($money > 0) {
-            $this->balance += $money * 100;
+            $this->balance += (int) $money * 100;
         }
         return $this->balance;
     }
 
-    public function removeFromBalance($money): float
+    public function removeFromBalance(float $money): float
     {
         if ($money > 0 && $money <= $this->getBalance()) {
-            $this->balance -= $money * 100;
+            $this->balance -= (int) $money * 100;
         }
 
         return $this->balance;

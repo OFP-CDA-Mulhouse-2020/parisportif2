@@ -29,7 +29,7 @@ class OrderTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Order $order, $groups): int
+    public function getViolationsCount(Order $order, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -82,7 +82,6 @@ class OrderTest extends KernelTestCase
         ];
     }
 
-
     public function testValidOrderStatus(): void
     {
         $order = new Order(5, 22);
@@ -104,9 +103,6 @@ class OrderTest extends KernelTestCase
         $order->closeOrder();
         $this->assertSame(5, $order->getOrderStatusId());
     }
-
-
-
 
     public function testValidCalculateProfitsForOrderNotPayed(): void
     {
