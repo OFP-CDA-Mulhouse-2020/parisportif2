@@ -186,6 +186,22 @@ class User implements UserInterface
      */
     private ?DateTimeInterface $deletedAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     */
+    private ?Address $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     */
+    private ?BankAccount $bankAccount;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     */
+    private ?Wallet $wallet;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -480,5 +496,41 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->password = null;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getBankAccount(): ?BankAccount
+    {
+        return $this->bankAccount;
+    }
+
+    public function setBankAccount(?BankAccount $bankAccount): self
+    {
+        $this->bankAccount = $bankAccount;
+
+        return $this;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(?Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
+
+        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\PaymentRepository;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,13 +13,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Payment
 {
+    private const PAYMENT_STATUS = [
+        0 => 'attente de paiement',
+        1 => 'paiement rejeté',
+        2 => 'paiement accepté',
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private int $id;
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -34,7 +40,6 @@ class Payment
      */
     private string $paymentName;
 
-
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(
@@ -49,12 +54,10 @@ class Payment
      */
     protected DateTimeInterface $datePayment;
 
-
-
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *      message="Amount is incorrect",
+     *      message="Amount is empty",
      * )
      * @Assert\Type(
      *      type="integer",
@@ -67,54 +70,48 @@ class Payment
      */
     private int $amount;
 
-
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\NotNull(
+     *      message="Payment status is empty",
+     *      groups={"paymentStatus"}
+     * )
+     * @Assert\Choice(
+     *      choices={0,1,2},
+     *      message="Status incorrect",
+     *      groups={"paymentStatus"}
+     * )
+     */
+    private int $paymentStatusId;
 
     /**
-     * @ORM\Column(type="integer", length=255)
-     * @Assert\NotBlank(
-     *  groups={"paymentStatus","payment"}
+     * @ORM\ManyToOne(targetEntity=TypeOfPayment::class)
+     * @Assert\NotNull(
+     *      message="Type of Payment is empty",
      * )
-     *
-     * @Assert\type("integer")
-     *
-     * @Assert\Choice({1, 2, 3})
-     *
+     * @Assert\Valid
      */
-    private int $paymentStatus;
-
-
+    private TypeOfPayment $typeOfPayment;
 
 
     public function __construct(float $amount)
     {
         $this->datePayment = new DateTime();
-
-        $this->paymentStatus = 1;
-
         $this->amount = (int) ($amount * 100);
+        $this->paymentStatusId = 0;
     }
-
-
-
-
-
-    /******************************** id ****************************** */
-
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-
     /******************************** paymentName ****************************** */
-
 
     public function getPaymentName(): string
     {
         return $this->paymentName;
     }
-
 
     public function setPaymentName(string $paymentName): self
     {
@@ -123,63 +120,56 @@ class Payment
         return $this;
     }
 
-
     /******************************** datePayment ****************************** */
-
 
     public function getDatePayment(): DateTimeInterface
     {
         return $this->datePayment;
     }
 
-
     public function setDatePayment(DateTimeInterface $datePayment): void
     {
         $this->datePayment = $datePayment;
     }
 
-
-
-
     /******************************** amount ****************************** */
-
 
     public function getAmount(): float
     {
         return $this->amount / 100;
     }
 
-
     /******************************** paymentStatus ****************************** */
 
-
-    public function getPaymentStatus(): int
+    public function getPaymentStatusId(): ?int
     {
-        return $this->paymentStatus;
+        return $this->paymentStatusId;
     }
-
-
-
-    public function setPaymentStatus($paymentStatus): void
-    {
-        $this->paymentStatus = $paymentStatus;
-    }
-
 
     public function onGoPayment(): void
     {
-        $this->paymentStatus = 1;
+        $this->paymentStatusId = 0;
     }
-
 
     public function refusePayment(): void
     {
-        $this->paymentStatus = 2;
+        $this->paymentStatusId = 1;
     }
-
 
     public function acceptPayment(): void
     {
-        $this->paymentStatus = 3;
+        $this->paymentStatusId = 2;
+    }
+
+    public function getTypeOfPayment(): ?TypeOfPayment
+    {
+        return $this->typeOfPayment;
+    }
+
+    public function setTypeOfPayment(?TypeOfPayment $typeOfPayment): self
+    {
+        $this->typeOfPayment = $typeOfPayment;
+
+        return $this;
     }
 }

@@ -60,3 +60,14 @@
 10/12 merge des branches User et des tests fonctionnels, démarrage entity Wallet et Address
 
 11/12 Entity Wallet, BankAcount et Address terminées, démarrage Entity Order et Payment
+
+---
+14/12 Entity Order et OrderStatus (daniel), Payment (ladji)
+
+15/12 Entity Bet (daniel), Entity Payment (ladji)
+
+16/12 Entity Competion et Event (daniel), Entity WebsiteWallet et PaymentStatus (ladji)
+
+17/12 Entity WabsiteWallet TypeOfPayment (ladji), entity Event et début des relations entre entités (daniel)
+
+18/12 Entity sport team player avec relation (ladji), autre relation entre entités (daniel)

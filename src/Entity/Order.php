@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Order
 {
     public const ORDER_STATUS = [
-        0, // order init => attente du paiement
-        1, // order payment => joueur à payé son ticket
-        2, // order delivered => joueur à gagné son pari
-        3, // order delivered => joueur à perdu son pari
-        4, // order cancelled => pari à été annulé et la mise aussi avec remboursement
-        5, // order closed => commande soldée
+        0 => 'attente de paiement', // order init => attente du paiement
+        1 => 'pari payée', // order payment => joueur à payé son ticket
+        2 => 'pari gagné', // order delivered => joueur à gagné son pari
+        3 => 'pari perdu', // order delivered => joueur à perdu son pari
+        4 => 'pari remboursé', // order cancelled => pari à été annulé et la mise aussi avec remboursement
+        5 => 'pari soldé', // order closed => commande soldée
         ];
     /**
      * @ORM\Id
@@ -94,8 +94,8 @@ class Order
      *      groups={"orderStatus"}
      * )
      * @Assert\Choice(
-     *      choices=Order::ORDER_STATUS,
-     *      message="Status incorrect",
+     *      choices={0,1,2,3,4,5},
+     *      message="Choix status incorrect",
      *      groups={"orderStatus"}
      * )
      */
@@ -156,6 +156,7 @@ class Order
 
     /**
      * @param float $amount
+     * @return Order
      */
     public function setAmount(float $amount): self
     {

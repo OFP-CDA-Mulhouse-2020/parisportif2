@@ -84,9 +84,6 @@ class Order {
     + returnMoneyToWebsite()
 }
 
-class OrderStatus {
-    - status :string
-}
 
 class Bet {
     - id :int
@@ -118,6 +115,7 @@ class Payment {
     - name :string
     - datePayment :DateTime
     - amount :float
+    - paymentStatus :int
 
     + credit()
     + debit()
@@ -144,7 +142,9 @@ class Event {
 
 
 class Sport {
-    - sport :string
+    - name :string
+    - nbTeam: int
+    - nbPlayer: int
 }
 
 
@@ -195,15 +195,6 @@ class PlayerRanking {
     + deletePlayerRanking()
 }
 
-class PlayerStatus {
-    - status :string
-}
-
-class Team_Player {
-    - teamId :int
-    - playerId :int
-}
-
 class Competition {
     - name :string
     - StartDate :DateTime
@@ -233,11 +224,6 @@ Bet "1..*" -right- "1..*" Order
 Bet "1..*" -up- "1..*" TypeOfBet
 Bet "1" -up- "1..*" CheckBet
 
-
-Order "1" -up-  "0..*" OrderStatus
-
-
-
 Event "1" *-up- "1.." Bet
 Event "1..*" -up-* "1" Competition
 Event "1" -- "0..*" Sport
@@ -251,7 +237,6 @@ Event "1..*" o-- "1..*" Player
 
 Player "1..*" o-left- "1..*" Team
 Player "1..*" o-right- "1..*" PlayerRanking
-Player "1" o-right- "1..*" PlayerStatus
 Player "1" -up- "0..*" Sport
 
 

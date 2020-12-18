@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit;
 
+use App\Entity\Address;
 use App\Entity\User;
 use DateInterval;
 use DateTime;
@@ -228,5 +229,14 @@ class UserTest extends KernelTestCase
             [(new User())->delete(), ['delete'], 0, true, new DateTime()],
             [(new User())->undelete(), ['delete'], 0, false, null],
         ];
+    }
+
+
+    public function testValidAddress()
+    {
+        $address = Address::build('8 rue des champs', 68000, 'Colmar', 'France');
+        $user = new User();
+        $user->setAddress($address);
+        $this->assertInstanceOf(Address::class, $user->getAddress());
     }
 }

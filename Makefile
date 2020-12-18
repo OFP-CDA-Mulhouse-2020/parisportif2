@@ -32,7 +32,7 @@ phpcs: ## Run Codesniffer
 phpcbf: ## Run Codesniffer Beautify
 	${CURDIR}/vendor/bin/phpcbf
 
-db: ## Build the DB, control the schema validity, load fixtures and check the migration status
+dbdev: ## Build the DB, control the schema validity, load fixtures and check the migration status
 	docker-compose exec php7.4 php bin/console doctrine:cache:clear-metadata
 	docker-compose exec php7.4 php bin/console doctrine:database:create --if-not-exists
 	docker-compose exec php7.4 php bin/console doctrine:schema:drop --force

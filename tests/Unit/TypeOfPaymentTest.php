@@ -20,10 +20,10 @@ class TypeOfPaymentTest extends KernelTestCase
     {
         $typeOfPayment = new TypeOfPayment();
 
-        $typeOfPayment->setRealTypeOfPayment();
+        $typeOfPayment->setTypeOfPayment('Réel');
         $this->assertSame('Réel', $typeOfPayment->getTypeOfPayment());
 
-        $typeOfPayment->setVirtualTypeOfPayment();
+        $typeOfPayment->setTypeOfPayment('Virtuel');
         $this->assertSame('Virtuel', $typeOfPayment->getTypeOfPayment());
     }
 }

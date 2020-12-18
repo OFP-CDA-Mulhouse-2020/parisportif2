@@ -86,10 +86,6 @@ class Address
      */
     private string $country;
 
-
-
-
-
     /******************************** Id ****************************** */
 
     public function getId(): ?int
@@ -165,10 +161,6 @@ class Address
 
         return $this;
     }
-
-
-
-
 
     /**
      * Entity builder with requested parameters
