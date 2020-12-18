@@ -45,7 +45,7 @@ class Team
      *  message="{{ value }} n'est pas du type {{ type }}",
      * )
      * @Assert\PositiveOrZero(
-     *  message="Team Status must be positive",
+     *  message="The team Status must be positive",
      * )
      */
     private int $nbPlayer;

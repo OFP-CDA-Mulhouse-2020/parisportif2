@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\SportRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
