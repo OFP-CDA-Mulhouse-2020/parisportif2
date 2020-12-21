@@ -61,7 +61,7 @@ class Cart {
 
 class Item {
     - id :int
-    - expectedBetValue :array
+    - expectedBetResult :int
     - recordedOdds :float
     - amount :float
     - itemStatus :int
@@ -92,10 +92,9 @@ class TypeOfBet {
 
 class Payment {
     - id :int
-    - userId :int
     - name :string
     - datePayment :DateTime
-    - amount :float
+    - sum :float
     - paymentStatus :int
 
     + credit()
@@ -171,10 +170,8 @@ User "1" *-- "1" Address
 User "1" *-right- "1" Wallet
 User "1" *-left- "1..*" Cart
 User "1" *-- "1" BankAccount
-User "1..*" *-up- "1..*" Order
 
 Payment "1..*" -down-* "1..*" Wallet
-Payment "1..*" -left- "Order"
 Payment "1" -- "1" BankAccount
 Payment "1" -right- "1" WebsiteWallet
 Payment "1" -up- "1..*" TypeOfPayment

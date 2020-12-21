@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PaymentRepository;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -93,12 +95,18 @@ class Payment
      */
     private TypeOfPayment $typeOfPayment;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="payment")
+     */
+    private ArrayCollection $items;
+
 
     public function __construct(float $amount)
     {
         $this->datePayment = new DateTime();
         $this->amount = (int) ($amount * 100);
         $this->paymentStatusId = 0;
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,11 +133,6 @@ class Payment
     public function getDatePayment(): DateTimeInterface
     {
         return $this->datePayment;
-    }
-
-    public function setDatePayment(DateTimeInterface $datePayment): void
-    {
-        $this->datePayment = $datePayment;
     }
 
     /******************************** amount ****************************** */
@@ -169,6 +172,36 @@ class Payment
     public function setTypeOfPayment(?TypeOfPayment $typeOfPayment): self
     {
         $this->typeOfPayment = $typeOfPayment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setPayment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getPayment() === $this) {
+                $item->setPayment(null);
+            }
+        }
 
         return $this;
     }

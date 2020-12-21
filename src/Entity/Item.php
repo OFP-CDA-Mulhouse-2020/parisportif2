@@ -2,26 +2,23 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
-use DateTime;
-use DateTimeInterface;
+use App\Repository\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=OrderRepository::class)
- * @ORM\Table(name="`order`")
+ * @ORM\Entity(repositoryClass=ItemRepository::class)
  */
-class Order
+class Item
 {
-    public const ORDER_STATUS = [
-        0 => 'attente de paiement', // order init => attente du paiement
+    public const ITEM_STATUS = [
+        0 => 'en attente', // order init => attente du paiement
         1 => 'pari payée', // order payment => joueur à payé son ticket
         2 => 'pari gagné', // order delivered => joueur à gagné son pari
         3 => 'pari perdu', // order delivered => joueur à perdu son pari
         4 => 'pari remboursé', // order cancelled => pari à été annulé et la mise aussi avec remboursement
         5 => 'pari soldé', // order closed => commande soldée
-        ];
+    ];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -32,17 +29,17 @@ class Order
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Bet Id incorrect",
+     *  message="BetExpectedResult incorrect",
      * )
      * @Assert\Type(
      *  type="integer",
      *  message="{{ value }} n'est pas du type {{ type }}",
      * )
      * @Assert\PositiveOrZero(
-     *  message="Bet Id must be positive",
+     *  message="BetExpectedResult must be positive",
      * )
      */
-    private int $betId;
+    private int $expectedBetResult;
 
     /**
      * @ORM\Column(type="integer")
@@ -76,43 +73,40 @@ class Order
     private int $amount;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Assert\NotBlank(
-     *      message="Date de commande vide",
-     * )
-     * @Assert\LessThanOrEqual(
-     *      value="+1 hours",
-     *      message="Date de commande incorrecte : {{ value }}",
-     * )
-     */
-    private DateTimeInterface $orderAt;
-
-    /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
      *      message="Order Status incorrect",
-     *      groups={"orderStatus"}
      * )
      * @Assert\Choice(
      *      choices={0,1,2,3,4,5},
      *      message="Choix status incorrect",
-     *      groups={"orderStatus"}
      * )
      */
-    private int $orderStatusId;
+    private int $itemStatusId;
+
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Bet::class)
+     * @Assert\NotNull(
+     *      message="Bet incorrect",
+     * )
      */
-    private $user;
+    private Bet $bet;
 
-    public function __construct(int $betId, float $recordedOdds)
+    /**
+     * @ORM\ManyToOne(targetEntity=Cart::class, inversedBy="items")
+     */
+    private ?Cart $cart;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Payment::class, inversedBy="items")
+     */
+    private ?Payment $payment;
+
+    public function __construct(Bet $bet)
     {
-        $this->betId = $betId;
-        $this->recordedOdds = (int) ($recordedOdds * 100);
-        $this->orderAt = new DateTime();
-        $this->orderStatusId = 0;
+        $this->bet = $bet;
+        $this->itemStatusId = 0;
     }
 
     public function getId(): ?int
@@ -120,12 +114,34 @@ class Order
         return $this->id;
     }
 
+    public function getAmount(): ?float
+    {
+        return $this->amount / 100;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = (int) ($amount * 100);
+
+        return $this;
+    }
+
     /**
      * @return int
      */
-    public function getBetId(): int
+    public function getExpectedBetResult(): int
     {
-        return $this->betId;
+        return $this->expectedBetResult;
+    }
+
+    /**
+     * @return self
+     */
+    public function setExpectedBetResult(int $expectedBetResult): self
+    {
+        $this->expectedBetResult = $expectedBetResult;
+
+        return $this;
     }
 
     /**
@@ -137,70 +153,83 @@ class Order
     }
 
     /**
-     * @return float
+     * @return self
      */
-    public function getAmount(): float
+    public function setRecordedOdds(float $recordedOdds): self
     {
-        return $this->amount / 100;
-    }
+        $this->recordedOdds = (int) ($recordedOdds * 100);
 
-    /**
-     * @return DateTimeInterface
-     */
-    public function getOrderAt(): DateTimeInterface
-    {
-        return $this->orderAt;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getOrderStatusId(): int
+    public function getItemStatusId(): int
     {
-        return $this->orderStatusId;
+        return $this->itemStatusId;
     }
 
-    /**
-     * @param float $amount
-     * @return Order
-     */
-    public function setAmount(float $amount): self
+    public function payItem(): void
     {
-        $this->amount = (int) ($amount * 100);
+        $this->itemStatusId = 1;
+    }
+
+    public function winItem(): void
+    {
+        $this->itemStatusId = 2;
+    }
+
+    public function looseItem(): void
+    {
+        $this->itemStatusId = 3;
+    }
+
+    public function refundItem(): void
+    {
+        $this->itemStatusId = 4;
+    }
+
+    public function closeItem(): void
+    {
+        $this->itemStatusId = 5;
+    }
+
+    public function getBet(): ?Bet
+    {
+        return $this->bet;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
 
         return $this;
     }
 
-    public function payOrder(): void
+    public function getPayment(): ?Payment
     {
-        $this->orderStatusId = 1;
+        return $this->payment;
     }
 
-    public function winOrder(): void
+    public function setPayment(?Payment $payment): self
     {
-        $this->orderStatusId = 2;
+        $this->payment = $payment;
+
+        return $this;
     }
 
-    public function looseOrder(): void
-    {
-        $this->orderStatusId = 3;
-    }
-
-    public function refundOrder(): void
-    {
-        $this->orderStatusId = 4;
-    }
-
-    public function closeOrder(): void
-    {
-        $this->orderStatusId = 5;
-    }
 
     public function calculateProfits(): ?float
     {
         $profits = null;
 
-        switch ($this->getOrderStatusId()) {
+        switch ($this->getItemStatusId()) {
             case 0:
                 $profits = - $this->getAmount();
                 break;
@@ -217,17 +246,5 @@ class Order
                 break;
         }
         return $profits;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 }
