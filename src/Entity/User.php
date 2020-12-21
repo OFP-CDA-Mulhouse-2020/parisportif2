@@ -531,8 +531,6 @@ class User implements UserInterface
         return $this;
     }
 
-
-
     public function getCart(): ?Cart
     {
         return $this->cart;
