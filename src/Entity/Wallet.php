@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WalletRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -62,6 +64,21 @@ class Wallet
      * )
      */
     private bool $realMoney;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="wallet", cascade={"persist", "remove"})
+     */
+    private User $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="wallet")
+     */
+    private ArrayCollection $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -153,5 +170,47 @@ class Wallet
         $this->balance -= (int) $amount * 100;
 
         return true;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setWallet($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getWallet() === $this) {
+                $payment->setWallet(null);
+            }
+        }
+
+        return $this;
     }
 }

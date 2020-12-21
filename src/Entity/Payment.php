@@ -100,6 +100,11 @@ class Payment
      */
     private ArrayCollection $items;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="payments")
+     */
+    private ?Wallet $wallet;
+
 
     public function __construct(float $amount)
     {
@@ -169,7 +174,7 @@ class Payment
         return $this->typeOfPayment;
     }
 
-    public function setTypeOfPayment(?TypeOfPayment $typeOfPayment): self
+    public function setTypeOfPayment(TypeOfPayment $typeOfPayment): self
     {
         $this->typeOfPayment = $typeOfPayment;
 
@@ -202,6 +207,18 @@ class Payment
                 $item->setPayment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(?Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
 
         return $this;
     }

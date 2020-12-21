@@ -35,7 +35,12 @@ class Cart
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="cart")
      */
-    private $items;
+    private ArrayCollection $items;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="cart", cascade={"persist", "remove"})
+     */
+    private $user;
 
     public function __construct()
     {
@@ -93,5 +98,19 @@ class Cart
     public function validateCart()
     {
         $payment = new Payment($this->getSum());
+        $userWallet = $this->user->getWallet();
+        $payment->setWallet($userWallet);
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
