@@ -61,7 +61,7 @@ class UserTest extends KernelTestCase
     /**
      * @dataProvider validUserProvider
      * @param User $user
-     * @param array $groups
+     * @param array|null $groups
      * @param int $expectedViolationsCount
      */
     public function testValidUser(User $user, ?array $groups, int $expectedViolationsCount): void
@@ -298,5 +298,6 @@ class UserTest extends KernelTestCase
         $user->setCart($cart);
         $this->assertInstanceOf(Cart::class, $user->getCart());
         $this->assertSame(0, $this->getViolationsCount($user, ['cart']));
+        var_dump(date_default_timezone_get());
     }
 }

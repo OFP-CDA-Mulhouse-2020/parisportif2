@@ -26,7 +26,7 @@ class Bet
      *  message="Date limite vide",
      *  groups={"limitTime", "bet"}
      * )
-     * @Assert\GreaterThan(value="+1 hours",
+     * @Assert\GreaterThan(value="today",
      *      message="Date limite incorrecte",
      *      groups={"limitTime", "bet"}
      * )

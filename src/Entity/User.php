@@ -109,7 +109,7 @@ class User implements UserInterface
      *  groups={"createAt"}
      * )
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de création incorrecte : {{ value }}",
      *  groups={"createAt"}
      * )
@@ -133,7 +133,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de validation incorrecte : {{ value }}",
      *  groups={"active"}
      * )
@@ -157,7 +157,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
@@ -181,7 +181,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de suppression incorrecte : {{ value }}",
      *  groups={"delete"}
      * )

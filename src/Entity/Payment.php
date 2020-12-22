@@ -50,7 +50,7 @@ class Payment
      * )
      *
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  groups={"datePayment", "payment"}
      * )
      */
