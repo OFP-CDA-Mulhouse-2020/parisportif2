@@ -36,6 +36,10 @@ class Cart
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="cart")
+     * @Assert\NotNull(
+     *     message="Items ne peut pas être vide",
+     *     groups={"cart"}
+     * )
      * @var Collection<int, Item>|Item[]
      */
     private Collection $items;

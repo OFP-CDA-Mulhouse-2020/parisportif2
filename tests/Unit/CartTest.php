@@ -148,6 +148,7 @@ class CartTest extends KernelTestCase
         $this->assertSame(50.00, $result->getSum());
         $this->assertInstanceOf(Payment::class, $result);
         $this->assertSame($cart->getItems(), $result->getItems());
+        $this->assertSame(0, $this->getViolationsCount($cart, ['cart']));
     }
 
     public function testNoValidateCart(): void
@@ -156,5 +157,6 @@ class CartTest extends KernelTestCase
 
         $result = $cart->validateCart();
         $this->assertSame(null, $result);
+        $this->assertSame(0, $this->getViolationsCount($cart, ['cart']));
     }
 }
