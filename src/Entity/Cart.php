@@ -25,28 +25,31 @@ class Cart
      * @Assert\Type(
      *     type="integer",
      *     message="{{ value }} n'est pas du type {{ type }}",
+     *     groups={"cart"}
      * )
-     * @Assert\Positive(
-     *     message="Sum ne peut pas être négative"
+     * @Assert\PositiveOrZero(
+     *     message="Sum ne peut pas être négative",
+     *     groups={"cart"}
      * )
      */
-    private int $sum = 0;
+    private int $sum;
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="cart")
      */
     private ArrayCollection $items;
 
+
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="cart", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="cart", cascade={"persist", "remove"})
      */
-    private $user;
+    private ?User $user;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->sum = 0;
     }
-
 
     public function getId(): ?int
     {
@@ -58,10 +61,12 @@ class Cart
         return $this->sum / 100;
     }
 
-    public function setSum(?float $sum): self
+    public function setSum(): self
     {
-        $this->sum = (int) ($sum * 100);
-
+        $this->sum = 0;
+        foreach ($this->items as $item) {
+            $this->sum += (int) ($item->getAmount() * 100);
+        }
         return $this;
     }
 
@@ -95,11 +100,19 @@ class Cart
         return $this;
     }
 
-    public function validateCart()
+    public function validateCart(): ?Payment
     {
-        $payment = new Payment($this->getSum());
-        $userWallet = $this->user->getWallet();
-        $payment->setWallet($userWallet);
+        if (count($this->items) > 0) {
+            $this->setSum();
+            $payment = new Payment($this->getSum());
+            $payment->setItems($this->items);
+
+            $userWallet = $this->user->getWallet();
+            $payment->setWallet($userWallet);
+
+            return $payment;
+        }
+        return null;
     }
 
     public function getUser(): ?User
@@ -110,6 +123,12 @@ class Cart
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newCart = null === $user ? null : $this;
+        if ($user->getCart() !== $newCart) {
+            $user->setCart($newCart);
+        }
 
         return $this;
     }

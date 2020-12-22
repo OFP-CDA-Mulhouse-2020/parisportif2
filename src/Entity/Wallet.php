@@ -65,10 +65,6 @@ class Wallet
      */
     private bool $realMoney;
 
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="wallet", cascade={"persist", "remove"})
-     */
-    private User $user;
 
     /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="wallet")
@@ -170,18 +166,6 @@ class Wallet
         $this->balance -= (int) $amount * 100;
 
         return true;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**

@@ -59,18 +59,20 @@ class Payment
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *      message="Amount is empty",
+     *      message="Sum is empty",
+     *      groups={"sum"}
      * )
      * @Assert\Type(
      *      type="integer",
      *      message="{{ value }} n'est pas du type {{ type }}",
+     *      groups={"sum"}
      * )
      * @Assert\Positive(
-     *      message="Amount must be positive",
-     * groups={"amount"}
+     *      message="Sum must be positive",
+     *      groups={"sum"}
      * )
      */
-    private int $amount;
+    private int $sum;
 
     /**
      * @ORM\Column(type="integer")
@@ -98,7 +100,7 @@ class Payment
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="payment")
      */
-    private ArrayCollection $items;
+    private ?ArrayCollection $items;
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="payments")
@@ -106,10 +108,10 @@ class Payment
     private ?Wallet $wallet;
 
 
-    public function __construct(float $amount)
+    public function __construct(float $sum)
     {
         $this->datePayment = new DateTime();
-        $this->amount = (int) ($amount * 100);
+        $this->sum = (int) ($sum * 100);
         $this->paymentStatusId = 0;
         $this->items = new ArrayCollection();
     }
@@ -142,9 +144,9 @@ class Payment
 
     /******************************** amount ****************************** */
 
-    public function getAmount(): float
+    public function getSum(): float
     {
-        return $this->amount / 100;
+        return $this->sum / 100;
     }
 
     /******************************** paymentStatus ****************************** */
@@ -189,24 +191,9 @@ class Payment
         return $this->items;
     }
 
-    public function addItem(Item $item): self
+    public function setItems(ArrayCollection $items): self
     {
-        if (!$this->items->contains($item)) {
-            $this->items[] = $item;
-            $item->setPayment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeItem(Item $item): self
-    {
-        if ($this->items->removeElement($item)) {
-            // set the owning side to null (unless already changed)
-            if ($item->getPayment() === $this) {
-                $item->setPayment(null);
-            }
-        }
+        $this->items = $items;
 
         return $this;
     }

@@ -119,11 +119,13 @@ class Item
         return $this->amount / 100;
     }
 
-    public function setAmount(float $amount): self
+    public function isModifiedAmount(float $amount): bool
     {
-        $this->amount = (int) ($amount * 100);
-
-        return $this;
+        if ($this->itemStatusId === 0) {
+            $this->amount = (int) ($amount * 100);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Entity\Address;
 use App\Entity\BankAccount;
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
 use DateInterval;
@@ -252,6 +253,24 @@ class UserTest extends KernelTestCase
         $this->assertSame(1, $this->getViolationsCount($user, ['address']));
     }
 
+    public function testValidBankAccount(): void
+    {
+        $bankAccount = BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS');
+        $user = new User();
+        $user->setBankAccount($bankAccount);
+        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
+        $this->assertSame(0, $this->getViolationsCount($user, ['bankAccount']));
+    }
+
+    public function testInvalidBankAccount(): void
+    {
+        $bankAccount = BankAccount::build('1', '1');
+        $user = new User();
+        $user->setBankAccount($bankAccount);
+        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
+        $this->assertSame(2, $this->getViolationsCount($user, ['bankAccount']));
+    }
+
     public function testValidWallet(): void
     {
         $wallet = new Wallet();
@@ -272,22 +291,12 @@ class UserTest extends KernelTestCase
         $this->assertSame(3, $this->getViolationsCount($user, ['wallet']));
     }
 
-
-    public function testValidBankAccount(): void
+    public function testValidCart(): void
     {
-        $bankAccount = BankAccount::build('FR7630006000011234567890189', 'BNPAFRPPTAS');
+        $cart = new Cart();
         $user = new User();
-        $user->setBankAccount($bankAccount);
-        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
-        $this->assertSame(0, $this->getViolationsCount($user, ['bankAccount']));
-    }
-
-    public function testInvalidBankAccount(): void
-    {
-        $bankAccount = BankAccount::build('1', '1');
-        $user = new User();
-        $user->setBankAccount($bankAccount);
-        $this->assertInstanceOf(BankAccount::class, $user->getBankAccount());
-        $this->assertSame(2, $this->getViolationsCount($user, ['bankAccount']));
+        $user->setCart($cart);
+        $this->assertInstanceOf(Cart::class, $user->getCart());
+        $this->assertSame(0, $this->getViolationsCount($user, ['cart']));
     }
 }

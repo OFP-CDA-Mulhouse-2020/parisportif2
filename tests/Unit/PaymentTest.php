@@ -15,7 +15,7 @@ class PaymentTest extends KernelTestCase
     {
         $payment = new Payment(50.0);
         $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame(50.0, $payment->getAmount());
+        $this->assertSame(50.0, $payment->getSum());
     }
 
     public function testPaymentInstance(): void
@@ -24,7 +24,7 @@ class PaymentTest extends KernelTestCase
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertClassHasAttribute('paymentName', Payment::class);
         $this->assertClassHasAttribute('datePayment', Payment::class);
-        $this->assertClassHasAttribute('amount', Payment::class);
+        $this->assertClassHasAttribute('sum', Payment::class);
         $this->assertClassHasAttribute('paymentStatusId', Payment::class);
         $this->assertClassHasAttribute('typeOfPayment', Payment::class);
     }
@@ -98,39 +98,39 @@ class PaymentTest extends KernelTestCase
     /******************************** amount ****************************** */
 
     /**
-     * @dataProvider generateValidAmount
+     * @dataProvider generateValidSum
      */
-    public function testValidAmount(float $amount, array $groups, int $numberOfViolations): void
+    public function testValidSum(float $sum, array $groups, int $numberOfViolations): void
     {
-        $payment = new Payment($amount);
+        $payment = new Payment($sum);
 
         $this->assertSame($numberOfViolations, $this->getViolationsCount($payment, $groups));
     }
 
-    public function generateValidAmount(): array
+    public function generateValidSum(): array
     {
         return [
-            [0.5, ['amount'], 0],
-            [1000000, ['amount'], 0],
-            [5000, ['amount'], 0],
+            [0.5, ['sum'], 0],
+            [1000000, ['sum'], 0],
+            [5000, ['sum'], 0],
         ];
     }
 
     /**
-     * @dataProvider generateInValidAmount
+     * @dataProvider generateInValidSum
      */
-    public function testInValidAmount(float $amount, array $groups, int $numberOfViolations): void
+    public function testInValidSum(float $sum, array $groups, int $numberOfViolations): void
     {
-        $payment = new Payment($amount);
+        $payment = new Payment($sum);
 
         $this->assertSame($numberOfViolations, $this->getViolationsCount($payment, $groups));
     }
 
-    public function generateInValidAmount(): array
+    public function generateInValidSum(): array
     {
         return [
-            [0, ['amount'], 1], // Le montant ne peut pas être égale à 0
-            [-1, ['amount'], 1],
+            [0, ['sum'], 1], // Le montant ne peut pas être égale à 0
+            [-1, ['sum'], 1],
         ];
     }
 

@@ -201,15 +201,16 @@ class User implements UserInterface
     private ?BankAccount $bankAccount;
 
     /**
-     * @ORM\OneToOne(targetEntity=Wallet::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Cart::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"cart"})
+     */
+    private ?Cart $cart;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
      * @Assert\Valid(groups={"wallet"})
      */
     private ?Wallet $wallet;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Cart::class, mappedBy="user", cascade={"persist", "remove"})
-     */
-    private ?Cart $cart;
 
     public function getId(): ?int
     {
@@ -540,12 +541,6 @@ class User implements UserInterface
     {
         $this->cart = $cart;
 
-        // set (or unset) the owning side of the relation if necessary
-        $newUser = null === $cart ? null : $this;
-        if ($cart->getUser() !== $newUser) {
-            $cart->setUser($newUser);
-        }
-
         return $this;
     }
 
@@ -557,12 +552,6 @@ class User implements UserInterface
     public function setWallet(?Wallet $wallet): self
     {
         $this->wallet = $wallet;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newUser = null === $wallet ? null : $this;
-        if ($wallet->getUser() !== $newUser) {
-            $wallet->setUser($newUser);
-        }
 
         return $this;
     }
