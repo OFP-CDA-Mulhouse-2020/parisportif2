@@ -4,6 +4,8 @@ namespace App\Tests\Unit;
 
 use App\Entity\Bet;
 use App\Entity\Item;
+use App\Entity\Payment;
+use App\Entity\Wallet;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -96,7 +98,7 @@ class ItemTest extends KernelTestCase
         ];
     }
 
-    public function testIsModifiedAmount()
+    public function testIsModifiedAmount(): void
     {
         $item = new Item(new Bet());
         $status = $item->isModifiedAmount(50);
@@ -104,7 +106,7 @@ class ItemTest extends KernelTestCase
         $this->assertTrue($status);
     }
 
-    public function testIsNotModifiedAmount()
+    public function testIsNotModifiedAmount(): void
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(20);
@@ -143,7 +145,7 @@ class ItemTest extends KernelTestCase
         $item->setRecordedOdds(2.22);
 
         $item->calculateProfits();
-        $this->assertSame(-10.00, $item->calculateProfits());
+        $this->assertSame(null, $item->calculateProfits());
     }
 
     public function testValidCalculateProfitsForItemPayed(): void
@@ -204,5 +206,25 @@ class ItemTest extends KernelTestCase
 
         $item->calculateProfits();
         $this->assertSame(null, $item->calculateProfits());
+    }
+
+
+    public function testValidGeneratePayment(): void
+    {
+        $item = new Item(new Bet());
+        $item->isModifiedAmount(10);
+        $payment = new Payment(10);
+        $wallet = new Wallet();
+        $payment->setWallet($wallet);
+        $item->setPayment($payment);
+        $item->setRecordedOdds(2.22);
+
+        $item->winItem();
+
+        $result = $item->generatePayment();
+
+        $this->assertInstanceOf(Payment::class, $result);
+        $this->assertSame(22.2, $result->getSum());
+        $this->assertSame($item, $result->getItems()[0]);
     }
 }

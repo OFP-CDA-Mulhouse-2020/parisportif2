@@ -68,8 +68,9 @@ class Wallet
 
     /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="wallet")
+     * @var Collection<int, Payment>|null
      */
-    private ArrayCollection $payments;
+    private ?Collection $payments;
 
     public function __construct()
     {
@@ -155,21 +156,21 @@ class Wallet
         return true;
     }
 
-    public function betPayment(float $amount, int $amountBetPaymentLastWeek): bool
+    public function betPayment(float $amount, int $amountBetPaymentLastWeek): int
     {
         if ($amount <= 0 or $amount > $this->getBalance()) {
-            return false;
+            return 0;
         }
         if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
-            return false;
+            return 1;
         }
         $this->balance -= (int) $amount * 100;
 
-        return true;
+        return 2;
     }
 
     /**
-     * @return Collection|Payment[]
+     * @return  Collection<int, Payment>|Payment[]
      */
     public function getPayments(): Collection
     {
@@ -185,7 +186,7 @@ class Wallet
 
         return $this;
     }
-
+/* Pas nécessaire
     public function removePayment(Payment $payment): self
     {
         if ($this->payments->removeElement($payment)) {
@@ -196,5 +197,5 @@ class Wallet
         }
 
         return $this;
-    }
+    }*/
 }

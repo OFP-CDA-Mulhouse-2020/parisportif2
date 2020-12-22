@@ -60,16 +60,16 @@ class Payment
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
      *      message="Sum is empty",
-     *      groups={"sum"}
+     *      groups={"sum", "payment"}
      * )
      * @Assert\Type(
      *      type="integer",
      *      message="{{ value }} n'est pas du type {{ type }}",
-     *      groups={"sum"}
+     *      groups={"sum", "payment"}
      * )
      * @Assert\Positive(
      *      message="Sum must be positive",
-     *      groups={"sum"}
+     *      groups={"sum", "payment"}
      * )
      */
     private int $sum;
@@ -78,12 +78,12 @@ class Payment
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
      *      message="Payment status is empty",
-     *      groups={"paymentStatus"}
+     *      groups={"paymentStatus", "payment"}
      * )
      * @Assert\Choice(
      *      choices={0,1,2},
      *      message="Status incorrect",
-     *      groups={"paymentStatus"}
+     *      groups={"paymentStatus", "payment"}
      * )
      */
     private int $paymentStatusId;
@@ -99,13 +99,23 @@ class Payment
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="payment")
+     * @var Collection<int, Item>|null
      */
-    private ?ArrayCollection $items;
+    private ?Collection $items;
 
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="payments")
+     * @Assert\NotNull(
+     *      message="Wallet is empty",
+     * )
+     * @Assert\Valid
      */
-    private ?Wallet $wallet;
+    private Wallet $wallet;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=WebsiteWallet::class, inversedBy="payments")
+     */
+    private ?WebsiteWallet $websiteWallet;
 
 
     public function __construct(float $sum)
@@ -156,11 +166,6 @@ class Payment
         return $this->paymentStatusId;
     }
 
-    public function onGoPayment(): void
-    {
-        $this->paymentStatusId = 0;
-    }
-
     public function refusePayment(): void
     {
         $this->paymentStatusId = 1;
@@ -184,14 +189,18 @@ class Payment
     }
 
     /**
-     * @return Collection|Item[]
+     * @return Collection<int, Item>|Item[]
      */
     public function getItems(): Collection
     {
         return $this->items;
     }
 
-    public function setItems(ArrayCollection $items): self
+    /**
+     * @param Collection<int, Item>|Item[] $items
+     * @return $this
+     */
+    public function setItems(Collection $items): self
     {
         $this->items = $items;
 
@@ -203,9 +212,21 @@ class Payment
         return $this->wallet;
     }
 
-    public function setWallet(?Wallet $wallet): self
+    public function setWallet(Wallet $wallet): self
     {
         $this->wallet = $wallet;
+
+        return $this;
+    }
+
+    public function getWebsiteWallet(): ?WebsiteWallet
+    {
+        return $this->websiteWallet;
+    }
+
+    public function setWebsiteWallet(?WebsiteWallet $websiteWallet): self
+    {
+        $this->websiteWallet = $websiteWallet;
 
         return $this;
     }

@@ -36,8 +36,9 @@ class Cart
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="cart")
+     * @var Collection<int, Item>|Item[]
      */
-    private ArrayCollection $items;
+    private Collection $items;
 
 
     /**
@@ -71,7 +72,7 @@ class Cart
     }
 
     /**
-     * @return Collection|Item[]
+     * @return Collection<int, Item>|Item[]
      */
     public function getItems(): Collection
     {
@@ -100,21 +101,6 @@ class Cart
         return $this;
     }
 
-    public function validateCart(): ?Payment
-    {
-        if (count($this->items) > 0) {
-            $this->setSum();
-            $payment = new Payment($this->getSum());
-            $payment->setItems($this->items);
-
-            $userWallet = $this->user->getWallet();
-            $payment->setWallet($userWallet);
-
-            return $payment;
-        }
-        return null;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -131,5 +117,21 @@ class Cart
         }
 
         return $this;
+    }
+
+    //Peut-être à mettre dans le contrôleur ???
+    public function validateCart(): ?Payment
+    {
+        if (count($this->items) > 0) {
+            $this->setSum();
+            $payment = new Payment($this->getSum());
+            $payment->setItems($this->items);
+
+            $userWallet = $this->user->getWallet();
+            $payment->setWallet($userWallet);
+
+            return $payment;
+        }
+        return null;
     }
 }

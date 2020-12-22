@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -121,7 +122,7 @@ class Item
 
     public function isModifiedAmount(float $amount): bool
     {
-        if ($this->itemStatusId === 0) {
+        if ($this->itemStatusId === 0 && $amount > 0) {
             $this->amount = (int) ($amount * 100);
             return true;
         }
@@ -233,8 +234,6 @@ class Item
 
         switch ($this->getItemStatusId()) {
             case 0:
-                $profits = - $this->getAmount();
-                break;
             case 1:
             case 3:
             case 5:
@@ -247,6 +246,26 @@ class Item
                 $profits = $this->getAmount();
                 break;
         }
+
         return $profits;
+    }
+
+    //Peut-être à mettre dans le contrôleur ???
+    public function generatePayment(): ?Payment
+    {
+        if ($this->itemStatusId === 2 || $this->itemStatusId === 4) {
+            $amount = $this->calculateProfits();
+            $payment = new Payment($amount);
+
+            $userWallet = $this->payment->getWallet();
+            $payment->setWallet($userWallet);
+
+            $arrayCollection  = new ArrayCollection();
+            $arrayCollection[] = $this;
+            $payment->setItems($arrayCollection);
+
+            return $payment;
+        }
+        return null;
     }
 }

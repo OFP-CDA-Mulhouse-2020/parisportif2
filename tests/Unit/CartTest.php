@@ -21,7 +21,25 @@ class CartTest extends KernelTestCase
         $this->assertClassHasAttribute('sum', Cart::class);
     }
 
-    public function testAddItemToCart()
+    public function getKernel(): KernelInterface
+    {
+        $kernel = self::bootKernel();
+        $kernel->boot();
+
+        return $kernel;
+    }
+
+    public function getViolationsCount(Cart $cart, ?array $groups): int
+    {
+        $kernel = $this->getKernel();
+
+        $validator = $kernel->getContainer()->get('validator');
+        $violationList = $validator->validate($cart, null, $groups);
+        //var_dump($violationList);
+        return count($violationList);
+    }
+
+    public function testAddItemToCart(): void
     {
         $cart = new Cart();
         $item = new Item(new Bet());
@@ -37,7 +55,7 @@ class CartTest extends KernelTestCase
         $this->assertEquals(3, count($items));
     }
 
-    public function testRemoveItemFromCart()
+    public function testRemoveItemFromCart(): void
     {
         $cart = new Cart();
         $item = new Item(new Bet());
@@ -57,7 +75,7 @@ class CartTest extends KernelTestCase
         $this->assertEquals(2, count($items));
     }
 
-    public function testSumWhenAddToCart()
+    public function testSumWhenAddToCart(): void
     {
         $cart = new Cart();
         $item = new Item(new Bet());
@@ -81,7 +99,7 @@ class CartTest extends KernelTestCase
         $this->assertSame(70.00, $sum);
     }
 
-    public function testSumWhenRemoveFromCart()
+    public function testSumWhenRemoveFromCart(): void
     {
         $cart = new Cart();
         $item = new Item(new Bet());
@@ -103,20 +121,16 @@ class CartTest extends KernelTestCase
         $this->assertSame(20.00, $sum);
     }
 
-
-    public function testSetUser()
+    public function testSetUser(): void
     {
         $cart = new Cart();
         $user = new User();
         $user->setCart($cart);
         $cart->setUser($user);
         $this->assertInstanceOf(User::class, $cart->getUser());
-        $wallet = new Wallet();
-        $user->setWallet($wallet);
-        $test = $cart->getUser();
     }
 
-    public function testValidateCart()
+    public function testValidateCart(): void
     {
         $cart = new Cart();
         $user = new User();
@@ -136,14 +150,9 @@ class CartTest extends KernelTestCase
         $this->assertSame($cart->getItems(), $result->getItems());
     }
 
-    public function testNoValidateCart()
+    public function testNoValidateCart(): void
     {
         $cart = new Cart();
-        $user = new User();
-        $wallet = new Wallet();
-        $user->setCart($cart);
-        $user->setWallet($wallet);
-        $cart->setUser($user);
 
         $result = $cart->validateCart();
         $this->assertSame(null, $result);

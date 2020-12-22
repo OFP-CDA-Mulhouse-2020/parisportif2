@@ -4,6 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Entity\Payment;
 use App\Entity\TypeOfPayment;
+use App\Entity\Wallet;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -147,9 +148,6 @@ class PaymentTest extends KernelTestCase
         $this->assertSame(0, $this->getViolationsCount($payment, ['paymentStatus']));
         $this->assertSame(0, $payment->getPaymentStatusId());
 
-        $payment->onGoPayment();
-        $this->assertSame(0, $payment->getPaymentStatusId());
-
         $payment->refusePayment();
         $this->assertSame(1, $payment->getPaymentStatusId());
 
@@ -157,26 +155,24 @@ class PaymentTest extends KernelTestCase
         $this->assertSame(2, $payment->getPaymentStatusId());
     }
 
-    public function testValidTypeOfPayment(): void
+    public function testValidTypeOfPaymentAndWallet(): void
     {
         $payment = new Payment(50.0);
-
+        $wallet = new Wallet();
         $typeOfPayment = new TypeOfPayment();
+
         $typeOfPayment->setTypeOfPayment('Virtuel');
         $payment->setTypeOfPayment($typeOfPayment);
+        $payment->setWallet($wallet);
 
         $this->assertInstanceOf(TypeOfPayment::class, $payment->getTypeOfPayment());
         $this->assertSame(0, $this->getViolationsCount($payment, ['Default']));
     }
 
-    public function testInvalidTypeOfPayment(): void
+    public function testInvalidTypeOfPaymentAndWallet(): void
     {
         $payment = new Payment(50.0);
 
-        $typeOfPayment = new TypeOfPayment();
-        $typeOfPayment->setTypeOfPayment('');
-        $payment->setTypeOfPayment($typeOfPayment);
-
-        $this->assertSame(1, $this->getViolationsCount($payment, ['Default']));
+        $this->assertSame(2, $this->getViolationsCount($payment, ['Default']));
     }
 }
