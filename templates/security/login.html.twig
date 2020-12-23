@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block body %}
-	<form method="post" id="loginForm">
-		{% if error %}
+
+	{{ form_start(login_form, {'attr': {novalidate: 'novalidate', id : 'loginForm'}}) }}
+	{% if error %}
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 
@@ -22,13 +23,8 @@
 		<h1 id="titre-principal" class="h3 mb-3 font-weight-normal">Titre principal</h1>
 		<h2>Entrez vos paramètres de connexion :</h2>
 
-		<label for="inputEmail">Email</label>
-		<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Entrez votre email" autofocus>
-		<br/>
-		<label for="inputPassword">Password</label>
-		<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Entrez votre mot de passe">
-
-		<br/>
+		{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
+		{{ form_row(login_form.password, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
 
 		<input
 		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -45,18 +41,9 @@
 				</div>
 			#}
 
+	{{ form_row(login_form.Valider) }}
 
-		<button class="btn btn-lg btn-primary loginForm_submit" type="submit">
-			Valider
-		</button>
-	</form>
+	{{ form_end(login_form) }}
 
 
-	{# <h1 id="titre-principal">
-									Titre principal</h1>
-								<h2>Entrez vos paramètres de connexion :</h2>
-								
-								{{ form_start(form, { attr: {novalidate: 'novalidate'}}) }}
-								{# {{form(login_form)}} #}
-	{# {{ form_end(form) }} #}
 {% endblock %}
