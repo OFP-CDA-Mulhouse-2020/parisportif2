@@ -156,13 +156,15 @@ class Item
     }
 
     /**
-     * @return self
+     * @return bool
      */
-    public function setRecordedOdds(float $recordedOdds): self
+    public function isModifiedRecordedOdds(float $recordedOdds): bool
     {
-        $this->recordedOdds = (int) ($recordedOdds * 100);
-
-        return $this;
+        if ($this->itemStatusId === 0 && $recordedOdds > 0) {
+            $this->recordedOdds = (int) ($recordedOdds * 100);
+            return true;
+        }
+        return false;
     }
 
     /**

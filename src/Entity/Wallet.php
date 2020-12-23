@@ -125,6 +125,7 @@ class Wallet
         $this->realMoney = $realMoney;
     }
 
+    // Peut-être à remplacer par un constructeur ??
     public function initializeWallet(bool $realMoney): void
     {
         if ($realMoney) {

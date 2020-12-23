@@ -298,6 +298,5 @@ class UserTest extends KernelTestCase
         $user->setCart($cart);
         $this->assertInstanceOf(Cart::class, $user->getCart());
         $this->assertSame(0, $this->getViolationsCount($user, ['cart']));
-        var_dump(date_default_timezone_get());
     }
 }

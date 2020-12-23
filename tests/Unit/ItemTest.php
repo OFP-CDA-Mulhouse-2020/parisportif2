@@ -55,7 +55,7 @@ class ItemTest extends KernelTestCase
         $item = new Item(new Bet());
         $item->isModifiedAmount($amount);
         $item->setExpectedBetResult($expectedBetResult);
-        $item->setRecordedOdds($recordedOdds);
+        $item->isModifiedRecordedOdds($recordedOdds);
 
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($item, null));
 
@@ -85,7 +85,7 @@ class ItemTest extends KernelTestCase
         $item = new Item(new Bet());
         $item->isModifiedAmount($amount);
         $item->setExpectedBetResult($expectedBetResult);
-        $item->setRecordedOdds($recordedOdds);
+        $item->isModifiedRecordedOdds($recordedOdds);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($item, null));
     }
 
@@ -116,10 +116,29 @@ class ItemTest extends KernelTestCase
         $this->assertFalse($status);
     }
 
+    public function testIsModifiedRecordedOdds(): void
+    {
+        $item = new Item(new Bet());
+        $status = $item->isModifiedRecordedOdds(2.22);
+
+        $this->assertSame(2.22, $item->getRecordedOdds());
+        $this->assertTrue($status);
+    }
+
+    public function testIsNotModifiedRecordedOdds(): void
+    {
+        $item = new Item(new Bet());
+        $item->isModifiedRecordedOdds(2.22);
+        $item->payItem();
+        $status = $item->isModifiedRecordedOdds(3);
+        $this->assertSame(2.22, $item->getRecordedOdds());
+        $this->assertFalse($status);
+    }
+
     public function testValidItemStatus(): void
     {
         $item = new Item(new Bet());
-        $this->assertSame(0, $this->getViolationsCount($item, ['ItemStatus']));
+
         $this->assertSame(0, $item->getItemStatusId());
 
         $item->payItem();
@@ -142,7 +161,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->calculateProfits();
         $this->assertSame(null, $item->calculateProfits());
@@ -152,7 +171,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->payItem();
 
@@ -164,7 +183,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->winItem();
 
@@ -176,7 +195,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->looseItem();
 
@@ -188,7 +207,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->refundItem();
 
@@ -200,7 +219,7 @@ class ItemTest extends KernelTestCase
     {
         $item = new Item(new Bet());
         $item->isModifiedAmount(10);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->closeItem();
 
@@ -217,7 +236,7 @@ class ItemTest extends KernelTestCase
         $wallet = new Wallet();
         $payment->setWallet($wallet);
         $item->setPayment($payment);
-        $item->setRecordedOdds(2.22);
+        $item->isModifiedRecordedOdds(2.22);
 
         $item->winItem();
 
