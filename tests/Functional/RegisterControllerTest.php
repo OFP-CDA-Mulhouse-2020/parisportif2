@@ -8,58 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RegisterControllerTest extends WebTestCase
 {
-/*
-    public function testLoginReponse200()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login');
-        $this->assertResponseStatusCodeSame(200);
-    }
-
-    public function testLoginWithAllLabel()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login');
-        $this->assertSelectorExists('form');
-        $this->assertSelectorExists('form button[type=submit]');
-        $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
-    }
-
-
-    public function testLoginSubmitWithSuccess()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login');
-
-        $form = $crawler->filter('form')->form();
-
-        $form['email'] = 'daniel@test3.cda';
-        $form['password'] = 'Wxcv123456';
-
-        $crawler = $client->submit($form);
-
-        $this->assertResponseRedirects('/home');
-        $crawler = $client->followRedirect();
-
-        $this->assertSelectorTextContains('h1', 'Le Formulaire  a été validé');
-    }
-
-
-    public function testInvalidLoginSubmit()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/login');
-
-        $form = $crawler->filter('form')->form();
-
-        $crawler = $client->submit($form);
-
-        $this->assertSelectorTextContains('', 'Email vide');
-        $this->assertSelectorTextContains('', 'Password vide');
-    }
-    */
-// Test Register
     public function testRegisterResponse200(): void
     {
         $client = static::createClient();
@@ -80,7 +28,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[name*="agreeTerms"]'));
         $this->assertSelectorExists('form button[type=submit]');
     }
-/*
+
     public function testRegisterSubmitWithSuccess(): void
     {
         $client = static::createClient();
@@ -102,7 +50,6 @@ class RegisterControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
     }
-*/
 
     public function testInvalidRegisterSubmit(): void
     {
