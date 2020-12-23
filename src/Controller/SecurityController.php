@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
             [
                 'last_username' => $lastUsername,
                 'error' => $error,
-                'form' => $form->createView()
+                'login_form' => $form->createView()
             ]
         );
     }

@@ -32,7 +32,7 @@ class LoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/login');
 
         $this->assertSelectorExists('form');
-        $this->assertEquals(3, $crawler->filter('form input')->count());
+        $this->assertEquals(4, $crawler->filter('form input')->count());
         $this->assertSelectorExists('form button[type="submit"]');
         $this->assertCount(1, $crawler->filter('form input[type="email"][placeholder="Entrez votre email"]'));
         $this->assertCount(1, $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]'));
@@ -41,7 +41,7 @@ class LoginControllerTest extends WebTestCase
     public function testSubmitFormWithSuccess(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', 'login');
+        $crawler = $client->request('GET', '/login');
         $form = $crawler->filter('form')->form();
         $form['email'] = 'ladji.cda@test.com';
         $form['password'] = 'M1cdacda8';
@@ -55,7 +55,7 @@ class LoginControllerTest extends WebTestCase
     }
 
 
-/*
+
     public function testInvalidConnexionSubmitWithIncorrectEmail()
     {
         $client = static::createClient();
@@ -66,6 +66,8 @@ class LoginControllerTest extends WebTestCase
         $form['password'] = 'M1cdacda8';
 
         $crawler = $client->submit($form);
+
+        $crawler = $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Email could not be found.');
     }
@@ -80,7 +82,8 @@ class LoginControllerTest extends WebTestCase
         $form['password'] = 'M1cdacda88';
 
         $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Invalid credentials.');
-    }*/
+    }
 }
