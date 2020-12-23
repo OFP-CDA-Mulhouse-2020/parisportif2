@@ -3,6 +3,8 @@
 namespace App\Tests\Unit;
 
 use App\Entity\Bet;
+use App\Entity\TypeOfBet;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -15,7 +17,7 @@ class BetTest extends KernelTestCase
         $this->assertClassHasAttribute('id', Bet::class);
         $this->assertClassHasAttribute('listOfOdds', Bet::class);
         $this->assertClassHasAttribute('betLimitTime', Bet::class);
-        $this->assertClassHasAttribute('typeOfBetId', Bet::class);
+        $this->assertClassHasAttribute('typeOfBet', Bet::class);
         $this->assertClassHasAttribute('betOpened', Bet::class);
     }
 
@@ -27,7 +29,7 @@ class BetTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Bet $bet, $groups): int
+    public function getViolationsCount(Bet $bet, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -55,13 +57,13 @@ class BetTest extends KernelTestCase
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
                 2 => ['V2' => 3.2],
-            ], 0), null , 0],
+            ], 0), ['bet'] , 0],
             [Bet::build('2022-12-12', null, 5), ['limitTime'], 0],
             [Bet::build('2022-12-12', [
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
                 2 => ['V2' => 3.2],
-            ], 3), null, 0],
+            ], 3), ['bet'], 0],
 
         ];
     }
@@ -84,14 +86,14 @@ class BetTest extends KernelTestCase
                 0 => ['V1' => 1.2],
                 1 => ['N' => 2.2],
                 2 => ['V2' => 3.2],
-            ], -1), null , 1],
+            ], null), ['bet'] , 1],
             [Bet::build(null, null, 5), ['limitTime'], 1],
-            [Bet::build('2022-12-12', null, 3), null, 1],
+            [Bet::build('2022-12-12', null, 3), ['bet'], 1],
 
         ];
     }
 
-    public function testBetOpened()
+    public function testBetOpened(): void
     {
         $bet = new Bet();
         $bet->openBet();
@@ -99,11 +101,48 @@ class BetTest extends KernelTestCase
         $this->assertTrue($bet->isOpen());
     }
 
-    public function testBetClosed()
+    public function testBetClosed(): void
     {
         $bet = new Bet();
         $bet->closeBet();
 
         $this->assertFalse($bet->isOpen());
+    }
+
+    public function testValidTypeOfBet(): void
+    {
+        $bet = new Bet();
+        $bet->openBet();
+        $bet->setBetLimitTime(DateTime::createFromFormat('Y-m-d', "2022-12-12"));
+        $bet->setListOfOdds([
+            0 => ['V1' => 1.2],
+            1 => ['N' => 2.2],
+            2 => ['V2' => 3.2],
+        ]);
+        $typeOfBet = new TypeOfBet();
+        $typeOfBet->setTypeOfBet('Test');
+
+        $bet->setTypeOfBet($typeOfBet);
+
+        $this->assertInstanceOf(TypeOfBet::class, $bet->getTypeOfBet());
+        $this->assertSame(0, $this->getViolationsCount($bet, ['Default']));
+    }
+
+    public function testInvalidTypeOfBet(): void
+    {
+        $bet = new Bet();
+        $bet->openBet();
+        $bet->setBetLimitTime(DateTime::createFromFormat('Y-m-d', "2022-12-12"));
+        $bet->setListOfOdds([
+            0 => ['V1' => 1.2],
+            1 => ['N' => 2.2],
+            2 => ['V2' => 3.2],
+        ]);
+        $typeOfBet = new TypeOfBet();
+        $typeOfBet->setTypeOfBet('');
+
+        $bet->setTypeOfBet($typeOfBet);
+
+        $this->assertSame(1, $this->getViolationsCount($bet, ['Default']));
     }
 }

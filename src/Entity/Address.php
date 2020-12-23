@@ -15,17 +15,8 @@ class Address
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer",
-     *  message="Id incorrect",
-     *  groups={"address"}
-     * )
-     * @Assert\GreaterThan(
-     *  value=0,
-     *  message="Id Incorrect",
-     * groups={"address"})
      */
     private int $id;
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,7 +32,6 @@ class Address
      */
     private string $addressNumberAndStreet;
 
-
     /**
      * @ORM\Column(type="integer", length=255)
      * @Assert\NotBlank(message="Code postal vide",
@@ -55,7 +45,6 @@ class Address
      *
      */
     private int $zipCode;
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -71,7 +60,6 @@ class Address
      */
     private string $city;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Pays non renseignée",
@@ -86,10 +74,6 @@ class Address
      */
     private string $country;
 
-
-
-
-
     /******************************** Id ****************************** */
 
     public function getId(): ?int
@@ -97,15 +81,12 @@ class Address
         return $this->id;
     }
 
-
     /********************* Address Street Number ********************** */
-
 
     public function getAddressNumberAndStreet(): ?string
     {
         return $this->addressNumberAndStreet;
     }
-
 
     public function setAddressNumberAndStreet(string $addressNumberAndStreet): self
     {
@@ -114,15 +95,12 @@ class Address
         return $this;
     }
 
-
     /********************* zipCode ********************** */
-
 
     public function getZipCode(): ?int
     {
         return $this->zipCode;
     }
-
 
     public function setZipCode(int $zipCode): self
     {
@@ -131,16 +109,12 @@ class Address
         return $this;
     }
 
-
-
     /********************* Ville ********************** */
-
 
     public function getCity(): ?string
     {
         return $this->city;
     }
-
 
     public function setCity(string $city): self
     {
@@ -149,15 +123,12 @@ class Address
         return $this;
     }
 
-
     /********************* France ********************** */
-
 
     public function getCountry(): ?string
     {
         return $this->country;
     }
-
 
     public function setCountry(string $country): self
     {
@@ -165,10 +136,6 @@ class Address
 
         return $this;
     }
-
-
-
-
 
     /**
      * Entity builder with requested parameters

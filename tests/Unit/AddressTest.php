@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class AddressTest extends KernelTestCase
 {
-    public function testAssertInstanceOfAddress()
+    public function testAssertInstanceOfAddress(): void
     {
         $address = new Address();
         $this->assertInstanceOf(Address::class, $address);
@@ -31,7 +31,7 @@ class AddressTest extends KernelTestCase
         return $kernel;
     }
 
-    public function numberOfViolations(Address $address, $groups)
+    public function numberOfViolations(Address $address, array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -45,12 +45,12 @@ class AddressTest extends KernelTestCase
      * @dataProvider validAddressProvider
      */
 
-    public function testValidAddress(Address $address, $groups, $numberOfViolations)
+    public function testValidAddress(Address $address, array $groups, int $numberOfViolations): void
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($address, $groups));
     }
 
-    public function validAddressProvider()
+    public function validAddressProvider(): array
     {
         return [
             [Address::build('12 rue du test', 77777, 'TestCity', 'Testland'), ['adress'], 0]
@@ -62,12 +62,12 @@ class AddressTest extends KernelTestCase
     /**
      * @dataProvider invalidAddressProvider
      */
-    public function testInvalidAddress(Address $address, $groups, $numberOfViolations)
+    public function testInvalidAddress(Address $address, array $groups, int $numberOfViolations): void
     {
         $this->assertSame($numberOfViolations, $this->numberOfViolations($address, $groups));
     }
 
-    public function invalidAddressProvider()
+    public function invalidAddressProvider(): array
     {
         return [
             [Address::build(null, null, null, null), ['address'], 4],

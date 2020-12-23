@@ -46,8 +46,8 @@ class WalletTest extends KernelTestCase
         $wallet = new Wallet();
         $wallet->initializeWallet(true);
         $this->assertTrue($wallet->isRealMoney());
-        $this->assertSame(0, $wallet->getBalance());
-        $this->assertSame(0, $this->getViolationsCount($wallet, null));
+        $this->assertSame(0.0, $wallet->getBalance());
+        $this->assertSame(0, $this->getViolationsCount($wallet, ['wallet']));
     }
 
 
@@ -56,14 +56,14 @@ class WalletTest extends KernelTestCase
         $wallet = new Wallet();
         $wallet->initializeWallet(false);
         $this->assertFalse($wallet->isRealMoney());
-        $this->assertSame(100, $wallet->getBalance());
-        $this->assertSame(0, $this->getViolationsCount($wallet, null));
+        $this->assertSame(100.0, $wallet->getBalance());
+        $this->assertSame(0, $this->getViolationsCount($wallet, ['wallet']));
     }
 
     public function testInvalidInitializeWallet(): void
     {
         $wallet = new Wallet();
-        $this->assertSame(2, $this->getViolationsCount($wallet, null));
+        $this->assertSame(3, $this->getViolationsCount($wallet, ['wallet']));
     }
 
     /************************$limitAmountPerWeek*********************************/
@@ -227,7 +227,7 @@ class WalletTest extends KernelTestCase
         $transactionStatus = $wallet->betPayment($amount, $amountBetPaymentLastWeek);
 
         $this->assertSame($expectedBalance, $wallet->getBalance());
-        $this->assertTrue($transactionStatus);
+        $this->assertSame(2, $transactionStatus);
     }
 
     public function validBetPaymentProvider(): array
@@ -251,13 +251,13 @@ class WalletTest extends KernelTestCase
         $transactionStatus = $wallet->betPayment($amount, $amountBetPaymentLastWeek);
 
         $this->assertSame($expectedBalance, $wallet->getBalance());
-        $this->assertFalse($transactionStatus);
+        $this->assertSame(1, $transactionStatus);
     }
 
     public function invalidBetPaymentProvider(): array
     {
         return [
-            [-50, 50],
+            [60, 50],
             [11, 90],
             [55, 50],
         ];

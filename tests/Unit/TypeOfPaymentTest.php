@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class TypeOfPaymentTest extends KernelTestCase
 {
-    public function testAssertInstanceTypeOfPayment()
+    public function testAssertInstanceTypeOfPayment(): void
     {
         $typeOfPayment = new TypeOfPayment();
         $this->assertInstanceOf(TypeOfPayment::class, $typeOfPayment);
@@ -16,14 +16,14 @@ class TypeOfPaymentTest extends KernelTestCase
         $this->assertClassHasAttribute('typeOfPayment', TypeOfPayment::class);
     }
 
-    public function testValidTypeOfPayment()
+    public function testValidTypeOfPayment(): void
     {
         $typeOfPayment = new TypeOfPayment();
 
-        $typeOfPayment->setRealTypeOfPayment();
+        $typeOfPayment->setTypeOfPayment('Réel');
         $this->assertSame('Réel', $typeOfPayment->getTypeOfPayment());
 
-        $typeOfPayment->setVirtualTypeOfPayment();
+        $typeOfPayment->setTypeOfPayment('Virtuel');
         $this->assertSame('Virtuel', $typeOfPayment->getTypeOfPayment());
     }
 }

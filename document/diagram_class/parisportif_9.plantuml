@@ -20,8 +20,6 @@ class User {
     + bet()
 }
 
-
-
 class Address {
     - id :int
     - addressNumberAndStreet :string
@@ -41,7 +39,6 @@ class Wallet {
     + withdrawMoney()
 }
 
-
 class BankAccount {
     - id :int
     - ibanCode :string
@@ -55,38 +52,25 @@ class WebsiteWallet {
     - amount: float
 }
 
-
 class Cart {
     - id :int
-    - userId :int
-    - betId :int
-    - amount :float
-    - total :float
+    - sum :float
 
-    + addBetToCart()
-    + editBetToCart()
-    + removeBetToCart()
     + validate()
 }
 
-
-class Order {
+class Item {
     - id :int
-    - userId :int
-    - betId :int
-    - oddsRecord :float
+    - expectedBetValue :array
+    - recordedOdds :float
     - amount :float
-    - dateOrder :DateTime
-    - orderStatus :int
+    - itemStatus :int
 
     + profitsCalcul()
     + returnMoneyToUser()
     + returnMoneyToWebsite()
 }
 
-class OrderStatus {
-    - status :string
-}
 
 class Bet {
     - id :int
@@ -105,12 +89,6 @@ class TypeOfBet {
     - typeOfBet:string
 }
 
-class CheckBet {
-    - id
-
-    + checkBetResult()
-}
-
 
 class Payment {
     - id :int
@@ -118,6 +96,7 @@ class Payment {
     - name :string
     - datePayment :DateTime
     - amount :float
+    - paymentStatus :int
 
     + credit()
     + debit()
@@ -136,15 +115,13 @@ class Event {
     - dateEvent :DateTime
     - dateTimeZone :int
     - nbContestant :int
-
-    + createEvent()
-    + editEvent()
-    + deleteEvent()
 }
 
 
 class Sport {
-    - sport :string
+    - name :string
+    - nbTeam: int
+    - nbPlayer: int
 }
 
 
@@ -154,9 +131,6 @@ class Event_Participant {
     - team_or_playersolo :bool
     - bonus_malus :double
 
-    + createEvent_Participant()
-    + editEvent_Participant()
-    + deleteEvent_Participant()
 }
 
 class Team {
@@ -165,9 +139,6 @@ class Team {
     - nbPlayer :int
     - ranking :int
 
-    + createTeam()
-    + editTeam()
-    + deleteTeam()
     + calculateTeamRanking()
 }
 
@@ -177,9 +148,6 @@ class Player {
     - playerStatus :int
     - ranking :int
 
-    + createPlayer()
-    + editPlayer()
-    + deletePlayer()
     + calculatePlayerRanking()
 }
 
@@ -190,18 +158,6 @@ class PlayerRanking {
     - offensiveRate :int
     - defensiveRate :int
 
-    + createPlayerRanking()
-    + editPlayerRanking()
-    + deletePlayerRanking()
-}
-
-class PlayerStatus {
-    - status :string
-}
-
-class Team_Player {
-    - teamId :int
-    - playerId :int
 }
 
 class Competition {
@@ -209,17 +165,13 @@ class Competition {
     - StartDate :DateTime
     - FinishDate :DateTime
 
-    + createCompetition()
-    + addEvent()
-    + removeEvent()
-    + deleteCompetition()
 }
 
 User "1" *-- "1" Address
-User "1" *-left- "1" Wallet
-User "1" *-- "1..*" Cart
+User "1" *-right- "1" Wallet
+User "1" *-left- "1..*" Cart
 User "1" *-- "1" BankAccount
-User "1..*" *-- "1..*" Payment
+User "1..*" *-up- "1..*" Order
 
 Payment "1..*" -down-* "1..*" Wallet
 Payment "1..*" -left- "Order"
@@ -227,16 +179,11 @@ Payment "1" -- "1" BankAccount
 Payment "1" -right- "1" WebsiteWallet
 Payment "1" -up- "1..*" TypeOfPayment
 
-Cart "1..*" -up- "1..*" Bet
+Cart "1..*" -up- "1..*" Item
+Item "1..*" -left- "1..*" Bet
 
-Bet "1..*" -right- "1..*" Order
+Item "1..*" -right- "1..*" Payment
 Bet "1..*" -up- "1..*" TypeOfBet
-Bet "1" -up- "1..*" CheckBet
-
-
-Order "1" -up-  "0..*" OrderStatus
-
-
 
 Event "1" *-up- "1.." Bet
 Event "1..*" -up-* "1" Competition
@@ -251,7 +198,6 @@ Event "1..*" o-- "1..*" Player
 
 Player "1..*" o-left- "1..*" Team
 Player "1..*" o-right- "1..*" PlayerRanking
-Player "1" o-right- "1..*" PlayerStatus
 Player "1" -up- "0..*" Sport
 
 

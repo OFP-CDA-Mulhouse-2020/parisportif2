@@ -42,19 +42,15 @@ class TypeOfPayment
     }
 
 
-    public function getTypeOfPayment()
+    public function getTypeOfPayment(): ?string
     {
         return $this->typeOfPayment;
     }
 
-
-    public function setRealTypeOfPayment(): void
+    public function setTypeOfPayment(string $typeOfPayment): self
     {
-        $this->typeOfPayment = 'Réel';
-    }
+        $this->typeOfPayment = $typeOfPayment;
 
-    public function setVirtualTypeOfPayment(): void
-    {
-        $this->typeOfPayment = 'Virtuel';
+        return $this;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WalletRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,14 +23,17 @@ class Wallet
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
-     *  message="Balance incorrect",
+     *      message="Balance incorrect",
+     *      groups={"wallet"}
      * )
      * @Assert\Type(
-     *  type="integer",
-     *  message="{{ value }} n'est pas du type {{ type }}",
+     *      type="integer",
+     *      message="{{ value }} n'est pas du type {{ type }}",
+     *      groups={"wallet"}
      * )
      * @Assert\PositiveOrZero(
-     *  message="Balance not less than 0",
+     *      message="Balance not less than 0",
+     *      groups={"wallet"}
      * )
      */
     private int $balance;
@@ -37,27 +42,40 @@ class Wallet
      * @ORM\Column(type="integer")
      * @Assert\NotNull(
      *  message="Limite incorrecte",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      * @Assert\PositiveOrZero(
      *  message="Limite incorrecte",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      * @Assert\LessThanOrEqual(
      *  value = 10000,
      *  message="Limite maximum 100,00 euros",
-     *  groups={"limitAmountPerWeek"}
+     *  groups={"limitAmountPerWeek", "wallet"}
      * )
      */
-    private int $limitAmountPerWeek = 10000;
+    private int $limitAmountPerWeek;
 
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotNull(
-     *  message="Money incorrect",
+     *      message="Money incorrect",
+     *      groups={"wallet"}
      * )
      */
     private bool $realMoney;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="wallet")
+     * @var Collection<int, Payment>|null
+     */
+    private ?Collection $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -68,11 +86,11 @@ class Wallet
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getBalance(): int
+    public function getBalance(): float
     {
-        return $this->balance;
+        return $this->balance / 100;
     }
 
     /**
@@ -80,7 +98,7 @@ class Wallet
      */
     public function getLimitAmountPerWeek(): int
     {
-        return $this->limitAmountPerWeek;
+        return $this->limitAmountPerWeek / 100;
     }
 
     /**
@@ -88,7 +106,7 @@ class Wallet
      */
     public function setLimitAmountPerWeek(int $limitAmountPerWeek): void
     {
-        $this->limitAmountPerWeek = $limitAmountPerWeek;
+        $this->limitAmountPerWeek = $limitAmountPerWeek * 100;
     }
 
     /**
@@ -107,46 +125,78 @@ class Wallet
         $this->realMoney = $realMoney;
     }
 
+    // Peut-être à remplacer par un constructeur ??
     public function initializeWallet(bool $realMoney): void
     {
         if ($realMoney) {
             $this->balance = 0;
         } else {
-            $this->balance = 100;
+            $this->balance = 10000;
         }
             $this->realMoney = $realMoney;
+            $this->limitAmountPerWeek = 10000;
     }
 
-    public function addMoney(int $amount): bool
+    public function addMoney(float $amount): bool
     {
         if ($amount <= 0) {
             return false;
         }
-        $this->balance += $amount;
+        $this->balance += (int) $amount * 100;
 
         return true;
     }
 
-    public function withdrawMoney(int $amount): bool
+    public function withdrawMoney(float $amount): bool
     {
         if ($amount <= 0 or $amount > $this->getBalance()) {
             return false;
         }
-        $this->balance -= $amount;
+        $this->balance -= (int) $amount * 100;
 
         return true;
     }
 
-    public function betPayment(int $amount, int $amountBetPaymentLastWeek): bool
+    public function betPayment(float $amount, int $amountBetPaymentLastWeek): int
     {
         if ($amount <= 0 or $amount > $this->getBalance()) {
-            return false;
+            return 0;
         }
-        if ($amount > $this->getLimitAmountPerWeek() / 100 - $amountBetPaymentLastWeek) {
-            return false;
+        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
+            return 1;
         }
-        $this->balance -= $amount;
+        $this->balance -= (int) $amount * 100;
 
-        return true;
+        return 2;
     }
+
+    /**
+     * @return  Collection<int, Payment>|Payment[]
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setWallet($this);
+        }
+
+        return $this;
+    }
+/* Pas nécessaire
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getWallet() === $this) {
+                $payment->setWallet(null);
+            }
+        }
+
+        return $this;
+    }*/
 }

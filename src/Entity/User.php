@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -107,7 +109,7 @@ class User implements UserInterface
      *  groups={"createAt"}
      * )
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de création incorrecte : {{ value }}",
      *  groups={"createAt"}
      * )
@@ -131,7 +133,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de validation incorrecte : {{ value }}",
      *  groups={"active"}
      * )
@@ -155,7 +157,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
@@ -179,12 +181,36 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 hours",
+     *  value="+1 minutes",
      *  message="Date de suppression incorrecte : {{ value }}",
      *  groups={"delete"}
      * )
      */
     private ?DateTimeInterface $deletedAt;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"address"})
+     */
+    private ?Address $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccount"})
+     */
+    private ?BankAccount $bankAccount;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Cart::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"cart"})
+     */
+    private ?Cart $cart;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"wallet"})
+     */
+    private ?Wallet $wallet;
 
     public function getId(): ?int
     {
@@ -476,9 +502,57 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->password = null;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getBankAccount(): ?BankAccount
+    {
+        return $this->bankAccount;
+    }
+
+    public function setBankAccount(?BankAccount $bankAccount): self
+    {
+        $this->bankAccount = $bankAccount;
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    public function getWallet(): ?Wallet
+    {
+        return $this->wallet;
+    }
+
+    public function setWallet(?Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
+
+        return $this;
     }
 }

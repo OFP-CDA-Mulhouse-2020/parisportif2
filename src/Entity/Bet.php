@@ -24,11 +24,11 @@ class Bet
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(
      *  message="Date limite vide",
-     *  groups={"limitTime"}
+     *  groups={"limitTime", "bet"}
      * )
-     * @Assert\GreaterThan(value="+1 hours",
-     *  message="Date limite incorrecte",
-     *  groups={"limitTime"}
+     * @Assert\GreaterThan(value="today",
+     *      message="Date limite incorrecte",
+     *      groups={"limitTime", "bet"}
      * )
      */
     private DateTimeInterface $betLimitTime;
@@ -36,29 +36,31 @@ class Bet
     /**
      * @ORM\Column(type="array")
      * @Assert\NotBlank(
-     *  message="Liste vide",
+     *      message="Liste vide",
+     *      groups={"bet"}
      * )
      */
     private array $listOfOdds = [];
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank(
-     *  message="Type de pari vide",
-     * )
-     * @Assert\PositiveOrZero(
-     *  message="Type of Bet Id positive or zero"
-     * )
-     */
-    private int $typeOfBetId;
-
-    /**
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank(
-     *  message="Status du pari vide",
+     *      message="Status du pari vide",
+     *      groups={"bet", "betStatus"}
      * )
      */
     private bool $betOpened;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=TypeOfBet::class)
+     * @Assert\NotNull(
+     *      message="Type of Bet is empty",
+     *     groups={"bet"}
+     * )
+     * @Assert\Valid
+     */
+    private TypeOfBet $typeOfBet;
+
 
     public function getId(): ?int
     {
@@ -89,21 +91,9 @@ class Bet
         return $this;
     }
 
-    public function getTypeOfBetId(): ?int
-    {
-        return $this->typeOfBetId;
-    }
-
     public function isOpen(): ?bool
     {
         return $this->betOpened;
-    }
-
-    public function setTypeOfBetId(int $typeOfBetId): self
-    {
-        $this->typeOfBetId = $typeOfBetId;
-
-        return $this;
     }
 
     public function openBet(): void
@@ -132,10 +122,22 @@ class Bet
         $bet = new Bet();
         $betLimitTime ? $bet->setBetLimitTime(DateTime::createFromFormat('Y-m-d', $betLimitTime)) : null ;
         $listOfOdds ? $bet->setListOfOdds($listOfOdds) : null ;
-        $typeOfBetId !== null ? $bet->setTypeOfBetId($typeOfBetId) : null ;
+        $typeOfBetId !== null ? $bet->setTypeOfBet(new TypeOfBet()) : null ;
 
         $bet->openBet();
 
         return $bet;
+    }
+
+    public function getTypeOfBet(): ?TypeOfBet
+    {
+        return $this->typeOfBet;
+    }
+
+    public function setTypeOfBet(TypeOfBet $typeOfBet): self
+    {
+        $this->typeOfBet = $typeOfBet;
+
+        return $this;
     }
 }

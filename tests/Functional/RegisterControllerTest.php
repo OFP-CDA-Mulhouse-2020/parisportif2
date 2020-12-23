@@ -60,14 +60,14 @@ class RegisterControllerTest extends WebTestCase
     }
     */
 // Test Register
-    public function testRegisterResponse200()
+    public function testRegisterResponse200(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
         $this->assertResponseStatusCodeSame(200);
     }
 
-    public function testRegisterWithAllLabel()
+    public function testRegisterWithAllLabel(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
@@ -81,7 +81,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type=submit]');
     }
 
-    public function testRegisterSubmitWithSuccess()
+    public function testRegisterSubmitWithSuccess(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
@@ -104,7 +104,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
 
-    public function testInvalidRegisterSubmit()
+    public function testInvalidRegisterSubmit(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
@@ -121,7 +121,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Vous devez accepter les termes du contrat');
     }
 
-    public function testInvalidRegisterSubmitwithEmailAlreadyUse()
+    public function testInvalidRegisterSubmitwithEmailAlreadyUse(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
@@ -140,7 +140,7 @@ class RegisterControllerTest extends WebTestCase
     }
 
 
-    public function testUserSetOnDb()
+    public function testUserSetOnDb(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);

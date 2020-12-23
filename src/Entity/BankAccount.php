@@ -16,47 +16,42 @@ class BankAccount
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Iban vide",
+     *  groups={"ibanCode", "bankAccount"}
+     * )
+     * @Assert\Iban(
+     *  message="Ce n'est pas un IBAN valide (IBAN).",
+     *  groups={"ibanCode","bankAccount"}
+     * )
+     */
+    private string $ibanCode;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="code bic vide",
+     *  groups={"bicCode", "bankAccount"}
+     * )
+     * @Assert\Bic(
+     *  message="Code BIC est invalide.",
+     *  groups={"bicCode","bankAccount"}
+     * )
+     */
+    private string $bicCode;
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Iban vide",
-     *  groups={"ibanCode", "bankInfo"}
-     * )
-     * @Assert\Iban(
-     *  message="Ce n'est pas un IBAN valide (IBAN).",
-     *  groups={"ibanCode","bankInfo"}
-     * )
-     */
-    private string $ibanCode;
-
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="code bic vide",
-     *  groups={"bicCode", "bankInfo"}
-     * )
-     * @Assert\Bic(
-     *  message="Code BIC est invalide.",
-     *  groups={"bicCode","bankInfo"}
-     * )
-     */
-    private string $bicCode;
-
-
     /******************************** ibanCode ****************************** */
 
     public function getIbanCode(): ?string
     {
         return $this->ibanCode;
     }
-
 
     public function setIbanCode(string $ibanCode): self
     {
@@ -65,17 +60,12 @@ class BankAccount
         return $this;
     }
 
-
     /******************************** bicCode ****************************** */
-
-
-
 
     public function getBicCode(): string
     {
         return $this->bicCode;
     }
-
 
     public function setBicCode(string $bicCode): self
     {
@@ -83,8 +73,6 @@ class BankAccount
 
         return $this;
     }
-
-
 
     /**
      * Entity builder with requested parameters

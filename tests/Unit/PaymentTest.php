@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Entity\Payment;
+use App\Entity\TypeOfPayment;
+use App\Entity\Wallet;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -10,26 +12,23 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class PaymentTest extends KernelTestCase
 {
 
-
-    public function testPaymentConstruct()
+    public function testPaymentConstruct(): void
     {
         $payment = new Payment(50.0);
         $this->assertInstanceOf(Payment::class, $payment);
-        $this->assertSame(50.0, $payment->getAmount());
+        $this->assertSame(50.0, $payment->getSum());
     }
 
-
-
-    public function testPaymentInstance()
+    public function testPaymentInstance(): void
     {
         $payment = new Payment(50.0);
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertClassHasAttribute('paymentName', Payment::class);
         $this->assertClassHasAttribute('datePayment', Payment::class);
-        $this->assertClassHasAttribute('amount', Payment::class);
+        $this->assertClassHasAttribute('sum', Payment::class);
+        $this->assertClassHasAttribute('paymentStatusId', Payment::class);
+        $this->assertClassHasAttribute('typeOfPayment', Payment::class);
     }
-
-
 
     /******************************** kernel ****************************** */
 
@@ -41,7 +40,7 @@ class PaymentTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Payment $payment, $groups): int
+    public function getViolationsCount(Payment $payment, array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -51,16 +50,12 @@ class PaymentTest extends KernelTestCase
         return count($violationList);
     }
 
-
-
-
     /******************************** paymentName ****************************** */
 
     /**
      * @dataProvider generateValidPaymentName
      */
-
-    public function testValidPaymentName($paymentName, $groups, $numberOfViolations)
+    public function testValidPaymentName(string $paymentName, array $groups, int $numberOfViolations): void
     {
         $payment = new Payment(50.0);
         $payment->setPaymentName($paymentName);
@@ -74,19 +69,15 @@ class PaymentTest extends KernelTestCase
         ];
     }
 
-
-
     /**
      * @dataProvider generateInvalidPaymentName
      */
-
-    public function testInvalidPaymentName($paymentName, $groups, $numberOfViolations)
+    public function testInvalidPaymentName(string $paymentName, array $groups, int $numberOfViolations): void
     {
         $payment = new Payment(50.0);
         $payment->setPaymentName($paymentName);
         $this->assertSame($numberOfViolations, $this->getViolationsCount($payment, $groups));
     }
-
 
     public function generateInvalidPaymentName(): array
     {
@@ -96,13 +87,7 @@ class PaymentTest extends KernelTestCase
         ];
     }
 
-
-
     /******************************** datePayment ****************************** */
-
-    // /**
-    //  * @dataProvider generateValidPaymentDate
-    //  */
 
     public function testValidPaymentDate(): void
     {
@@ -111,78 +96,83 @@ class PaymentTest extends KernelTestCase
         $this->assertEqualsWithDelta($dateActual, $payment->getDatePayment(), 1);
     }
 
-
     /******************************** amount ****************************** */
 
     /**
-     * @dataProvider generateValidAmount
+     * @dataProvider generateValidSum
      */
-
-    public function testValidAmount(float $amount, $groups, $numberOfViolations)
+    public function testValidSum(float $sum, array $groups, int $numberOfViolations): void
     {
-        $payment = new Payment($amount);
+        $payment = new Payment($sum);
 
         $this->assertSame($numberOfViolations, $this->getViolationsCount($payment, $groups));
     }
 
-
-    public function generateValidAmount(): array
+    public function generateValidSum(): array
     {
         return [
-            [0.5, ['amount'], 0],
-            [1000000, ['amount'], 0],
-            [5000, ['amount'], 0],
-
+            [0.5, ['sum'], 0],
+            [1000000, ['sum'], 0],
+            [5000, ['sum'], 0],
         ];
     }
-
 
     /**
-     * @dataProvider generateInValidAmount
+     * @dataProvider generateInValidSum
      */
-
-    public function testInValidAmount(float $amount, $groups, $numberOfViolations)
+    public function testInValidSum(float $sum, array $groups, int $numberOfViolations): void
     {
-        $payment = new Payment($amount);
+        $payment = new Payment($sum);
 
         $this->assertSame($numberOfViolations, $this->getViolationsCount($payment, $groups));
     }
 
-
-    public function generateInValidAmount(): array
+    public function generateInValidSum(): array
     {
         return [
-            [0, ['amount'], 1], // Le montant ne peut pas être égale à 0
-            [-1, ['amount'], 1],
-
-
-
+            [0, ['sum'], 1], // Le montant ne peut pas être égale à 0
+            [-1, ['sum'], 1],
         ];
     }
-
-
-
 
     /******************************** paymentStatus ****************************** */
 
     // Le statut du paiement :
-    // 1 : onGo / En cours;
-    // 2 : refuse / Refusé;
-    // 3 : accept/ Accepté;
+    // 0 : onGo / En cours;
+    // 1 : refuse / Refusé;
+    // 2 : accept/ Accepté;
 
-
-    public function testValidPaymentStatus()
+    public function testValidPaymentStatus(): void
     {
-        $payment = new payment(50.0);
-        $this->assertSame(1, $payment->getPaymentStatus());
-
-        $payment->onGoPayment();
-        $this->assertSame(1, $payment->getPaymentStatus());
+        $payment = new Payment(50.0);
+        $this->assertSame(0, $this->getViolationsCount($payment, ['paymentStatus']));
+        $this->assertSame(0, $payment->getPaymentStatusId());
 
         $payment->refusePayment();
-        $this->assertSame(2, $payment->getPaymentStatus());
+        $this->assertSame(1, $payment->getPaymentStatusId());
 
         $payment->acceptPayment();
-        $this->assertSame(3, $payment->getPaymentStatus());
+        $this->assertSame(2, $payment->getPaymentStatusId());
+    }
+
+    public function testValidTypeOfPaymentAndWallet(): void
+    {
+        $payment = new Payment(50.0);
+        $wallet = new Wallet();
+        $typeOfPayment = new TypeOfPayment();
+
+        $typeOfPayment->setTypeOfPayment('Virtuel');
+        $payment->setTypeOfPayment($typeOfPayment);
+        $payment->setWallet($wallet);
+
+        $this->assertInstanceOf(TypeOfPayment::class, $payment->getTypeOfPayment());
+        $this->assertSame(0, $this->getViolationsCount($payment, ['Default']));
+    }
+
+    public function testInvalidTypeOfPaymentAndWallet(): void
+    {
+        $payment = new Payment(50.0);
+
+        $this->assertSame(2, $this->getViolationsCount($payment, ['Default']));
     }
 }
