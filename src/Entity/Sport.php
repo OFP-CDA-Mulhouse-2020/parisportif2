@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -54,7 +56,7 @@ class Sport
      *  message=" The number of players must be positive",
      * )
      */
-    private $nbOfPlayers;
+    private int $nbOfPlayers;
 
 
 
@@ -71,7 +73,21 @@ class Sport
      */
     private int $nbOfSubstitutePlayers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="sport")
+     * @var Collection<int, Event>|null
+     */
+    private ?Collection $events;
 
+
+
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+    }
+
+
+    // Ajouter évenement
 
     public function getId(): ?int
     {
@@ -151,5 +167,35 @@ class Sport
 
 
         return $sport;
+    }
+
+    /**
+     * @return Collection<int, Event>|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setSport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            // set the owning side to null (unless already changed)
+            if ($event->getSport() === $this) {
+                $event->setSport(null);
+            }
+        }
+
+        return $this;
     }
 }

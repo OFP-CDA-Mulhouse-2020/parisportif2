@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\PlayerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -45,6 +45,10 @@ class Player
      * @Assert\PositiveOrZero(
      *  message="Player Status must be positive",
      * )
+     * @Assert\Choice(
+     *  choices={0,1,2,3,4},
+     *  message="Le status du joueur est incorrect",
+     * )
      */
     private int $playerStatus;
 
@@ -61,10 +65,26 @@ class Player
     private int $ranking;
 
 
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Event::class, mappedBy="player")
+    //  */
+    // private $event;
+
     /**
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="player")
      */
-    private $team;
+    private ?Team $team;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="player")
+     */
+    private ?Sport $sport;
+
+
+    public function __construct()
+    {
+        $this->playerStatus = 0;
+    }
 
 
 
@@ -109,6 +129,26 @@ class Player
         return $this;
     }
 
+    public function activeStatus(): void
+    {
+        $this->playerStatus = 1;
+    }
+
+    public function replacementStatus(): void
+    {
+        $this->playerStatus = 2;
+    }
+
+    public function injuredStatus(): void
+    {
+        $this->playerStatus = 3;
+    }
+
+    public function inactiveStatus(): void
+    {
+        $this->playerStatus = 4;
+    }
+
     public function getRanking(): ?int
     {
         return $this->ranking;
@@ -127,7 +167,6 @@ class Player
      *
      * @param string|null $lastName
      * @param string|null $firstName
-     * @param int|null $playerStatus
      * @param int|null $ranking
      * @return  self
      * @throws \Exception
@@ -135,18 +174,19 @@ class Player
     public static function build(
         ?string $lastName,
         ?string $firstName,
-        ?int $playerStatus,
         ?int $ranking
     ): Player {
         $player = new Player();
         $lastName ? $player->setLastName($lastName) : null;
         $firstName ? $player->setFirstName($firstName) : null;
-        $playerStatus ? $player->setPlayerStatus($playerStatus) : null;
-        $ranking ? $player->setranking($ranking) : null;
+        $ranking ? $player->setRanking($ranking) : null;
 
 
         return $player;
     }
+
+
+    /***** Team */
 
     public function getTeam(): ?Team
     {
@@ -156,6 +196,21 @@ class Player
     public function setTeam(?Team $team): self
     {
         $this->team = $team;
+
+        return $this;
+    }
+
+
+    /***** Sport */
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): self
+    {
+        $this->sport = $sport;
 
         return $this;
     }

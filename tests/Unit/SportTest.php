@@ -2,7 +2,9 @@
 
 namespace App\Tests;
 
+use App\Entity\Player;
 use App\Entity\Sport;
+use App\Entity\Team;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -30,13 +32,13 @@ class SportTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Sport $sport, $groups): int
+    public function getViolationsCount(Sport $sport, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
         $violationList = $validator->validate($sport, $groups);
-        //var_dump($violationList);
+
         return count($violationList);
     }
 

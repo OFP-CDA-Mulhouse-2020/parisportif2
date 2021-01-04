@@ -2,6 +2,8 @@
 
 namespace App\Tests;
 
+use App\Entity\Player;
+use App\Entity\Sport;
 use App\Entity\Team;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -14,9 +16,10 @@ class TeamTest extends KernelTestCase
         $this->assertInstanceOf(Team::class, $team);
         $this->assertClassHasAttribute('id', Team::class);
         $this->assertClassHasAttribute('name', Team::class);
-        $this->assertClassHasAttribute('sport', Team::class);
-        $this->assertClassHasAttribute('nbPlayer', Team::class);
         $this->assertClassHasAttribute('ranking', Team::class);
+        $this->assertClassHasAttribute('player', Team::class);
+        $this->assertClassHasAttribute('sport', Team::class);
+        $this->assertClassHasAttribute('event', Team::class);
     }
 
     public function getKernel(): KernelInterface
@@ -27,7 +30,7 @@ class TeamTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Team $data, $groups): int
+    public function getViolationsCount(Team $data, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -48,8 +51,8 @@ class TeamTest extends KernelTestCase
     public function validTeamDataProvider(): array
     {
         return [
-            [Team::build('ZTKK', 'Basket', 1, 1), 0],
-            [Team::build('XYZ', 'Rugby', 0, 3), 0],
+            [Team::build('ZTKK', 1), 0],
+            [Team::build('XYZ', 3), 0],
 
         ];
     }
@@ -66,12 +69,70 @@ class TeamTest extends KernelTestCase
     public function invalidTeamDataProvider(): array
     {
         return [
-            [Team::build('Z', null, null, null), 1],
-            [Team::build(null, 'J', null, null), 1],
-            [Team::build(null, null, -1, null), 1],
-            [Team::build(null, null, null, -1), 1],
+            [Team::build('Z', null), 1],
+            [Team::build(null, -1), 1],
 
 
         ];
+    }
+
+
+    public function testIsEnoughPlayers(): void
+    {
+        $team = new Team();
+
+        $sport = new Sport();
+        $sport->setName('football');
+        $sport->setNbOfPlayers(2);
+
+        //Relate sport to team
+        $team->setSport($sport);
+
+        $player1 = new Player();
+        $player2 = new Player();
+        $player3 = new Player();
+        $player4 = new Player();
+
+
+        //relate player to team
+        $team->addPlayer($player1);
+        $team->addPlayer($player2);
+        $team->addPlayer($player3);
+        $team->addPlayer($player4);
+
+        var_dump($team->getSport()->getNbOfPlayers());
+        var_dump(count($team->getPlayer()));
+
+
+        // dd($team->getPlayer());
+
+        $this->assertSame(0, $this->getViolationsCount($team, ['isEnoughPlayers']));
+    }
+
+
+    public function testIsNotEnoughPlayers(): void
+    {
+        $team = new Team();
+
+        $sport = new Sport();
+        $sport->setName('football');
+        $sport->setNbOfPlayers(3);
+
+        //Relate sport to team
+        $team->setSport($sport);
+
+        $player1 = new Player();
+
+        //relate player to team
+        $team->addPlayer($player1);
+
+
+        var_dump($team->getSport()->getNbOfPlayers());
+        var_dump(count($team->getPlayer()));
+
+
+        // dd($team->getPlayer());
+
+        $this->assertSame(1, $this->getViolationsCount($team, ['isEnoughPlayers']));
     }
 }

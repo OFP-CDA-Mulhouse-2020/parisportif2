@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\EventRepository;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -68,6 +69,46 @@ class Event
      * )
      */
     private string $eventTimeZone;
+
+    // /**
+    //  * @ORM\Column(type="integer")
+    //  * @Assert\NotBlank
+    //  * @Assert\Type(
+    //  *  type="integer",
+    //  *  message="{{ value }} n'est pas du type {{ type }}",
+    //  * )
+    //  * @Assert\PositiveOrZero(
+    //  *  message=" The number of contestants must be positive",
+    //  * )
+    //  */
+    // private int $nbContestants;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Competition::class, inversedBy="event")
+     */
+    private ?Competition $competition;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Team::class, mappedBy="event")
+     * @var Collection<int, Team>|null
+     */
+    private ?collection $teams;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="events")
+     */
+    private ?Sport $sport;
+
+
+
+
+    public function __construct()
+    {
+        $this->teams = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -139,14 +180,105 @@ class Event
         ?string $eventTimeZone
     ): Event {
         $event = new Event();
-        $name ? $event->setName($name) : null ;
-        $location ? $event->setLocation($location) : null ;
+        $name ? $event->setName($name) : null;
+        $location ? $event->setLocation($location) : null;
         $eventDateTime ? $event->setEventDateTime(new DateTime(
             $eventDateTime,
             new DateTimeZone($eventTimeZone)
-        )) : null ;
-        $eventTimeZone ? $event->setEventTimeZone($eventTimeZone) : null ;
+        )) : null;
+        $eventTimeZone ? $event->setEventTimeZone($eventTimeZone) : null;
 
         return $event;
     }
+
+
+
+
+    public function getCompetition(): ?Competition
+    {
+        return $this->competition;
+    }
+
+    public function setCompetition(?Competition $competition): self
+    {
+        $this->competition = $competition;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Collection<int, Team>|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+            $team->addEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->teams->removeElement($team)) {
+            $team->removeEvent($this);
+        }
+
+        return $this;
+    }
+
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): self
+    {
+        $this->sport = $sport;
+
+        return $this;
+    }
+
+    /**
+     * @assert\IsTrue(
+     *  message= "Le nombre d'équipe est insuffisant !",
+     *  groups={"isEnoughTeams"}
+     *)
+     * @return boolean
+     */
+    public function isEnoughTeams(): bool
+    {
+        $minContestantsAllowed = $this->getsport()->getNbOfTeams();
+
+        if (count($this->getTeams()) == $minContestantsAllowed) {
+            return true;
+        }
+        return false;
+    }
+
+    // /**
+    //  * @assert\IsTrue(
+    //  *  message= "Le nombre de joueurs est insuffisant !",
+    //  *  groups={"isEnoughPlayers"}
+    //  *)
+    //  * @return boolean
+    //  */
+    // public function isEnoughPlayers(): bool
+    // {
+    //     $minPlayersAllowed = $this->getsport()->getNbOfPlayers();
+
+    //     if (count($this->getPlayers()) == $minPlayersAllowed) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }

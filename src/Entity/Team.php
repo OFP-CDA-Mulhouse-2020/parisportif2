@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
+use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,26 +30,7 @@ class Team
      */
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *@Assert\Regex(
-     *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,40}$/",
-     *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
-     * )
-     */
-    private string $sport;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\Type(
-     *  type="integer",
-     *  message="{{ value }} n'est pas du type {{ type }}",
-     * )
-     * @Assert\PositiveOrZero(
-     *  message="The team Status must be positive",
-     * )
-     */
-    private int $nbPlayer;
 
     /**
      * @ORM\Column(type="integer")
@@ -62,10 +44,29 @@ class Team
      */
     private int $ranking;
 
+
     /**
      * @ORM\OneToMany(targetEntity=Player::class, mappedBy="team")
+     * @var Collection<int, Player>|null
+     *
+     * @assert\NotNull
      */
-    private $player;
+    private ?Collection $player;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="team")
+     */
+    private ?Sport $sport;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, inversedBy="teams")
+     * @var Collection<int, Event>|null
+     */
+    private ?Collection $event;
+
+
+
+
 
 
 
@@ -73,6 +74,7 @@ class Team
     public function __construct()
     {
         $this->player = new ArrayCollection();
+        $this->event = new ArrayCollection();
     }
 
 
@@ -95,29 +97,7 @@ class Team
         return $this;
     }
 
-    public function getSport(): ?string
-    {
-        return $this->sport;
-    }
 
-    public function setSport(?string $sport): self
-    {
-        $this->sport = $sport;
-
-        return $this;
-    }
-
-    public function getNbPlayer(): ?int
-    {
-        return $this->nbPlayer;
-    }
-
-    public function setNbPlayer(?int $nbPlayer): self
-    {
-        $this->nbPlayer = $nbPlayer;
-
-        return $this;
-    }
 
     public function getRanking(): ?int
     {
@@ -136,30 +116,59 @@ class Team
      * Entity builder with the requested parameters
      *
      * @param string|null $name
-     * @param string|null $sport
-     * @param int|null $nbPlayer
      * @param int|null $ranking
      * @return  self
      * @throws \Exception
      */
     public static function build(
         ?string $name,
-        ?string $sport,
-        ?int $nbPlayer,
         ?int $ranking
     ): Team {
         $team = new Team();
         $name ? $team->setName($name) : null;
-        $sport ? $team->setSport($sport) : null;
-        $nbPlayer ? $team->setNbPlayer($nbPlayer) : null;
+        $team->setSport(new Sport());
         $ranking ? $team->setranking($ranking) : null;
 
 
         return $team;
     }
 
+
+
+
+    /***** Relation to Event */
+
     /**
-     * @return Collection|Player[]
+     * @return Collection<int, Event>|Event[]
+     */
+    public function getEvent(): Collection
+    {
+        return $this->event;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->event->contains($event)) {
+            $this->event[] = $event;
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        $this->event->removeElement($event);
+
+        return $this;
+    }
+
+
+
+
+    /***** Relation to Player */
+
+    /**
+     * @return Collection<int, Player>|Player[]
      */
     public function getPlayer(): Collection
     {
@@ -186,5 +195,39 @@ class Team
         }
 
         return $this;
+    }
+
+
+    /***** Relation to Sport */
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): self
+    {
+        $this->sport = $sport;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @assert\IsTrue(
+     *  message= "Le nombre de joueurs est insuffisant !",
+     *  groups={"isEnoughPlayers"}
+     *)
+     * @return boolean
+     */
+    public function isEnoughPlayers()
+    {
+        $minPlayersAllowed = $this->getSport()->getNbOfPlayers();
+
+        if (count($this->getPlayer()) < $minPlayersAllowed) {
+            return false;
+        }
+        return true;
     }
 }
