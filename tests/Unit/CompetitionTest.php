@@ -26,7 +26,7 @@ class CompetitionTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Competition $competition, $groups): int
+    public function getViolationsCount(Competition $competition, ?array $groups): int
     {
         $kernel = $this->getKernel();
 

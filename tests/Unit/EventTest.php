@@ -3,6 +3,9 @@
 namespace App\Tests\Unit;
 
 use App\Entity\Event;
+use App\Entity\Player;
+use App\Entity\Sport;
+use App\Entity\Team;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -16,7 +19,9 @@ class EventTest extends KernelTestCase
         $this->assertClassHasAttribute('name', Event::class);
         $this->assertClassHasAttribute('location', Event::class);
         $this->assertClassHasAttribute('eventDateTime', Event::class);
-        $this->assertClassHasAttribute('eventTimeZone', Event::class);
+        $this->assertClassHasAttribute('competition', Event::class);
+        $this->assertClassHasAttribute('teams', Event::class);
+        $this->assertClassHasAttribute('sport', Event::class);
     }
 
     public function getKernel(): KernelInterface
@@ -27,7 +32,7 @@ class EventTest extends KernelTestCase
         return $kernel;
     }
 
-    public function getViolationsCount(Event $competition, $groups): int
+    public function getViolationsCount(Event $competition, ?array $groups): int
     {
         $kernel = $this->getKernel();
 
@@ -70,5 +75,42 @@ class EventTest extends KernelTestCase
             [Event::build('Jeux Olympiques de Toronto 2020', '2021-05-30', '', null), 2],
 
         ];
+    }
+
+
+
+    public function testIsEnoughTeams(): void
+    {
+        $event = new Event();
+        $sport = new Sport();
+        $sport->setNbOfTeams(2);
+        $event->setSport($sport);
+
+        //* Add 2 team to event
+        $team1 = new Team();
+        $team2 = new Team();
+
+        $event->addTeam($team1);
+        $event->addTeam($team2);
+
+        //is enough Contestant ?
+        $this->assertSame(0, $this->getViolationsCount($event, ['isEnoughTeams']));
+    }
+
+    public function testIsNotEnoughTeams(): void
+    {
+        $event = new Event();
+        $sport = new Sport();
+        $sport->setNbOfTeams(2);
+        $event->setSport($sport);
+
+        //* Add 2 team to event
+        $team1 = new Team();
+
+
+        $event->addTeam($team1);
+
+        //is enough Contestant ?
+        $this->assertSame(1, $this->getViolationsCount($event, ['isEnoughTeams']));
     }
 }
