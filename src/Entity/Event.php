@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EventRepository;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
@@ -69,20 +70,6 @@ class Event
      * )
      */
     private string $eventTimeZone;
-
-    // /**
-    //  * @ORM\Column(type="integer")
-    //  * @Assert\NotBlank
-    //  * @Assert\Type(
-    //  *  type="integer",
-    //  *  message="{{ value }} n'est pas du type {{ type }}",
-    //  * )
-    //  * @Assert\PositiveOrZero(
-    //  *  message=" The number of contestants must be positive",
-    //  * )
-    //  */
-    // private int $nbContestants;
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Competition::class, inversedBy="event")

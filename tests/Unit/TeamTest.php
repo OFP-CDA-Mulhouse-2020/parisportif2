@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Entity\Player;
 use App\Entity\Sport;
@@ -100,12 +100,6 @@ class TeamTest extends KernelTestCase
         $team->addPlayer($player3);
         $team->addPlayer($player4);
 
-        var_dump($team->getSport()->getNbOfPlayers());
-        var_dump(count($team->getPlayer()));
-
-
-        // dd($team->getPlayer());
-
         $this->assertSame(0, $this->getViolationsCount($team, ['isEnoughPlayers']));
     }
 
@@ -125,13 +119,6 @@ class TeamTest extends KernelTestCase
 
         //relate player to team
         $team->addPlayer($player1);
-
-
-        var_dump($team->getSport()->getNbOfPlayers());
-        var_dump(count($team->getPlayer()));
-
-
-        // dd($team->getPlayer());
 
         $this->assertSame(1, $this->getViolationsCount($team, ['isEnoughPlayers']));
     }

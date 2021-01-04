@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
-use App\Entity\Player;
 use App\Entity\Sport;
-use App\Entity\Team;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
