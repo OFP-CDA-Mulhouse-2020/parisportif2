@@ -1,0 +1,205 @@
+@startuml parisportif
+
+class User {
+    - id :int
+    - lastName :string
+    - firstName :string
+    - email :string
+    - password :string
+    - birthDate :DateTime
+    - createAt :DateTime
+    - active :bool
+    - activeAt :DateTime
+    - suspended :bool
+    - suspendedAt :DateTime
+    - deleted :bool
+    - deletedAt :DateTime
+    - linkToOfficialId :string
+
+    + proofUpper18()
+    + bet()
+}
+
+class Address {
+    - id :int
+    - addressNumberAndStreet :string
+    - zipCode :int
+    - city :string
+    - country :string
+}
+
+class Wallet {
+    - id :int
+    - balance :float
+    - limitPerWeek :float
+    - realMoney :bool
+    
+    + getHistoryOfMovement()
+    + addMoney()
+    + withdrawMoney()
+}
+
+class BankAccount {
+    - id :int
+    - ibanCode :string
+    - bicCode :string
+
+    + checkBankAccount()
+}
+
+class WebsiteWallet {
+    - id: int
+    - amount: float
+}
+
+class Cart {
+    - id :int
+    - sum :float
+
+    + validate()
+}
+
+class Item {
+    - id :int
+    - expectedBetValue :array
+    - recordedOdds :float
+    - amount :float
+    - itemStatus :int
+
+    + profitsCalcul()
+    + returnMoneyToUser()
+    + returnMoneyToWebsite()
+}
+
+
+class Bet {
+    - id :int
+    - name :string
+    - BetLimitTime :DateTime
+    - listOfOdds :array
+    - result :array
+    - eventId :int
+
+    + getResultofBet()
+    + setBonusToParticipantId()
+}
+
+class TypeOfBet {
+    - id :int
+    - typeOfBet:string
+}
+
+
+class Payment {
+    - id :int
+    - userId :int
+    - name :string
+    - datePayment :DateTime
+    - amount :float
+    - paymentStatus :int
+
+    + credit()
+    + debit()
+}
+
+class TypeOfPayment {
+    - id :int
+    - typeOfPayment:string
+
+}
+
+class Event {
+    - name :string
+    - sport :int
+    - location :string
+    - dateEvent :DateTime
+    - dateTimeZone :int
+    - nbContestant :int
+}
+
+
+class Sport {
+    - name :string
+    - nbTeam: int
+    - nbPlayer: int
+}
+
+
+class Event_Participant {
+    - eventId :int
+    - participantId :int
+    - team_or_playersolo :bool
+    - bonus_malus :double
+
+}
+
+class Team {
+    - name :string
+    - sport :string
+    - nbPlayer :int
+    - ranking :int
+
+    + calculateTeamRanking()
+}
+
+class Player {
+    - lastName :string
+    - firstName :string
+    - playerStatus :int
+    - ranking :int
+
+    + calculatePlayerRanking()
+}
+
+class PlayerRanking {
+    - playerId :int
+    - age :int
+    - healthRate :int
+    - offensiveRate :int
+    - defensiveRate :int
+
+}
+
+class Competition {
+    - name :string
+    - StartDate :DateTime
+    - FinishDate :DateTime
+
+}
+
+User "1" *-- "1" Address
+User "1" *-right- "1" Wallet
+User "1" *-left- "1..*" Cart
+User "1" *-- "1" BankAccount
+User "1..*" *-up- "1..*" Order
+
+Payment "1..*" -down-* "1..*" Wallet
+Payment "1..*" -left- "Order"
+Payment "1" -- "1" BankAccount
+Payment "1" -right- "1" WebsiteWallet
+Payment "1" -up- "1..*" TypeOfPayment
+
+Cart "1..*" -up- "1..*" Item
+Item "1..*" -left- "1..*" Bet
+
+Item "1..*" -right- "1..*" Payment
+Bet "1..*" -up- "1..*" TypeOfBet
+
+Event "1" *-up- "1.." Bet
+Event "1..*" -up-* "1" Competition
+Event "1" -- "0..*" Sport
+Team "1" -up- "0..*" Sport
+
+
+Event "1..*" o-- "1..*" Team
+(Event, Team) .. Event_Participant
+Event "1..*" o-- "1..*" Player
+(Event, Player) .left. Event_Participant
+
+Player "1..*" o-left- "1..*" Team
+Player "1..*" o-right- "1..*" PlayerRanking
+Player "1" -up- "0..*" Sport
+
+
+@enduml
+

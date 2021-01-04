@@ -44,6 +44,8 @@ services:
     volumes:
       - ./db/:/var/lib/mysql/
      # - ./database/:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
     environment:
      # MYSQL_DATABASE: championnat_ski
      # MYSQL_USER: root
@@ -99,3 +101,11 @@ services:
 networks:
   proxy:
     name: proxy
+
+    
+# - "traefik.enable=true"
+# - "traefik.tcp.routers.mysql.tls=false"
+# - "traefik.tcp.routers.mysql.rule=HostSNI(`*`)"
+# - "traefik.tcp.routers.mysql.entrypoints=mysql"
+# - "traefik.tcp.routers.mysql.service=mysql-service"
+# - "traefik.tcp.services.mysql-service.loadbalancer.server.port=3306"

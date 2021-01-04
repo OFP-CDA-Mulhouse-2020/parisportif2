@@ -3,3 +3,6 @@ parameters:
 	paths:
 		- src
 		- tests
+	checkMissingIterableValueType: false
+	bootstrapFiles:
+		- vendor/bin/.phpunit/phpunit-9.3-0/vendor/autoload.php
