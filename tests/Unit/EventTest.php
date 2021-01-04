@@ -3,7 +3,6 @@
 namespace App\Tests\Unit;
 
 use App\Entity\Event;
-use App\Entity\Player;
 use App\Entity\Sport;
 use App\Entity\Team;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

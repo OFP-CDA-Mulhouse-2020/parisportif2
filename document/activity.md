@@ -1,4 +1,4 @@
-### Liste des activités phase1 : conception graphique et logique (9 jours)
+### Liste des activités phase1 : conception graphique et logique
 
 03/11 lecture specs, analyse, et veille concurentielle (ladji & daniel)
 
@@ -18,7 +18,7 @@
 13/11 uml review (tous), correction (ladji) et projet solidaire (daniel)
 
 ---
-### Liste des activités phase2 : installation environnement, docker, tdd, création entity (XX jours)
+### Liste des activités phase2 : installation environnement, docker, tdd, création entity
 
 16/11 installation environnement symfony (tous), réinstallation de symfony (ladji), projet solidaire (daniel)
 
@@ -71,3 +71,16 @@
 17/12 Entity WabsiteWallet TypeOfPayment (ladji), entity Event et début des relations entre entités (daniel)
 
 18/12 Entity sport team player avec relation (ladji), autre relation entre entités (daniel)
+
+---
+21/12 Fini relation autour de User (daniel), relation autour Sport (ladji)
+
+22/12 Correction des erreurs avec phpstan (daniel), relation autour Sport (ladji)
+
+23/12 Correction bug avec composer on CI (daniel), relation autour Sport (ladji)
+
+---
+### Liste des activités phase3 : développement de l'app avec tests fonctionnels
+
+04/01 Fini relation autour de User et sport, démarrage développement de l'app avec tests fonctionnels autour de 
+User Profile et Home Page

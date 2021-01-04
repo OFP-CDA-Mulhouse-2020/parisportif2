@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Entity\Player;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -44,7 +44,6 @@ class PlayerTest extends KernelTestCase
      */
     public function testValidPlayer(Player $player, int $expectedViolationsCount): void
     {
-        $player =  new Player();
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($player, null));
     }
 

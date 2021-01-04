@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
-use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,8 +29,6 @@ class Team
      */
     private string $name;
 
-
-
     /**
      * @ORM\Column(type="integer")
      * @Assert\Type(
@@ -44,7 +41,6 @@ class Team
      */
     private int $ranking;
 
-
     /**
      * @ORM\OneToMany(targetEntity=Player::class, mappedBy="team")
      * @var Collection<int, Player>|null
@@ -54,7 +50,7 @@ class Team
     private ?Collection $player;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="team")
+     * @ORM\ManyToOne(targetEntity=Sport::class)
      */
     private ?Sport $sport;
 
@@ -64,21 +60,11 @@ class Team
      */
     private ?Collection $event;
 
-
-
-
-
-
-
-
     public function __construct()
     {
         $this->player = new ArrayCollection();
         $this->event = new ArrayCollection();
     }
-
-
-
 
     public function getId(): ?int
     {
@@ -90,27 +76,24 @@ class Team
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-
-
     public function getRanking(): ?int
     {
         return $this->ranking;
     }
 
-    public function setRanking(?int $ranking): self
+    public function setRanking(int $ranking): self
     {
         $this->ranking = $ranking;
 
         return $this;
     }
-
 
     /**
      * Entity builder with the requested parameters
@@ -129,12 +112,8 @@ class Team
         $team->setSport(new Sport());
         $ranking ? $team->setranking($ranking) : null;
 
-
         return $team;
     }
-
-
-
 
     /***** Relation to Event */
 
@@ -161,9 +140,6 @@ class Team
 
         return $this;
     }
-
-
-
 
     /***** Relation to Player */
 
@@ -197,7 +173,6 @@ class Team
         return $this;
     }
 
-
     /***** Relation to Sport */
 
     public function getSport(): ?Sport
@@ -211,8 +186,6 @@ class Team
 
         return $this;
     }
-
-
 
     /**
      * @assert\IsTrue(

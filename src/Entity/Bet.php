@@ -61,6 +61,11 @@ class Bet
      */
     private TypeOfBet $typeOfBet;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Event::class)
+     */
+    private ?Event $event;
+
 
     public function getId(): ?int
     {
@@ -137,6 +142,18 @@ class Bet
     public function setTypeOfBet(TypeOfBet $typeOfBet): self
     {
         $this->typeOfBet = $typeOfBet;
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
 
         return $this;
     }

@@ -3,7 +3,6 @@
 namespace App\Tests\Unit;
 
 use App\Entity\Address;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 

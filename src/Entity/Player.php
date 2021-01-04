@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +20,7 @@ class Player
 
     /**
      * @ORM\Column(type="string", length=255)
-     *@Assert\Regex(
+     * @Assert\Regex(
      *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,40}$/",
      *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
      * )
@@ -29,7 +29,7 @@ class Player
 
     /**
      * @ORM\Column(type="string", length=255)
-     *@Assert\Regex(
+     * @Assert\Regex(
      *  pattern =  "/^[a-zA-Z0-9À-ÿ '-]{2,40}$/",
      *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
      * )
@@ -76,7 +76,7 @@ class Player
     private ?Team $team;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="player")
+     * @ORM\ManyToOne(targetEntity=Sport::class)
      */
     private ?Sport $sport;
 
@@ -98,7 +98,7 @@ class Player
         return $this->lastName;
     }
 
-    public function setLastName(?string $lastName): self
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -110,7 +110,7 @@ class Player
         return $this->firstName;
     }
 
-    public function setFirstName(?string $firstName): self
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -122,7 +122,7 @@ class Player
         return $this->playerStatus;
     }
 
-    public function setPlayerStatus(?int $playerStatus): self
+    public function setPlayerStatus(int $playerStatus): self
     {
         $this->playerStatus = $playerStatus;
 
@@ -154,7 +154,7 @@ class Player
         return $this->ranking;
     }
 
-    public function setRanking(?int $ranking): self
+    public function setRanking(int $ranking): self
     {
         $this->ranking = $ranking;
 

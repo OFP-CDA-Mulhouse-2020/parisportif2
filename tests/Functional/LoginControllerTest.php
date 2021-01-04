@@ -56,7 +56,7 @@ class LoginControllerTest extends WebTestCase
 
 
 
-    public function testInvalidConnexionSubmitWithIncorrectEmail()
+    public function testInvalidConnexionSubmitWithIncorrectEmail(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
@@ -72,7 +72,7 @@ class LoginControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Email could not be found.');
     }
 
-    public function testInvalidConnexionSubmitWithIncorrectPassword()
+    public function testInvalidConnexionSubmitWithIncorrectPassword(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/login');
