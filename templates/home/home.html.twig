@@ -1,10 +1,164 @@
-{% extends 'base.html.twig' %}
+{% extends 'home_base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}
+	Hello HomeController!
+{% endblock %}
 
 {% block body %}
+	{# header #}
+	<header>
+		<div class="container-fluid header">
+			<div
+				class="row">
+				{# HEADER TOP #}
+				<div class="col-sm-12 header-top">
+					<div class="container-fluid">
+						<div
+							class="row">
+							{# LOGO #}
+							<div id="logo" class="col-sm-6 d-flex align-items-center">
+								<div class="container-fluid">
+									<a class="navbar-brand" href="#">LOGO</a>
+								</div>
+							</div>
 
-<h1>Le Formulaire a été validé</h1>
+							{# NAV MAIN #}
+							<div class="col-sm-6 d-flex justify-content-end">
+								<nav class="navbar navbar-expand-lg navbar-light bg-light nav-main">
+									<div class="container-fluid">
+
+										<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+											<span class="navbar-toggler-icon"></span>
+										</button>
+										<div class="collapse navbar-collapse" id="navbarNav">
+											<ul class="navbar-nav">
+												<li class="nav-item">
+													<a class="nav-link active" aria-current="page" href="#">Favoris</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#">Ticket(s)</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#">Portefeuille</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#">Profil</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{# HEADER BOTTOM #}
+			<div
+				class="col-sm-12 header-bottom">
+				{# NAV SECONDARY #}
+				<nav class="navbar navbar-expand-lg navbar-light bg-light nav-secondary">
+					<div class="container-fluid">
+						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarNav">
+							<ul class="navbar-nav d-flex justify-content-around w-100">
+								<li class="nav-item">
+									<a class="nav-link active" aria-current="page" href="#">Accueil</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">En direct</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Dernière minute</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Football</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Basket</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Tennis</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Handball</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Sport Mécaniques</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">Cyclisme</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">A-Z</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	{# HOMEPAGE CONTENT #}
+
+	<section id="content">
+		<aside class="aside-left">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-12 advertising-insert-1">
+						Encart promotionnel
+					</div>
+					<div class="col-sm-12 nav-bet">
+						Navigation - Pari
+					</div>
+				</div>
+			</div>
+
+		</aside>
+
+		<section class="central">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-12">
+						<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+							<ol class="carousel-indicators">
+								<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+								<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+								<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+							</ol>
+							<div class="carousel-inner">
+								<div class="carousel-item active">
+									<img src="" class="d-block w-100" alt="...">
+								</div>
+								<div class="carousel-item">
+									<img src="..." class="d-block w-100" alt="...">
+								</div>
+								<div class="carousel-item">
+									<img src="..." class="d-block w-100" alt="...">
+								</div>
+							</div>
+							<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</a>
+							<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</a>
+						</div>
+					</div>
+					<div class="col-sm-12 bet-board"></div>
+				</div>
+			</div>
+
+		</section>
+
+
+	</section>
 
 
 {% endblock %}
