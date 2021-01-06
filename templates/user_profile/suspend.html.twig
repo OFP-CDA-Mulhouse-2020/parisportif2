@@ -1,0 +1,37 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+    <h4>Description</h4>
+       <p>
+           Deux types d'auto-exclusion s'offrent à vous : l'auto-exclusion temporaire et l'auto-exclusion définitive.<br>
+            <ul>
+                <li>
+                    L'auto-exclusion temporaire : vous nous pouvez plus vous connecter à l'application et au site jusqu'à la date que vous fixez. (durée minimum : une semaine)
+
+                </li>
+                <li>
+                    L'auto-exclusion définitive : votre compte sera fermé, et vos fonds seront transférés sur votre compte en banque.<br>
+                    Vous ne pourrez plus vous réinscrire avant une période de 3 ans.
+                </li>
+            </ul>
+       </p>
+    <br><br>
+
+    <h4>Quel type d'auto exclusion souhaitez vous ?</h4>
+    <form action="">
+        <label for="suspendType"></label>
+        <select name="suspendType" id="exclusionType">
+            <option value="">--Choisir un type d'exclusion--</option>
+            <option value="1">Exclusion temporaire</option>
+            <option value="2">Exclusion définitive</option>
+        </select>
+
+        <br><br>
+        <label for="suspendAt">M'exclure jusqu'au :</label>
+        <input type="date" id="suspendAt" name="suspendAt">
+        <br><br>
+
+        <button type="submit"  class="btn btn-danger">Confirmer</button>
+    </form>
+
+{% endblock %}

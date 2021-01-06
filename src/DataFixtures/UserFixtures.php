@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Address;
 use App\Entity\User;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -37,6 +38,12 @@ class UserFixtures extends Fixture
 
         $manager->persist($user);
 
+        $address = new Address();
+        $address->setAddressNumberAndStreet('8 rue des champs')
+            ->setZipCode(75000)
+            ->setCity('Paris')
+            ->setCountry('France');
+
         $user = new User();
         $user->setFirstName('ladjitest')
             ->setLastName('ladjitest')
@@ -47,7 +54,9 @@ class UserFixtures extends Fixture
             ))
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
             ->setCreateAt(new DateTime())
-            ->setRoles(['ROLE_USER']);
+            ->activate()
+            ->setRoles(['ROLE_USER'])
+            ->setAddress($address);
 
 
         $manager->persist($user);

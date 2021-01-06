@@ -1,0 +1,24 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+    <h4>Activation du compte</h4>
+
+    {% if user.active %}
+        Votre compte est activé depuis le {{ user.activeAt|date("d/m/Y")}}
+
+    {% else %}
+        Votre compte n'est pas encore activé.
+
+        <a href="edit/identity" class="btn btn-primary">
+            Activer mon compte
+        </a>
+
+    {% endif %}
+    <br><br>
+    <h4>Désactivation du compte</h4>
+    Vous pouvez à tout moment décider de fermer votre compte. Cette décision est irréversible.
+    <a href="delete" class="btn btn-danger">
+            Désactiver mon compte
+        </a>
+
+{% endblock %}
