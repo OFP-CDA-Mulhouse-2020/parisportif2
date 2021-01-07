@@ -5,8 +5,9 @@ namespace App\Controller;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\Form\LoginType;
-use App\Form\ResetPasswordType;
+use App\Form\EditPasswordType;
 use App\Repository\AddressRepository;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 /**
  * @Route("/app/user", name="app_user")
@@ -70,13 +72,13 @@ class UserProfileController extends AbstractController
 
         $user = $this->getUser();
         $formConnexion = $this->createForm(LoginType::class, $user);
-        $formPassword = $this->createForm(ResetPasswordType::class, $user);
+        $formPassword = $this->createForm(EditPasswordType::class, $user);
         $formPassword->handleRequest($request);
 
         if ($formPassword->isSubmitted() && $formPassword->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
-            $oldPassword = $request->request->get('reset_password')['oldPassword'];
+            $oldPassword = $request->request->get('edit_password')['oldPassword'];
 
             // Si l'ancien mot de passe est bon
             if ($passwordEncoder->isPasswordValid($user, $oldPassword)) {
@@ -86,15 +88,14 @@ class UserProfileController extends AbstractController
                         $user->getPlainPassword()
                     )
                 );
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-              //  $entityManager->persist($user);
-              //  $entityManager->flush();
                 $this->addFlash('notice', 'Votre mot de passe à bien été changé !');
 
-                return $this->redirectToRoute('_profile_connexion');
+                return $this->redirectToRoute('app_user_profile_connexion');
             } else {
-                dd('error pass');
-              //  $formPassword->addError(new FormError('Ancien mot de passe incorrect'));
+                $formPassword->addError(new FormError('Ancien mot de passe incorrect'));
             }
         }
 

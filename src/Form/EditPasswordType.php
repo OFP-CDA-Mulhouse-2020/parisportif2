@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ResetPasswordType extends AbstractType
+class EditPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -36,13 +36,9 @@ class ResetPasswordType extends AbstractType
             ])
 
             ->add('Valider', SubmitType::class, [
-
                 'attr' => [
-
                     'class' => 'btn btn-success btn-block'
-
                 ]
-
             ])
 
         ;
