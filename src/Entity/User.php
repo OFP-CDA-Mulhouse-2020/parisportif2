@@ -70,8 +70,6 @@ class User implements UserInterface
     private string $email;
 
     /**
-     * @var string the hashed password
-     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(
      *  message="Password vide",
      *  groups={"password","login", "register"}
@@ -81,6 +79,12 @@ class User implements UserInterface
      *  message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
      *  groups={"password","login", "register"}
      * )
+     */
+    private string $plainPassword;
+
+    /**
+     * @var string the hashed password
+     * @ORM\Column(type="string", length=255)
      */
     private string $password;
 
@@ -232,6 +236,11 @@ class User implements UserInterface
         return $this->email;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
     public function getBirthDate(): ?DateTimeInterface
     {
         return $this->birthDate;
@@ -307,6 +316,19 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of plainPassword
+     *
+     * @param string $plainPassword
+     * @return  self
+     */
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
@@ -421,7 +443,7 @@ class User implements UserInterface
      * @param string|null $firstName
      * @param string|null $lastName
      * @param string|null $email
-     * @param string|null $password
+     * @param string|null $plainPassword
      * @param string|null $birthDate
      * @return  self
      */
@@ -429,14 +451,14 @@ class User implements UserInterface
         ?string $firstName,
         ?string $lastName,
         ?string $email,
-        ?string $password,
+        ?string $plainPassword,
         ?string $birthDate
     ): User {
         $user = new User();
         $firstName ? $user->setFirstName($firstName) : null ;
         $lastName ? $user->setLastName($lastName) : null ;
         $email ? $user->setEmail($email) : null ;
-        $password ? $user->setPassword($password) : null ;
+        $plainPassword ? $user->setPlainPassword($plainPassword) : null ;
         $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
 
         $user->setCreateAt(new DateTime());

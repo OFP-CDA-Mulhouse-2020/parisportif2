@@ -24,7 +24,7 @@
 		<h2>Entrez vos paramètres de connexion :</h2>
 
 		{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
-		{{ form_row(login_form.password, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
+		{{ form_row(login_form.plainPassword, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
 
 		<input
 		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

@@ -35,7 +35,10 @@ class LoginControllerTest extends WebTestCase
         $this->assertEquals(4, $crawler->filter('form input')->count());
         $this->assertSelectorExists('form button[type="submit"]');
         $this->assertCount(1, $crawler->filter('form input[type="email"][placeholder="Entrez votre email"]'));
-        $this->assertCount(1, $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]'));
+        $this->assertCount(
+            1,
+            $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]')
+        );
     }
 
     public function testSubmitFormWithSuccess(): void

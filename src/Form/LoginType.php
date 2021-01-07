@@ -18,13 +18,11 @@ class LoginType extends AbstractType
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'Entrez votre email',
-                    'class' => 'form-control',
                 ]
             ])
-            ->add('password', PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'Entrez votre mot de passe',
-                    'class' => 'form-control',
                 ]
             ])
             ->add('Valider', SubmitType::class, [

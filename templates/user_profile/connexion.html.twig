@@ -1,0 +1,45 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+<h3>Connexion</h3>
+    <form action="">
+        {% if editMail %}
+            <label for="oldEmail">Ancien Email</label>
+            <input type="email" name="oldEmail" value="{{ user.email }}" disabled>
+
+            {{ form_row(formConnexion.email, {'full_name' :'newEmail'}) }}
+
+            <a href="/app/user/profile/connexion" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+            <button class="btn btn-success" type="submit">Valider</button>
+        {% else %}
+
+        {{ form_row(formConnexion.email, { 'attr':{'disabled':'disabled'} }) }}
+        <a href="/app/user/profile/edit/mail" class="btn btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </a>
+        {% endif %}
+    </form>
+
+
+        {% if editPassword %}
+
+            {{ form(formPassword) }}
+
+            <a href="/app/user/profile/connexion" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+
+        {% else %}
+            <form action="">
+
+            {{ form_row(formConnexion.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
+        <a href="edit/password" class="btn btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </a>
+            </form>
+
+        {% endif %}
+
+{% endblock %}
