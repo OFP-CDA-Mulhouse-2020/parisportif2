@@ -20,7 +20,7 @@ class LoginType extends AbstractType
                     'placeholder' => 'Entrez votre email',
                 ]
             ])
-            ->add('password', PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, [
                 'attr' => [
                     'placeholder' => 'Entrez votre mot de passe',
                 ]

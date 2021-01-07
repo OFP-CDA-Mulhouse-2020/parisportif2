@@ -22,7 +22,7 @@ class RegistrationType extends AbstractType
             ->add('lastName', TextType::class)
             ->add('firstName', TextType::class)
             ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->add('plainPassword', PasswordType::class)
             ->add('birthDate', BirthdayType::class, [
                 'widget' => 'single_text',
             ])

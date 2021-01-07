@@ -54,7 +54,7 @@ class UserProfileControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('div.main h3', 'Connexion');
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
     }
 
     public function testUserProfileEditMail(): void
@@ -100,11 +100,39 @@ class UserProfileControllerTest extends WebTestCase
         $crawler = $client->click($link);
 
         $this->assertSelectorTextContains('div.main h3', 'Connexion');
-        $this->assertCount(1, $crawler->filter('form input[name*="oldPassword"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="newPassword"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="confirmPassword"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="reset_password[oldPassword]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="reset_password[plainPassword][first]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="reset_password[plainPassword][second]"]'));
 
         $this->assertSelectorExists('form button[type="submit"]');
+    }
+
+    public function testUserProfileEditPasswordSuccess(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/user/profile/edit/password');
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertCount(1, $crawler->filter('form input[name*="reset_password[oldPassword]"]'));
+
+        $form = $crawler
+            ->filter('form')
+            ->eq(1)
+            ->form();
+
+        $form['reset_password[oldPassword]'] = 'M1cdacda8';
+        $form['reset_password[plainPassword][first]'] = 'M1cdacda10';
+        $form['reset_password[plainPassword][second]'] = 'M1cdacda10';
+
+        $crawler = $client->submit($form);
+        /*
+                $crawler = $client->followRedirect();
+                $this->assertResponseRedirects('/app/user/profile/connexion');
+        */
     }
 
     public function testUserProfileIdentity(): void

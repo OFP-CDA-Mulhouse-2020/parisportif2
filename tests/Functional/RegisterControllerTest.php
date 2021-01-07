@@ -23,7 +23,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="agreeTerms"]'));
         $this->assertSelectorExists('form button[type=submit]');
@@ -36,12 +36,12 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $form['registration_form[lastName]'] = 'cda';
-        $form['registration_form[firstName]'] = 'daniel';
-        $form['registration_form[email]'] = 'daniel.cda@phpunit15.com';
-        $form['registration_form[password]'] = 'M1cdacda8';
-        $form['registration_form[birthDate]'] = '2000-10-02';
-        $form['registration_form[agreeTerms]'] = "1";
+        $form['registration[lastName]'] = 'cda';
+        $form['registration[firstName]'] = 'daniel';
+        $form['registration[email]'] = 'daniel.cda@phpunit15.com';
+        $form['registration[plainPassword]'] = 'M1cdacda8';
+        $form['registration[birthDate]'] = '2000-10-02';
+        $form['registration[agreeTerms]'] = "1";
 
         $crawler = $client->submit($form);
 
@@ -74,12 +74,12 @@ class RegisterControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/register');
 
         $form = $crawler->filter('form')->form();
-        $form['registration_form[lastName]'] = 'cda';
-        $form['registration_form[firstName]'] = 'daniel';
-        $form['registration_form[email]'] = 'daniel.cda@test.com';
-        $form['registration_form[password]'] = 'M1cdacda8';
-        $form['registration_form[birthDate]'] = '2000-10-02';
-        $form['registration_form[agreeTerms]'] = "1";
+        $form['registration[lastName]'] = 'cda';
+        $form['registration[firstName]'] = 'daniel';
+        $form['registration[email]'] = 'daniel.cda@test.com';
+        $form['registration[plainPassword]'] = 'M1cdacda8';
+        $form['registration[birthDate]'] = '2000-10-02';
+        $form['registration[agreeTerms]'] = "1";
 
         $crawler = $client->submit($form);
 

@@ -23,6 +23,7 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('lastName', User::class);
         $this->assertClassHasAttribute('firstName', User::class);
         $this->assertClassHasAttribute('email', User::class);
+        $this->assertClassHasAttribute('plainPassword', User::class);
         $this->assertClassHasAttribute('password', User::class);
         $this->assertClassHasAttribute('birthDate', User::class);
         $this->assertClassHasAttribute('createAt', User::class);

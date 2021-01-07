@@ -5,10 +5,14 @@ namespace App\Controller;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\Form\LoginType;
+use App\Form\ResetPasswordType;
 use App\Repository\AddressRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -31,11 +35,11 @@ class UserProfileController extends AbstractController
      */
     public function userProfileConnexion(UserInterface $user): Response
     {
-        $formIdentity = $this->createForm(LoginType::class, $user);
+        $formConnexion = $this->createForm(LoginType::class, $user);
 
         return $this->render('user_profile/connexion.html.twig', [
             'user' => $user,
-            'formConnexion' => $formIdentity->createView(),
+            'formConnexion' => $formConnexion->createView(),
             'editMail' => false,
             'editPassword' => false,
         ]);
@@ -46,11 +50,11 @@ class UserProfileController extends AbstractController
      */
     public function userProfileEditMail(UserInterface $user): Response
     {
-        $formIdentity = $this->createForm(LoginType::class, $user);
+        $formConnexion = $this->createForm(LoginType::class, $user);
 
         return $this->render('user_profile/connexion.html.twig', [
             'user' => $user,
-            'formConnexion' => $formIdentity->createView(),
+            'formConnexion' => $formConnexion->createView(),
             'editMail' => true,
             'editPassword' => false,
         ]);
@@ -59,13 +63,45 @@ class UserProfileController extends AbstractController
     /**
      * @Route("/profile/edit/password", name="_profile_edit_password")
      */
-    public function userProfileEditPassword(UserInterface $user): Response
-    {
-        $formIdentity = $this->createForm(LoginType::class, $user);
+    public function userProfileEditPassword(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder
+    ): Response {
+
+        $user = $this->getUser();
+        $formConnexion = $this->createForm(LoginType::class, $user);
+        $formPassword = $this->createForm(ResetPasswordType::class, $user);
+        $formPassword->handleRequest($request);
+
+        if ($formPassword->isSubmitted() && $formPassword->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $oldPassword = $request->request->get('reset_password')['oldPassword'];
+
+            // Si l'ancien mot de passe est bon
+            if ($passwordEncoder->isPasswordValid($user, $oldPassword)) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $user->getPlainPassword()
+                    )
+                );
+
+              //  $entityManager->persist($user);
+              //  $entityManager->flush();
+                $this->addFlash('notice', 'Votre mot de passe à bien été changé !');
+
+                return $this->redirectToRoute('_profile_connexion');
+            } else {
+                dd('error pass');
+              //  $formPassword->addError(new FormError('Ancien mot de passe incorrect'));
+            }
+        }
 
         return $this->render('user_profile/connexion.html.twig', [
             'user' => $user,
-            'formConnexion' => $formIdentity->createView(),
+            'formConnexion' => $formConnexion->createView(),
+            'formPassword' => $formPassword->createView(),
             'editMail' => false,
             'editPassword' => true,
         ]);

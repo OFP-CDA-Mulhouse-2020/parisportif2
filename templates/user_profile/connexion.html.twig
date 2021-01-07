@@ -23,28 +23,22 @@
     </form>
 
 
-    <form action="">
         {% if editPassword %}
-            <label for="oldPassword">Ancien mot de passe</label>
-            <input type="email" name="oldPassword" >
-
-            {{ form_row(formConnexion.password, {'full_name' :'newPassword'}) }}
-
-            <label for="confirmPassword">Confirmer mot de passe</label>
-            <input type="email" name="confirmPassword">
+            {{ form(formPassword) }}
 
             <a href="/app/user/profile/connexion" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </a>
-            <button class="btn btn-success" type="submit">Valider</button>
 
         {% else %}
+            <form action="">
 
-            {{ form_row(formConnexion.password, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
+            {{ form_row(formConnexion.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
         <a href="edit/password" class="btn btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </a>
+            </form>
+
         {% endif %}
-    </form>
 
 {% endblock %}
