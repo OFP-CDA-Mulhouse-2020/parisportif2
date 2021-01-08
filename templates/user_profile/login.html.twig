@@ -1,0 +1,47 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+<h3>Mes identifiants</h3>
+        {% if editMail %}
+            {{ form_start(formMail) }}
+
+            {{ form_row(formMail.oldEmail, { 'value' : user.email })}}
+            {{ form_widget(formMail)}}
+
+            {{ form_end(formMail) }}
+
+            <a href="/app/user/profile/login" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+        {% else %}
+            <form action="">
+
+        {{ form_row(formLogin.email, { 'attr':{'disabled':'disabled'} }) }}
+        <a href="/app/user/profile/edit/mail" class="btn btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </a>
+            </form>
+
+        {% endif %}
+
+
+        {% if editPassword %}
+
+            {{ form(formPassword) }}
+
+            <a href="/app/user/profile/login" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+
+        {% else %}
+            <form action="">
+
+            {{ form_row(formLogin.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
+        <a href="/app/user/profile/edit/password" class="btn btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </a>
+            </form>
+
+        {% endif %}
+
+{% endblock %}

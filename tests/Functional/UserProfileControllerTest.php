@@ -29,155 +29,22 @@ class UserProfileControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertEquals(1, $crawler->filter('div.left-side-menu')->count());
-        $this->assertEquals(13, $crawler->filter('div.left-side-menu li')->count());
+        $this->assertEquals(12, $crawler->filter('div.left-side-menu a')->count());
 
-        $this->assertSelectorTextContains('ul li a', 'Mon profil');
+        $this->assertSelectorTextContains('', 'Mon profil');
         $this->assertSelectorTextContains('', 'Mon portefeuille');
         $this->assertSelectorTextContains('', 'Aide');
         $this->assertSelectorTextContains('', 'Nous contacter');
 
         $this->assertEquals(1, $crawler->filter('div.right-side-menu')->count());
-        $this->assertEquals(2, $crawler->filter('div.right-side-menu li')->count());
+        $this->assertEquals(2, $crawler->filter('div.right-side-menu a')->count());
+
+        $this->assertSelectorTextContains('', 'Mes tickets');
+        $this->assertSelectorTextContains('', 'Mes favoris');
 
         $this->assertEquals(1, $crawler->filter('div.main')->count());
     }
 
-    public function testUserProfileConnexion(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/connexion');
-        $this->assertResponseStatusCodeSame(200);
-
-        $this->assertSelectorTextContains('div.main h3', 'Connexion');
-        $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
-    }
-
-    public function testUserProfileEditMail(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/connexion');
-        $this->assertResponseStatusCodeSame(200);
-
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
-
-        $this->assertSelectorTextContains('div.main h3', 'Connexion');
-        $this->assertCount(1, $crawler->filter('form input[name*="oldEmail"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="newEmail"]'));
-        $this->assertSelectorExists('form button[type="submit"]');
-    }
-
-    public function testUserProfileEditPassword(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/connexion');
-        $this->assertResponseStatusCodeSame(200);
-
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(1)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
-
-        $this->assertSelectorTextContains('div.main h3', 'Connexion');
-        $this->assertCount(1, $crawler->filter('form input[name*="edit_password[oldPassword]"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="edit_password[plainPassword][first]"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="edit_password[plainPassword][second]"]'));
-
-        $this->assertSelectorExists('form button[type="submit"]');
-    }
-
-    public function testUserProfileEditPasswordSuccess(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
-        $this->assertResponseStatusCodeSame(200);
-
-        $form = $crawler
-            ->filter('form')
-            ->eq(1)
-            ->form();
-
-        $form['edit_password[oldPassword]'] = 'M1cdacda8';
-        $form['edit_password[plainPassword][first]'] = 'M1cdacda8';
-        $form['edit_password[plainPassword][second]'] = 'M1cdacda8';
-
-        $crawler = $client->submit($form);
-
-        $this->assertResponseRedirects('/app/user/profile/connexion');
-    }
-
-    public function testUserProfileEditPasswordFailOldPassword(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
-        $this->assertResponseStatusCodeSame(200);
-
-        $form = $crawler
-            ->filter('form')
-            ->eq(1)
-            ->form();
-
-        $form['edit_password[oldPassword]'] = 'M1cdacda10';
-        $form['edit_password[plainPassword][first]'] = 'M1cdacda10';
-        $form['edit_password[plainPassword][second]'] = 'M1cdacda10';
-
-        $client->submit($form);
-
-        $this->assertSelectorTextContains('', 'Ancien mot de passe incorrect');
-    }
-
-    public function testUserProfileEditPasswordFailNewPassword(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
-        $this->assertResponseStatusCodeSame(200);
-
-        $form = $crawler
-            ->filter('form')
-            ->eq(1)
-            ->form();
-
-        $form['edit_password[oldPassword]'] = 'M1cdacda8';
-        $form['edit_password[plainPassword][first]'] = 'M1cdacda10';
-        $form['edit_password[plainPassword][second]'] = 'M1cdacda11';
-
-        $client->submit($form);
-
-        $this->assertSelectorTextContains('', 'Les deux mots de passe doivent être identiques');
-    }
 
     public function testUserProfileIdentity(): void
     {
