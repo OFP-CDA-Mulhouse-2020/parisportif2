@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class LoginControllerTest extends WebTestCase
 {
@@ -49,12 +48,12 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test.com';
         $form['password'] = 'M1cdacda8';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertResponseRedirects('/app');
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
-        $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
+        $this->assertSelectorTextContains('', 'Accueil');
     }
 
 
@@ -68,9 +67,9 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test2.com';
         $form['password'] = 'M1cdacda8';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Email could not be found.');
     }
@@ -84,8 +83,8 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test.com';
         $form['password'] = 'M1cdacda88';
 
-        $crawler = $client->submit($form);
-        $crawler = $client->followRedirect();
+        $client->submit($form);
+        $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Invalid credentials.');
     }

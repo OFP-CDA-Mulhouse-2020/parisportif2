@@ -11,7 +11,7 @@ class RegisterControllerTest extends WebTestCase
     public function testRegisterResponse200(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $client->request('GET', '/register');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -43,12 +43,12 @@ class RegisterControllerTest extends WebTestCase
         $form['registration[birthDate]'] = '2000-10-02';
         $form['registration[agreeTerms]'] = "1";
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertResponseRedirects('/app');
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
-        $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
+        $this->assertSelectorTextContains('', 'Accueil');
     }
 
     public function testInvalidRegisterSubmit(): void
@@ -58,7 +58,7 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Nom vide');
         $this->assertSelectorTextContains('', 'Prénom vide');
@@ -81,7 +81,7 @@ class RegisterControllerTest extends WebTestCase
         $form['registration[birthDate]'] = '2000-10-02';
         $form['registration[agreeTerms]'] = "1";
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Il y a déjà un compte avec cet email');
     }
@@ -89,7 +89,7 @@ class RegisterControllerTest extends WebTestCase
 
     public function testUserSetOnDb(): void
     {
-        $client = static::createClient();
+        static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
 
         $user = $userRepository->findOneBy(['email' => 'daniel.cda@test.com']);

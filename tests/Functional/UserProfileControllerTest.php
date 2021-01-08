@@ -14,7 +14,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile');
+        $client->request('GET', '/app/user/profile');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -122,9 +122,9 @@ class UserProfileControllerTest extends WebTestCase
             ->eq(1)
             ->form();
 
-        $form['edit_password[oldPassword]'] = 'M1cdacda10';
-        $form['edit_password[plainPassword][first]'] = 'M1cdacda10';
-        $form['edit_password[plainPassword][second]'] = 'M1cdacda10';
+        $form['edit_password[oldPassword]'] = 'M1cdacda8';
+        $form['edit_password[plainPassword][first]'] = 'M1cdacda8';
+        $form['edit_password[plainPassword][second]'] = 'M1cdacda8';
 
         $crawler = $client->submit($form);
 
@@ -146,11 +146,11 @@ class UserProfileControllerTest extends WebTestCase
             ->eq(1)
             ->form();
 
-        $form['edit_password[oldPassword]'] = 'M1cdacda8';
+        $form['edit_password[oldPassword]'] = 'M1cdacda10';
         $form['edit_password[plainPassword][first]'] = 'M1cdacda10';
         $form['edit_password[plainPassword][second]'] = 'M1cdacda10';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Ancien mot de passe incorrect');
     }
@@ -174,7 +174,7 @@ class UserProfileControllerTest extends WebTestCase
         $form['edit_password[plainPassword][first]'] = 'M1cdacda10';
         $form['edit_password[plainPassword][second]'] = 'M1cdacda11';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Les deux mots de passe doivent être identiques');
     }
@@ -207,7 +207,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/activation');
+        $client->request('GET', '/app/user/profile/activation');
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertSelectorTextContains('div.main h4', 'Activation du compte');
