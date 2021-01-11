@@ -1,0 +1,37 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <h3>Définir ma limite de jeu</h3>
+
+    <h4>Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine. </h4>
+
+        {% if editLimitAmount %}
+            {{ form(formWallet) }}
+
+            <a href="/app/wallet/limit-amount" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+
+        {% else %}
+            <form class="" action="">
+
+            {{ form_row(formWallet.limitAmountPerWeek, { 'attr':{'disabled':'disabled'} }) }}
+            </form>
+
+            <a href="/app/wallet/limit-amount/edit" class="btn btn-primary">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+            </a>
+        {% endif %}
+        <br><br>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+    <h3>Modifier les coordonnées bancaires</h3>
+
+    <h4>Mes coordonnées bancaires</h4>
+
+    {{ user.lastName }} - {{ user.firstName }}
+    <form class="" action="">
+        {% if editBankAccount %}
+            {{ form_widget(formBankAccount) }}
+            <a href="/app/wallet/bank-account" class="btn btn-danger">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+            <button class="btn btn-success" type="submit">Valider</button>
+
+        {% else %}
+            {{ form_row(formBankAccount.ibanCode, { 'attr':{'disabled':'disabled'} }) }}
+            {{ form_row(formBankAccount.bicCode, { 'attr':{'disabled':'disabled'} }) }}
+
+            <a href="/app/wallet/bank-account/edit" class="btn btn-primary">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+            </a>
+        {% endif %}
+        <br><br>
+    </form>
+
+
+
+
+{% endblock %}

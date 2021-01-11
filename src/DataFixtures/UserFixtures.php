@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Entity\Wallet;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -23,8 +24,8 @@ class UserFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
         $user = new User();
-        $user->setFirstName('danytest')
-            ->setLastName('danytest')
+        $user->setFirstName('daniel')
+            ->setLastName('cda')
             ->setEmail('daniel.cda@test.com')
             ->setPassword($this->passwordEncoder->encodePassword(
                 $user,
@@ -44,9 +45,15 @@ class UserFixtures extends Fixture
             ->setCity('Paris')
             ->setCountry('France');
 
+        $wallet = new Wallet();
+        $wallet->initializeWallet(true);
+        $wallet->setLimitAmountPerWeek(20);
+        $wallet->addMoney(50);
+
+
         $user = new User();
-        $user->setFirstName('ladjitest')
-            ->setLastName('ladjitest')
+        $user->setFirstName('ladji')
+            ->setLastName('cda')
             ->setEmail('ladji.cda@test.com')
             ->setPassword($this->passwordEncoder->encodePassword(
                 $user,
@@ -56,6 +63,7 @@ class UserFixtures extends Fixture
             ->setCreateAt(new DateTime())
             ->activate()
             ->setRoles(['ROLE_USER'])
+            ->setWallet($wallet)
             ->setAddress($address);
 
 

@@ -1,0 +1,28 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+    <h3>Solde du compte</h3>
+
+    <h4>Solde actuel: {{ wallet.balance }} EUR</h4>
+
+    <br><br>
+
+    <h4>Rechercher une opération</h4>
+    <form action="">
+        <br><br>
+        <label for="startAt">Entre :</label>
+        <input type="date" id="startAt" name="startAt">
+        <br><br>
+
+        <label for="endAt">Et le :</label>
+        <input type="date" id="endAt" name="endAt">
+        <br><br>
+
+        <button type="submit"  class="btn btn-danger">Rechercher</button>
+    </form>
+
+
+    <h4>Historique du compte</h4>
+
+
+{% endblock %}
