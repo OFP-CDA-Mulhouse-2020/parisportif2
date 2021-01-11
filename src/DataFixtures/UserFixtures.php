@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Address;
+use App\Entity\BankAccount;
 use App\Entity\User;
 use App\Entity\Wallet;
 use DateTime;
@@ -50,6 +51,9 @@ class UserFixtures extends Fixture
         $wallet->setLimitAmountPerWeek(20);
         $wallet->addMoney(50);
 
+        $bankAccount = new BankAccount();
+        $bankAccount->setIbanCode('FR7630006000011234567890189');
+        $bankAccount->setBicCode('BNPAFRPPTAS');
 
         $user = new User();
         $user->setFirstName('ladji')
@@ -64,6 +68,7 @@ class UserFixtures extends Fixture
             ->activate()
             ->setRoles(['ROLE_USER'])
             ->setWallet($wallet)
+            ->setBankAccount($bankAccount)
             ->setAddress($address);
 
 

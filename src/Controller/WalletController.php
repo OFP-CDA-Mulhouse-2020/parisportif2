@@ -55,21 +55,6 @@ class WalletController extends AbstractController
     }
 
     /**
-     * @Route("/app/wallet/bank-account", name="app_wallet_bank-account")
-     */
-    public function getWalletBankAccount(): Response
-    {
-        $user = $this->getUser();
-        $formBankAccount = $this->createForm(BankAccountType::class);
-
-        return $this->render('wallet/bank-account.html.twig', [
-            'user' => $user,
-            'editBankAccount' => false,
-            'formBankAccount' => $formBankAccount->createView()
-        ]);
-    }
-
-    /**
      * @Route("/app/wallet/limit-amount", name="app_wallet_limit-amount")
      */
     public function getLimitAmountPerWeekOfWallet(WalletRepository $walletRepository): Response

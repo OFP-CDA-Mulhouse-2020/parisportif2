@@ -84,32 +84,6 @@ class WalletControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type="submit"]');
     }
 
-    public function testWalletBankAccountResponse200(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/wallet/bank-account');
-        $this->assertResponseStatusCodeSame(200);
-    }
-
-    public function testWalletBankAccountWithAllLabel(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/wallet/bank-account');
-
-        $this->assertSelectorTextContains('div.main h3', 'Modifier les coordonnées bancaires');
-        $this->assertCount(1, $crawler->filter('form input[name*="ibanCode"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="bicCode"]'));
-    }
-
-
     public function testGetLimitAmountPerWeekFromWalletResponse200(): void
     {
         $client = static::createClient();
