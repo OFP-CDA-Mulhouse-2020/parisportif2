@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\BankAccountType;
 use App\Form\WalletType;
+use App\Repository\PaymentRepository;
 use App\Repository\WalletRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,14 +16,18 @@ class WalletController extends AbstractController
     /**
      * @Route("/app/wallet/balance", name="app_wallet_balance")
      */
-    public function getWalletBalance(WalletRepository $walletRepository): Response
+    public function getWalletBalance(WalletRepository $walletRepository, PaymentRepository $paymentRepository): Response
     {
         $user = $this->getUser();
         $wallet = $walletRepository->find($user->getWallet()->getId());
+        $payments = $paymentRepository->findBy(
+            ['wallet' => $user->getWallet()->getId(), 'paymentStatusId' => 2],
+            ['datePayment' => 'ASC']
+        );
 
         return $this->render('wallet/balance.html.twig', [
             'wallet' => $wallet,
-
+            'payments' => $payments
         ]);
     }
 

@@ -136,4 +136,33 @@ class WalletControllerTest extends WebTestCase
         $client->submit($form);
         $this->assertResponseRedirects('/app/wallet/limit-amount');
     }
+
+    public function testSetLimitAmountPerWeekFromWalletFail(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/wallet/limit-amount');
+        $link = $crawler
+            ->filter('div.main a')
+            ->eq(0)
+            ->link()
+        ;
+
+        $crawler = $client->click($link);
+        $this->assertCount(1, $crawler->filter('form input[name*="limitAmountPerWeek"]'));
+        $this->assertSelectorExists('form button[type="submit"]');
+
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['wallet[limitAmountPerWeek]'] = '-50';
+
+        $client->submit($form);
+        $this->assertSelectorTextContains('', 'Limite incorrecte');
+    }
 }
