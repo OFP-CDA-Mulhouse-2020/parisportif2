@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Payment
 {
-    private const PAYMENT_STATUS = [
+    public const PAYMENT_STATUS = [
         0 => 'attente de paiement',
         1 => 'paiement rejeté',
         2 => 'paiement accepté',

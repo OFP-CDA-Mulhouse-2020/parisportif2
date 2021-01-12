@@ -5,13 +5,13 @@ namespace App\DataFixtures;
 use App\Entity\Address;
 use App\Entity\BankAccount;
 use App\Entity\User;
-use App\Entity\Wallet;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private UserPasswordEncoderInterface $passwordEncoder;
 
@@ -40,20 +40,9 @@ class UserFixtures extends Fixture
 
         $manager->persist($user);
 
-        $address = new Address();
-        $address->setAddressNumberAndStreet('8 rue des champs')
-            ->setZipCode(75000)
-            ->setCity('Paris')
-            ->setCountry('France');
-
-        $wallet = new Wallet();
-        $wallet->initializeWallet(true);
-        $wallet->setLimitAmountPerWeek(20);
-        $wallet->addMoney(50);
-
-        $bankAccount = new BankAccount();
-        $bankAccount->setIbanCode('FR7630006000011234567890189');
-        $bankAccount->setBicCode('BNPAFRPPTAS');
+        $address = $this->getReference(AddressFixtures::ADDRESS_USER_2);
+        $wallet = $this->getReference(WalletFixtures::WALLET_USER_2);
+        $bankAccount = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_USER_2);
 
         $user = new User();
         $user->setFirstName('ladji')
@@ -75,5 +64,15 @@ class UserFixtures extends Fixture
         $manager->persist($user);
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            WalletFixtures::class,
+            BankAccountFixtures::class,
+            AddressFixtures::class,
+
+        ];
     }
 }
