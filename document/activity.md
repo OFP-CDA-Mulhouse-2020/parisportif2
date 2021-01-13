@@ -84,3 +84,14 @@
 
 04/01 Fini relation autour de User et sport, démarrage développement de l'app avec tests fonctionnels autour de 
 User Profile et Home Page
+
+05/01 Création des pages pour User Profile, et page Home
+
+06/01 Page créer pour Profile, page Home en cours
+
+07/01 Edition du mot de passe (daniel), fin de la page Home (ladji)
+
+08/01 vu comment fonctionne Panther (daniel) et fait edition du mail, démarrage édition identity et adresse (ladji)
+
+---
+11/01

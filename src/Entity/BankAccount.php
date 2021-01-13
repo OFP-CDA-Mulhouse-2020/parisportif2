@@ -24,7 +24,7 @@ class BankAccount
      *  groups={"ibanCode", "bankAccount"}
      * )
      * @Assert\Iban(
-     *  message="Ce n'est pas un IBAN valide (IBAN).",
+     *  message="Cet IBAN n'est pas valide.",
      *  groups={"ibanCode","bankAccount"}
      * )
      */
@@ -32,11 +32,11 @@ class BankAccount
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="code bic vide",
+     * @Assert\NotBlank(message="code Bic vide",
      *  groups={"bicCode", "bankAccount"}
      * )
      * @Assert\Bic(
-     *  message="Code BIC est invalide.",
+     *  message="Ce code BIC n'est pas valide.",
      *  groups={"bicCode","bankAccount"}
      * )
      */
