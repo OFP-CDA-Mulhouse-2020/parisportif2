@@ -12,7 +12,7 @@
 
     <h4>Mes coordonnées bancaires</h4>
 
-   <p>Propriétaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
+   <p>Titulaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
         {% if editBankAccount %}
             {{ form(formBankAccount) }}
             <a href="/app/wallet/bank-account" class="btn btn-danger">

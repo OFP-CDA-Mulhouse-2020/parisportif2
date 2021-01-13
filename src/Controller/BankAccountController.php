@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Form\BankAccountType;
-use App\Form\WalletType;
 use App\Repository\BankAccountRepository;
-use App\Repository\WalletRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +16,6 @@ class BankAccountController extends AbstractController
      * @Route("/app/wallet/bank-account", name="app_wallet_bank-account")
      */
     public function getBankAccountInformations(
-        Request $request,
         BankAccountRepository $bankAccountRepository
     ): Response {
         $user = $this->getUser();

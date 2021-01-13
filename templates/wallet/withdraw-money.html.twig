@@ -5,17 +5,11 @@
 
     <h4>Solde actuel: {{ wallet.balance }} EUR</h4>
 
-    <br><br>
+    <br>
 
-    <form action="">
-        <br><br>
-        <label for="amount">Montant :</label>
-        <input type="number" id="amount" name="amount"> EUR
-        <br><br>
+{{ form(formPayment) }}
 
-        <button type="submit"  class="btn btn-danger">Valider</button>
-    </form>
-
+    <br>
     <h4>Versement par virement bancaire sur votre compte</h4>
     <p>Ref IBAN : XXXXXXXXXXXXXXXX</p>
 

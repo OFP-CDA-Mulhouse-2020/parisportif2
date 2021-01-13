@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\BankAccountType;
+use App\Form\PaymentType;
 use App\Form\WalletType;
 use App\Repository\PaymentRepository;
 use App\Repository\WalletRepository;
@@ -48,13 +48,28 @@ class WalletController extends AbstractController
     /**
      * @Route("/app/wallet/withdraw-money", name="app_wallet_withdraw-money")
      */
-    public function withdrawMoneyfromWallet(WalletRepository $walletRepository): Response
-    {
+    public function withdrawMoneyFromWallet(
+        Request $request,
+        WalletRepository $walletRepository
+    ): Response {
         $user = $this->getUser();
         $wallet = $walletRepository->find($user->getWallet()->getId());
+        $formPayment = $this->createForm(PaymentType::class);
+        $formPayment->handleRequest($request);
+/*
+        if ($formPayment->isSubmitted() && $formPayment->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
 
+            $entityManager->persist($wallet);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
+
+            return $this->redirectToRoute('app_wallet_withdraw-money');
+        }*/
         return $this->render('wallet/withdraw-money.html.twig', [
             'wallet' => $wallet,
+            'formPayment' => $formPayment->createView()
 
         ]);
     }

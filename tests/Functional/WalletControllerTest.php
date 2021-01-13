@@ -53,7 +53,7 @@ class WalletControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/app/wallet/add-money');
 
-        $this->assertSelectorTextContains('div.main h3', 'Réaliser un paiement');
+        $this->assertSelectorTextContains('div.main h3', 'Ajouter des fonds à mon portefeuille');
         $this->assertCount(3, $crawler->filter('form input[name*="meansOfPayment"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="amount"]'));
         $this->assertSelectorExists('form button[type="submit"]');
@@ -80,10 +80,29 @@ class WalletControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/wallet/withdraw-money');
 
         $this->assertSelectorTextContains('div.main h3', 'Faire un retrait');
-        $this->assertCount(1, $crawler->filter('form input[name*="amount"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="sum"]'));
         $this->assertSelectorExists('form button[type="submit"]');
     }
+/*
+    public function testWithdrawMoneyFromWalletSuccess(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        $client->loginUser($testUser);
 
+        $crawler = $client->request('GET', '/app/wallet/withdraw-money');
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['payment[sum]'] = '20';
+        $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Votre versement a été réalisé avec succès !');
+    }
+*/
     public function testGetLimitAmountPerWeekFromWalletResponse200(): void
     {
         $client = static::createClient();
