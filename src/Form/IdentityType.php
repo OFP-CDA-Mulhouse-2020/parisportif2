@@ -21,10 +21,11 @@ class IdentityType extends AbstractType
             ->add('birthDate', BirthdayType::class, [
                 'widget' => 'single_text',
             ])
-            ->add('Justificatif', FileType::class, [
-                'mapped' => false,
-                'empty_data' => 'Vous devez fournir un justificatif'
-            ]);
+            // ->add('Justificatif', FileType::class, [
+            //     'mapped' => false,
+            //     'empty_data' => 'Vous devez fournir un justificatif'
+            // ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

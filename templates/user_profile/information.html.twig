@@ -1,52 +1,52 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
 {% block main %}
-<h3>Mes informations</h3>
-    <h4>Mon identité</h4>
+	<h3>Mes informations</h3>
+	<h4>Mon identité</h4>
 
-    <form class="" action="">
-        {% if editIdentity %}
-            {{ form_widget(formIdentity) }}
-            <a href="/app/user/profile/information" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-            <button class="btn btn-success" type="submit">Valider</button>
+	<form class="" action="" method="post">
+		{% if editIdentity %}
+			{{ form_widget(formIdentity) }}
+			<a href="/app/user/profile/information" class="btn btn-danger">
+				<i class="fa fa-times" aria-hidden="true"></i>
+			</a>
+			<button class="btn btn-success" type="submit">Valider</button>
 
-        {% else %}
-            {{ form_row(formIdentity.lastName, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formIdentity.firstName, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formIdentity.birthDate, { 'attr':{'disabled':'disabled'} }) }}
+		{% else %}
+			{{ form_row(formIdentity.lastName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(formIdentity.firstName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(formIdentity.birthDate, { 'attr':{'disabled':'disabled'} }) }}
 
-            <a href="edit/identity" class="btn btn-primary">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-        {% endif %}
-        <br><br>
-    </form>
+			<a href="edit/identity" class="btn btn-primary">
+				<i class="fa fa-edit" aria-hidden="true"></i>
+			</a>
+		{% endif %}
+		<br><br>
+	</form>
 
-    <h4>Mon adresse</h4>
+	<h4>Mon adresse</h4>
 
-    <form class="" action="">
+	<form class="" action="" method="post">
 
-        {% if editAddress %}
-            {{ form_widget(formAddress) }}
-            <a href="/app/user/profile/information" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-            <button class="btn btn-success" type="submit">Valider</button>
+		{% if editAddress %}
+			{{ form_widget(formAddress) }}
+			<a href="/app/user/profile/information" class="btn btn-danger">
+				<i class="fa fa-times" aria-hidden="true"></i>
+			</a>
+			<button class="btn btn-success" type="submit">Valider</button>
 
-        {% else %}
-            {{ form_row(formAddress.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formAddress.zipCode, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formAddress.city, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formAddress.country, { 'attr':{'disabled':'disabled'} }) }}
+		{% else %}
+			{{ form_row(formAddress.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(formAddress.zipCode, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(formAddress.city, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(formAddress.country, { 'attr':{'disabled':'disabled'} }) }}
 
-            <a href="edit/address" class="btn btn-primary">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-        {% endif %}
-        <br><br>
+			<a href="edit/address" class="btn btn-primary">
+				<i class="fa fa-edit" aria-hidden="true"></i>
+			</a>
+		{% endif %}
+		<br><br>
 
-    </form>
+	</form>
 
 {% endblock %}
