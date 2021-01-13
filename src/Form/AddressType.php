@@ -16,11 +16,7 @@ class AddressType extends AbstractType
             ->add('addressNumberAndStreet')
             ->add('zipCode')
             ->add('city')
-            ->add('country')
-            ->add('Justificatif', FileType::class, [
-                'mapped' => false,
-                'empty_data' => 'Vous devez fournir un justificatif'
-            ]);
+            ->add('country');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
