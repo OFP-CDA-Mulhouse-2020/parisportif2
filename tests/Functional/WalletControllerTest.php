@@ -2,6 +2,8 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\Payment;
+use App\Repository\PaymentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -59,6 +61,26 @@ class WalletControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type="submit"]');
     }
 
+    public function testAddMoneyToWalletSuccess(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/wallet/add-money');
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['add_money[amount]'] = '30';
+
+        $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Votre versement a été réalisé avec succès !');
+    }
+
     public function testWithdrawMoneyFromWalletResponse200(): void
     {
         $client = static::createClient();
@@ -80,10 +102,10 @@ class WalletControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/wallet/withdraw-money');
 
         $this->assertSelectorTextContains('div.main h3', 'Faire un retrait');
-        $this->assertCount(1, $crawler->filter('form input[name*="sum"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="amount"]'));
         $this->assertSelectorExists('form button[type="submit"]');
     }
-/*
+
     public function testWithdrawMoneyFromWalletSuccess(): void
     {
         $client = static::createClient();
@@ -97,12 +119,43 @@ class WalletControllerTest extends WebTestCase
             ->eq(0)
             ->form();
 
-        $form['payment[sum]'] = '20';
+        $form['withdraw_money[amount]'] = '35';
+
         $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Votre versement a été réalisé avec succès !');
     }
-*/
+
+    public function testPaymentSetOnDb(): void
+    {
+        static::createClient();
+        $paymentRepository = static::$container->get(PaymentRepository::class);
+
+        $payment = $paymentRepository->findOneBy(['sum' => 3500]);
+
+        $this->assertInstanceOf(Payment::class, $payment);
+    }
+
+    public function testWithdrawMoneyFromWalletFail(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/wallet/withdraw-money');
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['withdraw_money[amount]'] = '100';
+
+        $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Montant supérieur au solde disponible');
+    }
+
     public function testGetLimitAmountPerWeekFromWalletResponse200(): void
     {
         $client = static::createClient();
