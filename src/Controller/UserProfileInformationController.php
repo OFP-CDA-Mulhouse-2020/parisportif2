@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/app/user", name="app_user")
@@ -44,8 +43,7 @@ class UserProfileInformationController extends AbstractController
      */
     public function editUserProfileIdentity(
         Request $request,
-        AddressRepository $addressRepository,
-        SluggerInterface $slugger
+        AddressRepository $addressRepository
     ): Response {
 
         $user = $this->getUser();
@@ -79,8 +77,6 @@ class UserProfileInformationController extends AbstractController
                 $idCard = new CardIdFile();
                 //mise à jour du nom du fichier
                 $idCard->setName($newFilename);
-                $idCard->setIsCardIdValid(false);
-
                 $user->setCardIdFile($idCard);
             } else {
                 $formIdentity->addError(new FormError("Vous devez fournir une pièce-jointe !"));
