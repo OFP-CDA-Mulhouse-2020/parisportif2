@@ -36,6 +36,7 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('address', User::class);
         $this->assertClassHasAttribute('wallet', User::class);
         $this->assertClassHasAttribute('bankAccount', User::class);
+        $this->assertClassHasAttribute('cardIdFile', User::class);
     }
 
     public function getKernel(): KernelInterface

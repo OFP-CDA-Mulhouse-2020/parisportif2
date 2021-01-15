@@ -216,6 +216,16 @@ class User implements UserInterface
      */
     private ?Wallet $wallet;
 
+    /**
+     * @ORM\OneToOne(targetEntity=CardIdFile::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"cardIdFile"})
+     */
+    private ?CardIdFile $cardIdFile;
+
+
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -455,11 +465,11 @@ class User implements UserInterface
         ?string $birthDate
     ): User {
         $user = new User();
-        $firstName ? $user->setFirstName($firstName) : null ;
-        $lastName ? $user->setLastName($lastName) : null ;
-        $email ? $user->setEmail($email) : null ;
-        $plainPassword ? $user->setPlainPassword($plainPassword) : null ;
-        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
+        $firstName ? $user->setFirstName($firstName) : null;
+        $lastName ? $user->setLastName($lastName) : null;
+        $email ? $user->setEmail($email) : null;
+        $plainPassword ? $user->setPlainPassword($plainPassword) : null;
+        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null;
 
         $user->setCreateAt(new DateTime());
 
@@ -574,6 +584,18 @@ class User implements UserInterface
     public function setWallet(?Wallet $wallet): self
     {
         $this->wallet = $wallet;
+
+        return $this;
+    }
+
+    public function getCardIdFile(): ?CardIdFile
+    {
+        return $this->cardIdFile;
+    }
+
+    public function setCardIdFile(?CardIdFile $cardIdFile): self
+    {
+        $this->cardIdFile = $cardIdFile;
 
         return $this;
     }

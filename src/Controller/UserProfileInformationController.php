@@ -2,32 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\User;
+use App\Entity\CardIdFile;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\Repository\AddressRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/app/user", name="app_user")
  */
 class UserProfileInformationController extends AbstractController
 {
-    // /**
-    //  * @Route("/profile/information", name="user_profile_information")
-    //  */
-    // public function index(): Response
-    // {
-    //     return $this->render('user_profile/information.html.twig', [
-    //         'controller_name' => 'UserProfileInformationController',
-    //     ]);
-    // }
-
     /**
      * @Route("/profile/information", name="_profile_information")
      */
@@ -51,8 +42,12 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/profile/edit/identity", name="_profile_edit_identity")
      */
-    public function userProfileEditIdentity(AddressRepository $addressRepository, Request $request): Response
-    {
+    public function editUserProfileIdentity(
+        Request $request,
+        AddressRepository $addressRepository,
+        SluggerInterface $slugger
+    ): Response {
+
         $user = $this->getUser();
         $formIdentity = $this->createForm(IdentityType::class, $user);
 
@@ -61,6 +56,36 @@ class UserProfileInformationController extends AbstractController
         $formIdentity->handleRequest($request);
 
         if ($formIdentity->isSubmitted() && $formIdentity->isValid()) {
+            //On récupère le fichier transmit
+            $file = $formIdentity->get('justificatif')->getData();
+            if ($file) {
+                // On récupère le nom du fichier
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                // On génère un nouveau nom de fichier
+                // $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = uniqid() . '.' . $file->guessExtension();
+
+                try {
+                    //Copie du fichier sur le serveur
+                    $file->move(
+                        $this->getParameter('files_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                    $formIdentity->addError(new FormError("Problème dans l\'envoi de la pièce-jointe"));
+                }
+                // Stockage du fichier dans la base de données
+                $idCard = new CardIdFile();
+                //mise à jour du nom du fichier
+                $idCard->setName($newFilename);
+                $idCard->setIsCardIdValid(false);
+
+                $user->setCardIdFile($idCard);
+            } else {
+                $formIdentity->addError(new FormError("Vous devez fournir une pièce-jointe !"));
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -80,7 +105,7 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/profile/edit/address", name="_profile_edit_address")
      */
-    public function userProfileEditAddress(AddressRepository $addressRepository, Request $request): Response
+    public function editUserProfileAddress(AddressRepository $addressRepository, Request $request): Response
     {
         $user = $this->getUser();
         $formIdentity = $this->createForm(IdentityType::class, $user);
@@ -106,26 +131,4 @@ class UserProfileInformationController extends AbstractController
             'editAddress' => true,
         ]);
     }
-
-    // /**
-    //  * @Route("profile/edit/address/post", name="_edit_address")
-    //  */
-    // public function editAddress(Address $address, Request $request)
-    // {
-    //     $formAddress = $this->createForm(AddressType::class, $address);
-    //     $formAddress->handleRequest($request);
-
-    //     if ($formAddress->isSubmitted() && $formAddress->isValid()) {
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //         $entityManager->persist($address);
-    //         $entityManager->flush();
-
-    //         $this->addFlash('message', 'Votre adresse à été modifiée avec succès !');
-    //         return $this->redirectToRoute('_profile_edit_address');
-    //     } else {
-    //         dd('invalid');
-    //     }
-
-    //     $formAddress->addError(new FormError('Votre adresse est incorrecte'));
-    // }
 }
