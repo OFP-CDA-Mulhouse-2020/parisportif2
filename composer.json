@@ -89,10 +89,15 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "bash githook/setup.sh"
+            "@auto-scripts",
+            "@setup-hooks"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "setup-hooks": [
+            "bash githook/setup.sh",
+            "sh githook/setup.sh"
         ]
     },
     "conflict": {

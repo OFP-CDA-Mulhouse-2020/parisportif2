@@ -2,7 +2,7 @@
 
 // login: ladji.cda@test.com
 // mdp : M1cdacda8
-namespace App\Tests\Controller;
+namespace App\Tests\Functional;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
