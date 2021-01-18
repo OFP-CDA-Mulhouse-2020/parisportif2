@@ -27,7 +27,7 @@ class WithdrawMoneyHandler
 
     public function process(FormInterface $withdrawMoneyForm, User $user): void
     {
-		$wallet = $user->getWallet();
+        $wallet = $user->getWallet();
         $withdrawMoneyData = $withdrawMoneyForm->getData();
         $paymentStatus = $wallet->withdrawMoney($withdrawMoneyData['amount']);
 
