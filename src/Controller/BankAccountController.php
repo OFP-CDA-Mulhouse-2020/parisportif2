@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\BankAccountType;
+use App\FormHandler\BankAccountHandler;
 use App\Repository\BankAccountRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,13 +20,13 @@ class BankAccountController extends AbstractController
         BankAccountRepository $bankAccountRepository
     ): Response {
         $user = $this->getUser();
-        $bankAccount = $bankAccountRepository->find($user->getBankAccount()->getId());
-        $formBankAccount = $this->createForm(BankAccountType::class, $bankAccount);
+        $bankAccount = $user->getBankAccount();
+        $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
 
         return $this->render('wallet/bank-account.html.twig', [
             'user' => $user,
             'editBankAccount' => false,
-            'formBankAccount' => $formBankAccount->createView()
+            'bankAccountForm' => $bankAccountForm->createView()
         ]);
     }
 
@@ -34,19 +35,15 @@ class BankAccountController extends AbstractController
      */
     public function setBankAccountInformations(
         Request $request,
-        BankAccountRepository $bankAccountRepository
+        BankAccountHandler $bankAccountHandler
     ): Response {
         $user = $this->getUser();
-        $bankAccount = $bankAccountRepository->find($user->getBankAccount()->getId());
-        $formBankAccount = $this->createForm(BankAccountType::class);
-        $formBankAccount->handleRequest($request);
+        $bankAccount = $user->getBankAccount();
+        $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
+        $bankAccountForm->handleRequest($request);
 
-        if ($formBankAccount->isSubmitted() && $formBankAccount->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($bankAccount);
-            $entityManager->flush();
-
+        if ($bankAccountForm->isSubmitted() && $bankAccountForm->isValid()) {
+            $bankAccountHandler->process($bankAccountForm);
             $this->addFlash('success', 'Vos coordonnées bancaires ont été mises à jour !');
 
             return $this->redirectToRoute('app_wallet_bank-account');
@@ -54,7 +51,7 @@ class BankAccountController extends AbstractController
         return $this->render('wallet/bank-account.html.twig', [
             'user' => $user,
             'editBankAccount' => true,
-            'formBankAccount' => $formBankAccount->createView()
+            'bankAccountForm' => $bankAccountForm->createView()
         ]);
     }
 }

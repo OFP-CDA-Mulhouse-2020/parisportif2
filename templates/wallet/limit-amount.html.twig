@@ -13,7 +13,7 @@
     <h4>Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine. </h4>
 
         {% if editLimitAmount %}
-            {{ form(formWallet) }}
+            {{ form(walletForm) }}
 
             <a href="/app/wallet/limit-amount" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -22,7 +22,7 @@
         {% else %}
             <form class="" action="">
 
-            {{ form_row(formWallet.limitAmountPerWeek, { 'attr':{'disabled':'disabled'} }) }}
+            {{ form_row(walletForm.limitAmountPerWeek, { 'attr':{'disabled':'disabled'} }) }}
             </form>
 
             <a href="/app/wallet/limit-amount/edit" class="btn btn-primary">

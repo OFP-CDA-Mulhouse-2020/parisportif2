@@ -14,7 +14,7 @@
 
    <p>Titulaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
         {% if editBankAccount %}
-            {{ form(formBankAccount) }}
+            {{ form(bankAccountForm) }}
             <a href="/app/wallet/bank-account" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </a>
@@ -22,8 +22,8 @@
         {% else %}
             <form class="" action="">
 
-            {{ form_row(formBankAccount.ibanCode, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(formBankAccount.bicCode, { 'attr':{'disabled':'disabled'} }) }}
+            {{ form_row(bankAccountForm.ibanCode, { 'attr':{'disabled':'disabled'} }) }}
+            {{ form_row(bankAccountForm.bicCode, { 'attr':{'disabled':'disabled'} }) }}
             </form>
 
             <a href="/app/wallet/bank-account/edit" class="btn btn-primary">

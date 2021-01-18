@@ -47,4 +47,16 @@ class PaymentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAmountOfLastWeek(int $walletId): ?array
+    {
+        return $this->createQueryBuilder('payment')
+            ->select("SUM(payment.sum) AS amountOfLastWeek")
+            ->where('payment.wallet = :walletId')
+            ->andWhere('payment.typeOfPayment = 3')
+            ->setParameter('walletId', $walletId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

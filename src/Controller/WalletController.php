@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
-use App\Form\PaymentType;
+use App\Form\AddMoneyType;
 use App\Form\WalletType;
+use App\Form\WithdrawMoneyType;
+use App\FormHandler\AddMoneyHandler;
+use App\FormHandler\WalletHandler;
+use App\FormHandler\WithdrawMoneyHandler;
 use App\Repository\PaymentRepository;
 use App\Repository\WalletRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,14 +39,26 @@ class WalletController extends AbstractController
     /**
      * @Route("/app/wallet/add-money", name="app_wallet_add-money")
      */
-    public function addMoneyToWallet(WalletRepository $walletRepository): Response
-    {
+    public function addMoneyToWallet(
+        Request $request,
+        AddMoneyHandler $addMoneyHandler
+    ): Response {
         $user = $this->getUser();
-        $wallet = $walletRepository->find($user->getWallet()->getId());
+        $wallet = $user->getWallet();
+        $addMoneyForm = $this->createForm(AddMoneyType::class);
+        $addMoneyForm->handleRequest($request);
 
+        if ($addMoneyForm->isSubmitted() && $addMoneyForm->isValid()) {
+            try {
+                $addMoneyHandler->process($addMoneyForm, $user);
+                $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
+            } catch (\LogicException $e) {
+                $addMoneyForm->addError(new FormError('La transaction a échouée'));
+            }
+        }
         return $this->render('wallet/add-money.html.twig', [
             'wallet' => $wallet,
-
+            'addMoneyForm' => $addMoneyForm->createView()
         ]);
     }
 
@@ -50,27 +67,25 @@ class WalletController extends AbstractController
      */
     public function withdrawMoneyFromWallet(
         Request $request,
-        WalletRepository $walletRepository
+        WithdrawMoneyHandler $withdrawMoneyHandler
     ): Response {
         $user = $this->getUser();
-        $wallet = $walletRepository->find($user->getWallet()->getId());
-        $formPayment = $this->createForm(PaymentType::class);
-        $formPayment->handleRequest($request);
-/*
-        if ($formPayment->isSubmitted() && $formPayment->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+        $wallet = $user->getWallet();
+        $withdrawMoneyForm = $this->createForm(WithdrawMoneyType::class);
+        $withdrawMoneyForm->handleRequest($request);
 
-            $entityManager->persist($wallet);
-            $entityManager->flush();
+        if ($withdrawMoneyForm->isSubmitted() && $withdrawMoneyForm->isValid()) {
+            try {
+                $withdrawMoneyHandler->process($withdrawMoneyForm, $user);
+                $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
+            } catch (\LogicException $e) {
+                $withdrawMoneyForm->addError(new FormError('Montant supérieur au solde disponible'));
+            }
+        }
 
-            $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
-
-            return $this->redirectToRoute('app_wallet_withdraw-money');
-        }*/
         return $this->render('wallet/withdraw-money.html.twig', [
             'wallet' => $wallet,
-            'formPayment' => $formPayment->createView()
-
+            'withdrawMoneyForm' => $withdrawMoneyForm->createView()
         ]);
     }
 
@@ -81,12 +96,12 @@ class WalletController extends AbstractController
     {
         $user = $this->getUser();
         $wallet = $walletRepository->find($user->getWallet()->getId());
-        $formWallet = $this->createForm(WalletType::class, $wallet);
+        $walletForm = $this->createForm(WalletType::class, $wallet);
 
         return $this->render('wallet/limit-amount.html.twig', [
             'wallet' => $wallet,
             'editLimitAmount' => false,
-            'formWallet' => $formWallet->createView()
+            'walletForm' => $walletForm->createView()
         ]);
     }
 
@@ -95,19 +110,15 @@ class WalletController extends AbstractController
      */
     public function setLimitAmountPerWeekOfWallet(
         Request $request,
-        WalletRepository $walletRepository
+        WalletHandler $walletHandler
     ): Response {
         $user = $this->getUser();
-        $wallet = $walletRepository->find($user->getWallet()->getId());
-        $formWallet = $this->createForm(WalletType::class, $wallet);
-        $formWallet->handleRequest($request);
+        $wallet = $user->getWallet();
+        $walletForm = $this->createForm(WalletType::class, $wallet);
+        $walletForm->handleRequest($request);
 
-        if ($formWallet->isSubmitted() && $formWallet->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($wallet);
-            $entityManager->flush();
-
+        if ($walletForm->isSubmitted() && $walletForm->isValid()) {
+            $walletHandler->process($walletForm);
             $this->addFlash('success', 'Votre limite de jeu a bien été changé !');
 
             return $this->redirectToRoute('app_wallet_limit-amount');
@@ -115,7 +126,7 @@ class WalletController extends AbstractController
         return $this->render('wallet/limit-amount.html.twig', [
             'wallet' => $wallet,
             'editLimitAmount' => true,
-            'formWallet' => $formWallet->createView()
+            'walletForm' => $walletForm->createView()
         ]);
     }
 }
