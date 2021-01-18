@@ -94,4 +94,17 @@ User Profile et Home Page
 08/01 vu comment fonctionne Panther (daniel) et fait edition du mail, démarrage édition identity et adresse (ladji)
 
 ---
-11/01
+11/01 Demarrage partie Wallet avec affichage des différentes parties (daniel), edition de l'adresse (ladji)
+
+12/01 Affichage du solde et edition de la limite de jeu (daniel), edition de l'adresse (ladji)
+
+13/01 Edition des coordonnées bancaire (daniel), démarrage édition de l'identité (ladji)
+
+14/01 Edition de l'ajout et de retrait de fonds (daniel) et rajout de la pièce joint dans identité (ladji)
+
+15/01 Refactorisation, correction de code sur WalletController (daniel), fin formulaire d'édition de l'identité (ladji)
+
+--
+18/01 Installation de easyAdmin et préparation présentation (daniel), fonctionnement du CRUD (ladji)
+
+19/01
