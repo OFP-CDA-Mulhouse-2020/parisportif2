@@ -4,6 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Entity\Address;
 use App\Entity\BankAccount;
+use App\Entity\CardIdFile;
 use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
@@ -36,6 +37,7 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('address', User::class);
         $this->assertClassHasAttribute('wallet', User::class);
         $this->assertClassHasAttribute('bankAccount', User::class);
+        $this->assertClassHasAttribute('cardIdFile', User::class);
     }
 
     public function getKernel(): KernelInterface
@@ -299,5 +301,17 @@ class UserTest extends KernelTestCase
         $user->setCart($cart);
         $this->assertInstanceOf(Cart::class, $user->getCart());
         $this->assertSame(0, $this->getViolationsCount($user, ['cart']));
+    }
+
+    public function testValidCardId(): void
+    {
+        $cardId = new CardIdFile();
+        $cardId->setName('Carteidentite.jpeg');
+        $cardId->validateCardId();
+
+        $user = new User();
+        $user->setCardIdFile($cardId);
+        $this->assertInstanceOf(CardIdFile::class, $user->getCardIdFile());
+        $this->assertSame(0, $this->getViolationsCount($user, ['cardIdFile']));
     }
 }

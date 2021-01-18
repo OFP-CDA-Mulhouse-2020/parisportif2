@@ -24,3 +24,4 @@ db/*
 
 /.vscode/
 /.idea/
+/public/uploads/files/*
