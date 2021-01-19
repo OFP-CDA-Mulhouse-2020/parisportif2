@@ -44,7 +44,7 @@ class TypeOfBet
         return $this->betType;
     }
 
-    public function setTypeOfBet(string $betType): self
+    public function setBetType(string $betType): self
     {
         $this->betType = $betType;
 

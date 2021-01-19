@@ -40,7 +40,7 @@ class TypeOfBetTest extends KernelTestCase
     public function testValidTypeOfBet(string $betType, int $expectedViolationsCount): void
     {
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet($betType);
+        $typeOfBet->setBetType($betType);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($typeOfBet, null));
     }
 
@@ -58,7 +58,7 @@ class TypeOfBetTest extends KernelTestCase
     public function testInvalidTypeOfBet(string $betType, int $expectedViolationsCount): void
     {
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet($betType);
+        $typeOfBet->setBetType($betType);
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($typeOfBet, null));
     }
 
