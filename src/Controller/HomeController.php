@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\BetRepository;
-use App\Repository\CartRepository;
+use App\Repository\PaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,9 +13,8 @@ class HomeController extends AbstractController
     /**
      * @Route("/app", name="app")
      */
-    public function homePage(BetRepository $betRepository): Response
+    public function homePage(BetRepository $betRepository, PaymentRepository $paymentRepository): Response
     {
-
         $listOfBet = $betRepository->findAll();
 
         $user = $this->getUser();

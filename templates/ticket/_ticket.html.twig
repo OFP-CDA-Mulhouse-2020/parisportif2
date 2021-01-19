@@ -31,13 +31,13 @@
     {{ sum }}
     EUR<br>
         <div class="col-12 d-flex justify-content-center">
-            <a type="button" class="btn btn-danger btn-sm" href="/app/cart/validate">Pariez !</a>
+            <a type="button" class="btn btn-danger btn-sm" href="/app/cart/payment">Pariez !</a>
         </div>
 
 {% else %}
     <p>Ajouter des paris</p>
     <div class="col-12 d-flex justify-content-center">
-        <a type="button" class="btn btn-secondary btn-sm"  disabled>Pariez !</a>
+        <button type="button" class="btn btn-secondary btn-sm"  disabled>Pariez !</button>
     </div>
 {% endif %}
 
