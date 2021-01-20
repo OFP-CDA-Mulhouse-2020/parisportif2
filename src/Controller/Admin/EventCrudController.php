@@ -2,33 +2,32 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Player;
+use App\Entity\Event;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TimezoneField;
 
-class PlayerCrudController extends AbstractCrudController
+class EventCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Player::class;
+        return Event::class;
     }
 
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('id'),
-            TextField::new('lastName'),
-            TextField::new('firstName'),
-            IntegerField::new('ranking'),
-            IntegerField::new('playerStatus'),
-            AssociationField::new('sport'),
-            AssociationField::new('team'),
-
-
+            IntegerField::new('id', 'ID')->onlyOnIndex(),
+            TextField::new('name'),
+            TextField::new('location'),
+            DateTimeField::new('eventDateTime'),
+            TimezoneField::new('eventTimeZone'),
+            AssociationField::new('competition'),
         ];
     }
 }

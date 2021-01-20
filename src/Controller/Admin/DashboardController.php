@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Competition;
+use App\Entity\Event;
 use App\Entity\Player;
 use App\Entity\Team;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -35,5 +37,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Player', 'fas fa-list', Player::class);
         yield MenuItem::linkToCrud('Team', 'fas fa-list', Team::class);
+        yield MenuItem::linkToCrud('Event', 'fas fa-list', Event::class);
+        yield MenuItem::linkToCrud('Competition', 'fas fa-list', Competition::class);
     }
 }
