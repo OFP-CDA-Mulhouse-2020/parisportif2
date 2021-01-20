@@ -20,7 +20,7 @@ class Competition
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -76,6 +76,11 @@ class Competition
     public function __construct()
     {
         $this->event = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getId() . ' - ' . $this->getName();
     }
 
     public function getId(): ?int
