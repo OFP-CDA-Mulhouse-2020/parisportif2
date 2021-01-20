@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Payment;
+use App\Repository\BetRepository;
+use App\Repository\ItemRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\TypeOfPaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,6 +68,58 @@ class PaymentController extends AbstractController
             $entityManager->persist($user);
             $entityManager->persist($payment);
             $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app');
+    }
+
+    public function validateBetToPayment(
+        BetRepository $betRepository,
+        ItemRepository $itemRepository,
+        TypeOfPaymentRepository $typeOfPaymentRepository
+    ): Response {
+        $user = $this->getUser();
+        $wallet = $user->getWallet();
+
+        $bet = $betRepository->find(1);
+
+      //  $result = $bet->getResult();
+        $result = [1];
+        $listOfItems = $itemRepository->findBy(['bet' => $bet->getId()]);
+
+        foreach ($listOfItems as $item) {
+            $expectedResult = $item->getExpectedBetResult();
+
+            if (in_array($expectedResult, $result)) {
+                $item->winItem();
+            } else {
+                $item->looseItem();
+            }
+
+                $sum = $item->calculateProfits();
+
+            if ($sum !== null) {
+                $payment = new Payment($sum);
+                $payment->setWallet($wallet);
+                $payment->setPaymentName('Gain sur ticket de pari n°');
+                $typeOfPayment = $typeOfPaymentRepository->findOneBy(
+                    [
+                    'typeOfPayment' => 'Internal Transfer Bet Earning'
+                    ]
+                );
+                $payment->setTypeOfPayment($typeOfPayment);
+
+                $walletStatus = $wallet->addMoney($sum);
+
+                if (!$walletStatus) {
+                    throw new \LogicException("Montant incorrect");
+                }
+                $payment->acceptPayment();
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->persist($payment);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('app');

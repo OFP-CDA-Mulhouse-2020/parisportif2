@@ -31,7 +31,7 @@ class CompetitionFixtures extends Fixture
 
         array_push(
             $competitions1,
-            $this->setCompetitionData('championnat Ligue 1', '2020-09-01 00:00:00', '2021-06-30 23:59:59')
+            $this->setCompetitionData('Ligue 1 Ubereats', '2020-09-01 00:00:00', '2021-06-30 23:59:59')
         );
 
         foreach ($competitions1 as $competition1) {
@@ -44,7 +44,7 @@ class CompetitionFixtures extends Fixture
 
         array_push(
             $competitions2,
-            $this->setCompetitionData('championnat NBA', '2020-10-01 00:00:00', '2021-07-31 23:59:59')
+            $this->setCompetitionData('NBA', '2020-10-01 00:00:00', '2021-07-31 23:59:59')
         );
 
         foreach ($competitions2 as $competition2) {

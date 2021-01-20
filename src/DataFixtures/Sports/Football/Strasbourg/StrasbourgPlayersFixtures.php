@@ -3,7 +3,6 @@
 // Football - Racing Club de Strasbourg
 namespace App\DataFixtures\Sports\Football\Strasbourg;
 
-use App\DataFixtures\Sports\Football\Strasbourg\StrasbourgTeamFixtures;
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Player;
 use Doctrine\Bundle\FixturesBundle\Fixture;

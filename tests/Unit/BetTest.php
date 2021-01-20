@@ -98,7 +98,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->openBet();
 
-        $this->assertTrue($bet->isOpen());
+        $this->assertTrue($bet->isBetOpened());
     }
 
     public function testBetClosed(): void
@@ -106,7 +106,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->closeBet();
 
-        $this->assertFalse($bet->isOpen());
+        $this->assertFalse($bet->isBetOpened());
     }
 
     public function testValidTypeOfBet(): void

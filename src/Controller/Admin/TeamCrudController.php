@@ -21,14 +21,12 @@ class TeamCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id', 'ID')->onlyOnIndex(),
             TextField::new('name'),
             AssociationField::new('sport'),
             IntegerField::new('ranking'),
             CollectionField::new('player'),
             CollectionField::new('event'),
-
-
         ];
     }
 }

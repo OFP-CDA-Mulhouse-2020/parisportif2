@@ -18,12 +18,15 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
 
         $typeOfBet1 = $this->getReference(TypeOfBetFixtures::TYPE_OF_BET_1);
         $typeOfBet2 = $this->getReference(TypeOfBetFixtures::TYPE_OF_BET_2);
+        $event1 = $this->getReference(EventFixtures::EVENT_1);
+        $event2 = $this->getReference(EventFixtures::EVENT_2);
 
 
         $bet = new Bet();
         $bet->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet->setListOfOdds([2.2, 1.5, 1.1]);
         $bet->setTypeOfBet($typeOfBet1);
+        $bet->setEvent($event1);
         $bet->openBet();
         $manager->persist($bet);
 
@@ -34,6 +37,8 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             TypeOfBetFixtures::class,
+            EventFixtures::class,
+
         ];
     }
 }
