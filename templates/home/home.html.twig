@@ -10,6 +10,18 @@
 	{% include "partials/header.html.twig" %}
 
 	{# HOMEPAGE CONTENT #}
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">
+			{{ message }}
+		</div>
+	{% endfor %}
 	<section class="container-fluid" id="page-content">
 		<div
 			class="row">
@@ -129,9 +141,9 @@
 
 							{########### BET BOARD CONTENT ###########}
 							<div class="col-sm-12 mt-4 bet-board card p-2">
-								{% block betBoardContent %}
-									{# place content here #}
-								{% endblock %}
+
+								{% include "bet/_home_bet.html.twig" %}
+
 							</div>
 
 						</div>
@@ -144,11 +156,8 @@
 				<aside class="container-fluid aside-right">
 					<div class="row card mt-4 p-2">
 						<section class="col-sm-12 bet-ticket">
-							<h6>Ticket de paris :</h6>
-							<p>Ajouter des paris</p>
-							<div class="col-12 d-flex justify-content-center">
-								<button type="button" class="btn btn-danger btn-sm">Pariez !</button>
-							</div>
+							{% include "ticket/_ticket.html.twig" %}
+
 						</section>
 					</div>
 					<div class="row card mt-4 p-2">

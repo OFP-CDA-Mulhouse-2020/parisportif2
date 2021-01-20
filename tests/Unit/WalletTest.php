@@ -251,7 +251,7 @@ class WalletTest extends KernelTestCase
         $transactionStatus = $wallet->betPayment($amount, $amountBetPaymentLastWeek);
 
         $this->assertSame($expectedBalance, $wallet->getBalance());
-        $this->assertSame(1, $transactionStatus);
+        $this->assertSame(0, $transactionStatus);
     }
 
     public function invalidBetPaymentProvider(): array

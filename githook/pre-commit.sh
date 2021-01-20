@@ -34,4 +34,4 @@ phpstan="./vendor/bin/phpstan analyse  -c phpstan.neon"
 
 __run "1/3" "Code Sniffer : Correct PSR12 coding standard violations" "${modified} | xargs -r ${phpcbf}"
 __run "2/3" "Code Sniffer : Detect last violations of PSR12 coding standard" "${modified} | xargs -r ${phpcs}"
-# __run "3/3" "PHPStan : Static code analysis" "${modified} | xargs -r ${phpstan}"
+__run "3/3" "PHPStan : Static code analysis" "${modified} | xargs -r ${phpstan}"

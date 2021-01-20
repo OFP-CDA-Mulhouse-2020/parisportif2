@@ -120,7 +120,7 @@ class BetTest extends KernelTestCase
             2 => ['V2' => 3.2],
         ]);
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet('Test');
+        $typeOfBet->setBetType('Test');
 
         $bet->setTypeOfBet($typeOfBet);
 
@@ -139,7 +139,7 @@ class BetTest extends KernelTestCase
             2 => ['V2' => 3.2],
         ]);
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet('');
+        $typeOfBet->setBetType('');
 
         $bet->setTypeOfBet($typeOfBet);
 

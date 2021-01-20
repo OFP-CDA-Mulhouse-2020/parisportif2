@@ -159,10 +159,10 @@ class Wallet
 
     public function betPayment(float $amount, int $amountBetPaymentLastWeek): int
     {
-        if ($amount <= 0 or $amount > $this->getBalance()) {
+        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
             return 0;
         }
-        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
+        if ($amount <= 0 or $amount > $this->getBalance()) {
             return 1;
         }
         $this->balance -= (int) $amount * 100;
