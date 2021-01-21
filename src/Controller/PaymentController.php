@@ -8,6 +8,8 @@ use App\Repository\ItemRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\TypeOfPaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,8 +42,9 @@ class PaymentController extends AbstractController
 
         //TODO : add website wallet
 
-        $sumOfLastPayment = $paymentRepository->findAmountOfLastWeek($wallet->getId(), $typeOfPayment->getId());
-        $walletStatus = $wallet->betPayment($sum, $sumOfLastPayment['amountOfLastWeek']);
+        $sumOfLastWeekPayment = $paymentRepository->findAmountOfLastWeek($wallet->getId(), $typeOfPayment->getId());
+
+        $walletStatus = $wallet->betPayment($sum, $sumOfLastWeekPayment['amountOfLastWeek']);
 
         if ($walletStatus === 0) {
             $this->addFlash('error', 'Limite de jeu hebdomadaire dépassée ! Misez moins ou patientez un petit peu !');
@@ -73,19 +76,29 @@ class PaymentController extends AbstractController
         return $this->redirectToRoute('app');
     }
 
+    /**
+     * @Route("app/cart/betpayment/{id}", name="app_cart_bet_payment")
+     */
     public function validateBetToPayment(
+        int $id,
         BetRepository $betRepository,
         ItemRepository $itemRepository,
-        TypeOfPaymentRepository $typeOfPaymentRepository
+        TypeOfPaymentRepository $typeOfPaymentRepository,
+        Request $request
     ): Response {
+
+        $bet = $betRepository->find($id);
+        if ($bet->isBetOpened()) {
+            return new RedirectResponse($request->server->get('HTTP_REFERER'));
+        }
+
         $user = $this->getUser();
         $wallet = $user->getWallet();
 
-        $bet = $betRepository->find(1);
+        $result = $bet->getBetResult();
 
-      //  $result = $bet->getResult();
-        $result = [1];
-        $listOfItems = $itemRepository->findBy(['bet' => $bet->getId()]);
+        $listOfItems = $itemRepository->findBy(['bet' => $bet->getId(), 'itemStatusId' => 1]);
+        $entityManager = $this->getDoctrine()->getManager();
 
         foreach ($listOfItems as $item) {
             $expectedResult = $item->getExpectedBetResult();
@@ -115,13 +128,15 @@ class PaymentController extends AbstractController
                     throw new \LogicException("Montant incorrect");
                 }
                 $payment->acceptPayment();
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
+
+                $entityManager->persist($wallet);
                 $entityManager->persist($payment);
-                $entityManager->flush();
             }
+
+            $entityManager->persist($item);
+            $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app');
+        return new RedirectResponse($request->server->get('HTTP_REFERER'));
     }
 }

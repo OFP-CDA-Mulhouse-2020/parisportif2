@@ -27,6 +27,7 @@ class TeamCrudController extends AbstractCrudController
             IntegerField::new('ranking'),
             CollectionField::new('player'),
             CollectionField::new('event'),
+
         ];
     }
 }

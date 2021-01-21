@@ -19,6 +19,7 @@ class BetTest extends KernelTestCase
         $this->assertClassHasAttribute('betLimitTime', Bet::class);
         $this->assertClassHasAttribute('typeOfBet', Bet::class);
         $this->assertClassHasAttribute('betOpened', Bet::class);
+        $this->assertClassHasAttribute('betResult', Bet::class);
     }
 
     public function getKernel(): KernelInterface

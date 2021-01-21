@@ -13,9 +13,9 @@ class HomeController extends AbstractController
     /**
      * @Route("/app", name="app")
      */
-    public function homePage(BetRepository $betRepository, PaymentRepository $paymentRepository): Response
+    public function homePage(BetRepository $betRepository): Response
     {
-        $listOfBet = $betRepository->findAll();
+        $listOfBet = $betRepository->findby(['betOpened' => true]);
 
         $user = $this->getUser();
         $cart = $user->getCart();

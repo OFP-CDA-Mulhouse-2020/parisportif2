@@ -28,6 +28,8 @@ class EventCrudController extends AbstractCrudController
             DateTimeField::new('eventDateTime'),
             TimezoneField::new('eventTimeZone'),
             AssociationField::new('competition'),
+            AssociationField::new('teams'),
+
         ];
     }
 }
