@@ -19,6 +19,7 @@ class BetTest extends KernelTestCase
         $this->assertClassHasAttribute('betLimitTime', Bet::class);
         $this->assertClassHasAttribute('typeOfBet', Bet::class);
         $this->assertClassHasAttribute('betOpened', Bet::class);
+        $this->assertClassHasAttribute('betResult', Bet::class);
     }
 
     public function getKernel(): KernelInterface
@@ -98,7 +99,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->openBet();
 
-        $this->assertTrue($bet->isOpen());
+        $this->assertTrue($bet->isBetOpened());
     }
 
     public function testBetClosed(): void
@@ -106,7 +107,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->closeBet();
 
-        $this->assertFalse($bet->isOpen());
+        $this->assertFalse($bet->isBetOpened());
     }
 
     public function testValidTypeOfBet(): void

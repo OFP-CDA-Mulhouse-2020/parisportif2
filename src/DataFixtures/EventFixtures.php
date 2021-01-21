@@ -2,6 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Sports\Basket\CharlotteHornets\CharlotteHornetsTeamFixtures;
+use App\DataFixtures\Sports\Basket\DetroitPistons\DetroitPistonsTeamFixtures;
+use App\DataFixtures\Sports\Football\Lyon\LyonTeamFixtures;
+use App\DataFixtures\Sports\Football\Strasbourg\StrasbourgTeamFixtures;
+use App\Entity\Sport;
 use DateTime;
 use App\Entity\Event;
 use App\DataFixtures\Sports\Basket\SportBasketFixtures;
@@ -9,24 +14,24 @@ use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Competition;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use PhpParser\Node\Stmt\ClassConst;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
 
+    public const EVENT_1 = 'football';
+    public const EVENT_2 = 'basket';
+
+
     public function setEventData(
-        string $reference,
         string $name,
         string $location,
         string $eventDateTime,
         string $eventTimeZone,
-        object $competition
-    ): object {
+        Sport $sport,
+        Competition $competition
+    ): Event {
         $event = new Event();
-
-        $sport = $this->getReference($reference);
 
         $event->setName($name)
             ->setLocation($location)
@@ -45,39 +50,44 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         // array_push($event, 'name', 'location', 'yyyy-mm-dd', 'Europe/Paris');
         $competition1 = $this->getReference(CompetitionFixtures::COMPETITION_LIGUE_1);
         $competition2  = $this->getReference(CompetitionFixtures::COMPETITION_NBA);
+        $sport1 = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
+        $sport2  = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        $teamFootball1  = $this->getReference(LyonTeamFixtures::TEAM_FOOTBALL_OL_LYON);
+        $teamFootball2  = $this->getReference(StrasbourgTeamFixtures::TEAM_FOOTBALL_RCS_ALSACE);
+        $teamBasket3  = $this->getReference(DetroitPistonsTeamFixtures::TEAM_BASKET_DETROIT_PISTONS);
+        $teamBasket4  = $this->getReference(CharlotteHornetsTeamFixtures::TEAM_BASKET_CHARLOTTE_HORNETS);
 
-        $events = array();
-
-        array_push(
-            $events,
-            $this->setEventData(
-                SportFootballFixtures::SPORT_FOOTBALL,
-                '34e journée',
-                'Parc Olympique Lyonnais',
-                '2021-04-25 21:00:00',
-                'Europe/Paris',
-                $competition1
-            )
-        );
-
-        array_push(
-            $events,
-            $this->setEventData(
-                SportBasketFixtures::SPORT_BASKET,
-                'finale',
-                'Little Caesars Arena, Detroit',
-                '2021-07-30 21:00:00',
-                'America/Detroit',
-                $competition2
-            )
+        $event1 = $this->setEventData(
+            '34e journée',
+            'Parc Olympique Lyonnais',
+            '2021-04-25 21:00:00',
+            'Europe/Paris',
+            $sport1,
+            $competition1
         );
 
 
+        $event2 = $this->setEventData(
+            'finale',
+            'Little Caesars Arena, Detroit',
+            '2021-07-30 21:00:00',
+            'America/Detroit',
+            $sport2,
+            $competition2
+        );
 
-        foreach ($events as $event) {
-            $manager->persist($event);
+
+        $event1->addTeam($teamFootball1);
+        $event1->addTeam($teamFootball2);
+        $event2->addTeam($teamBasket3);
+        $event2->addTeam($teamBasket4);
+
+            $manager->persist($event1);
+            $manager->persist($event2);
             $manager->flush();
-        }
+
+        $this->addReference(self::EVENT_1, $event1);
+        $this->addReference(self::EVENT_2, $event2);
     }
 
     public function getDependencies(): array
@@ -86,6 +96,10 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             SportFootballFixtures::class,
             SportBasketFixtures::class,
             CompetitionFixtures::class,
+            LyonTeamFixtures::class,
+            StrasbourgTeamFixtures::class,
+            DetroitPistonsTeamFixtures::class,
+            CharlotteHornetsTeamFixtures::class
         ];
     }
 }

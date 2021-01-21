@@ -6,6 +6,8 @@ use App\Repository\BetRepository;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,7 +20,7 @@ class Bet
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -66,6 +68,13 @@ class Bet
      */
     private ?Event $event;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private array $betResult = [];
+
+
+
 
     public function getId(): ?int
     {
@@ -96,7 +105,7 @@ class Bet
         return $this;
     }
 
-    public function isOpen(): ?bool
+    public function isBetOpened(): ?bool
     {
         return $this->betOpened;
     }
@@ -156,5 +165,25 @@ class Bet
         $this->event = $event;
 
         return $this;
+    }
+
+    public function getBetResult(): ?array
+    {
+        return $this->betResult;
+    }
+
+    public function setBetResult(array $betResult): self
+    {
+        $this->betResult = $betResult;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $betOpened
+     */
+    public function setBetOpened(bool $betOpened): void
+    {
+        $this->betOpened = $betOpened;
     }
 }

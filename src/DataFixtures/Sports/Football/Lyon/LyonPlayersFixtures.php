@@ -3,7 +3,6 @@
 // Football - l'Olympique Lyonnais
 namespace App\DataFixtures\Sports\Football\Lyon;
 
-use App\DataFixtures\Sports\Football\Lyon\LyonTeamFixtures;
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Player;
 use Doctrine\Bundle\FixturesBundle\Fixture;

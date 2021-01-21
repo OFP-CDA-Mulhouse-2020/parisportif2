@@ -21,7 +21,7 @@ class Event
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -80,7 +80,7 @@ class Event
      * @ORM\ManyToMany(targetEntity=Team::class, mappedBy="event")
      * @var Collection<int, Team>|null
      */
-    private ?collection $teams;
+    private ?Collection $teams;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="events")

@@ -15,9 +15,10 @@
 
         <tr>
                     <td class="" colspan="2">
-                        <p>  Strasbourg - Lyon</p>
-                        <p>{{ bet.betLimitTime|date("l d F - H:i")}}</p>
-                        <p> Ligue 1 Ubereats</p>
+                        <p>{{ bet.event.teams[0] }}<br>
+                        {{ bet.event.teams[1] }}<br>
+                        {{ bet.event.eventDateTime|date("l d F - H:i")}}<br>
+                         {{ bet.event.name }} - {{ bet.event.competition.name }}</p>
                     </td>
             {% for odds in bet.listOfOdds %}
                 <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>

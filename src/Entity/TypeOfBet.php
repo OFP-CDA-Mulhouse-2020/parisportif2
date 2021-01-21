@@ -16,7 +16,7 @@ class TypeOfBet
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -33,6 +33,11 @@ class TypeOfBet
      * )
      */
     private string $betType;
+
+    public function __toString()
+    {
+        return $this->getId() . ' - ' . $this->getBetType();
+    }
 
     public function getId(): ?int
     {

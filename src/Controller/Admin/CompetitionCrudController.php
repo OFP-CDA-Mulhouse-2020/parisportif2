@@ -21,7 +21,7 @@ class CompetitionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('id', 'ID')->onlyOnIndex(),
+            IdField::new('id', 'ID')->onlyOnIndex(),
             TextField::new('name'),
             DateTimeField::new('startAt'),
             DateTimeField::new('endAt'),

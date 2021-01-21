@@ -20,15 +20,13 @@ class PlayerCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IntegerField::new('id'),
+            IdField::new('id', 'ID')->onlyOnIndex(),
             TextField::new('lastName'),
             TextField::new('firstName'),
             IntegerField::new('ranking'),
             IntegerField::new('playerStatus'),
             AssociationField::new('sport'),
             AssociationField::new('team'),
-
-
         ];
     }
 }

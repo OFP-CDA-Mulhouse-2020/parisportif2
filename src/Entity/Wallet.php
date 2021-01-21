@@ -157,7 +157,7 @@ class Wallet
         return true;
     }
 
-    public function betPayment(float $amount, int $amountBetPaymentLastWeek): int
+    public function betPayment(float $amount, ?int $amountBetPaymentLastWeek): int
     {
         if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
             return 0;

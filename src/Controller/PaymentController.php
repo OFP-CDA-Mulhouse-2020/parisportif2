@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Payment;
+use App\Repository\BetRepository;
+use App\Repository\ItemRepository;
 use App\Repository\PaymentRepository;
 use App\Repository\TypeOfPaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,8 +42,9 @@ class PaymentController extends AbstractController
 
         //TODO : add website wallet
 
-        $sumOfLastPayment = $paymentRepository->findAmountOfLastWeek($wallet->getId(), $typeOfPayment->getId());
-        $walletStatus = $wallet->betPayment($sum, $sumOfLastPayment['amountOfLastWeek']);
+        $sumOfLastWeekPayment = $paymentRepository->findAmountOfLastWeek($wallet->getId(), $typeOfPayment->getId());
+
+        $walletStatus = $wallet->betPayment($sum, $sumOfLastWeekPayment['amountOfLastWeek']);
 
         if ($walletStatus === 0) {
             $this->addFlash('error', 'Limite de jeu hebdomadaire dépassée ! Misez moins ou patientez un petit peu !');
@@ -69,5 +74,69 @@ class PaymentController extends AbstractController
         }
 
         return $this->redirectToRoute('app');
+    }
+
+    /**
+     * @Route("app/cart/betpayment/{id}", name="app_cart_bet_payment")
+     */
+    public function validateBetToPayment(
+        int $id,
+        BetRepository $betRepository,
+        ItemRepository $itemRepository,
+        TypeOfPaymentRepository $typeOfPaymentRepository,
+        Request $request
+    ): Response {
+
+        $bet = $betRepository->find($id);
+        if ($bet->isBetOpened()) {
+            return new RedirectResponse($request->server->get('HTTP_REFERER'));
+        }
+
+        $user = $this->getUser();
+        $wallet = $user->getWallet();
+
+        $result = $bet->getBetResult();
+
+        $listOfItems = $itemRepository->findBy(['bet' => $bet->getId(), 'itemStatusId' => 1]);
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($listOfItems as $item) {
+            $expectedResult = $item->getExpectedBetResult();
+
+            if (in_array($expectedResult, $result)) {
+                $item->winItem();
+            } else {
+                $item->looseItem();
+            }
+
+                $sum = $item->calculateProfits();
+
+            if ($sum !== null) {
+                $payment = new Payment($sum);
+                $payment->setWallet($wallet);
+                $payment->setPaymentName('Gain sur ticket de pari n°');
+                $typeOfPayment = $typeOfPaymentRepository->findOneBy(
+                    [
+                    'typeOfPayment' => 'Internal Transfer Bet Earning'
+                    ]
+                );
+                $payment->setTypeOfPayment($typeOfPayment);
+
+                $walletStatus = $wallet->addMoney($sum);
+
+                if (!$walletStatus) {
+                    throw new \LogicException("Montant incorrect");
+                }
+                $payment->acceptPayment();
+
+                $entityManager->persist($wallet);
+                $entityManager->persist($payment);
+            }
+
+            $entityManager->persist($item);
+            $entityManager->flush();
+        }
+
+        return new RedirectResponse($request->server->get('HTTP_REFERER'));
     }
 }
