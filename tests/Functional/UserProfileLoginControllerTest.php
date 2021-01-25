@@ -14,7 +14,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $client->request('GET', '/app/user/profile/login');
+        $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -25,7 +25,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/login');
+        $crawler = $client->request('GET', '/app/profile/login');
 
         $this->assertSelectorTextContains('div.main h3', 'Mes identifiants');
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
@@ -39,7 +39,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/login');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $link = $crawler
@@ -63,7 +63,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/edit/mail');
+        $crawler = $client->request('GET', '/app/profile/edit/mail');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -75,7 +75,7 @@ class UserProfileLoginControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertResponseRedirects('/app/user/profile/login');
+        $this->assertResponseRedirects('/app/profile/login');
     }
 
 
@@ -86,7 +86,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/edit/mail');
+        $crawler = $client->request('GET', '/app/profile/edit/mail');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -109,7 +109,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/login');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $link = $crawler
@@ -135,7 +135,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/edit/password');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -149,7 +149,7 @@ class UserProfileLoginControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertResponseRedirects('/app/user/profile/login');
+        $this->assertResponseRedirects('/app/profile/login');
     }
 
     public function testUserProfileEditPasswordFailOldPassword(): void
@@ -159,7 +159,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/edit/password');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -183,7 +183,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/edit/password');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler

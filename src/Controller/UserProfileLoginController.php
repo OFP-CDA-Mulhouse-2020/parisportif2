@@ -14,12 +14,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @Route("/app/user", name="app_user")
+ * @Route("/app/profile", name="app_profile")
  */
 class UserProfileLoginController extends AbstractController
 {
     /**
-     * @Route("/profile/login", name="_profile_login")
+     * @Route("/login", name="_login")
      */
     public function userProfileLogin(UserInterface $user): Response
     {
@@ -34,7 +34,7 @@ class UserProfileLoginController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit/mail", name="_profile_edit_mail")
+     * @Route("/edit/mail", name="_edit_mail")
      */
     public function userProfileEditMail(
         Request $request,
@@ -53,7 +53,7 @@ class UserProfileLoginController extends AbstractController
 
             $this->addFlash('notice', 'Votre email a bien été changé !');
 
-            return $this->redirectToRoute('app_user_profile_login');
+            return $this->redirectToRoute('app_profile_login');
         }
 
         return $this->render('user_profile/login.html.twig', [
@@ -66,7 +66,7 @@ class UserProfileLoginController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit/password", name="_profile_edit_password")
+     * @Route("/edit/password", name="_edit_password")
      */
     public function userProfileEditPassword(
         Request $request,
@@ -96,7 +96,7 @@ class UserProfileLoginController extends AbstractController
 
                 $this->addFlash('notice', 'Votre mot de passe a bien été changé !');
 
-                return $this->redirectToRoute('app_user_profile_login');
+                return $this->redirectToRoute('app_profile_login');
             } else {
                 $formPassword->addError(new FormError('Ancien mot de passe incorrect'));
             }

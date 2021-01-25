@@ -13,7 +13,7 @@
 				{{ form_row(formIdentity.justificatif) }}
 				{{ form_row(formIdentity.valider) }} #}
 		{{form_end(formIdentity)}}
-			<a href="/app/user/profile/information" class="btn btn-danger"> <i class="fa fa-times" aria-hidden="true"></i>
+			<a href="/app/profile/information" class="btn btn-danger"> <i class="fa fa-times" aria-hidden="true"></i>
 		</a>
 
 	{% else %}
@@ -36,7 +36,7 @@
 
 	{% if editAddress %}
 		{{ form_widget(formAddress) }}
-		<a href="/app/user/profile/information" class="btn btn-danger">
+		<a href="/app/profile/information" class="btn btn-danger">
 			<i class="fa fa-times" aria-hidden="true"></i>
 		</a>
 		<button class="btn btn-success" type="submit">Valider</button>

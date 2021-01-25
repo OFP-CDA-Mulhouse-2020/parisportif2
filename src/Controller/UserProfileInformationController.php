@@ -14,12 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/app/user", name="app_user")
+ * @Route("/app/profile", name="app_profile")
  */
 class UserProfileInformationController extends AbstractController
 {
     /**
-     * @Route("/profile/information", name="_profile_information")
+     * @Route("/information", name="_information")
      */
     public function userProfileInformation(AddressRepository $addressRepository): Response
     {
@@ -39,7 +39,7 @@ class UserProfileInformationController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit/identity", name="_profile_edit_identity")
+     * @Route("/edit/identity", name="_edit_identity")
      */
     public function editUserProfileIdentity(
         Request $request,
@@ -86,7 +86,7 @@ class UserProfileInformationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('message', 'Votre identité à été modifiée avec succès !');
-            return $this->redirectToRoute('app_user_profile_information');
+            return $this->redirectToRoute('app_profile_information');
         }
 
         return $this->render('user_profile/information.html.twig', [
@@ -99,7 +99,7 @@ class UserProfileInformationController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit/address", name="_profile_edit_address")
+     * @Route("/edit/address", name="_edit_address")
      */
     public function editUserProfileAddress(AddressRepository $addressRepository, Request $request): Response
     {
@@ -116,7 +116,7 @@ class UserProfileInformationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('message', 'Votre adresse à été modifiée avec succès !');
-            return $this->redirectToRoute('app_user_profile_information');
+            return $this->redirectToRoute('app_profile_information');
         }
 
         return $this->render('user_profile/information.html.twig', [

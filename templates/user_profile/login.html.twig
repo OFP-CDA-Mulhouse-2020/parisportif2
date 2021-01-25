@@ -10,14 +10,14 @@
 
             {{ form_end(formMail) }}
 
-            <a href="/app/user/profile/login" class="btn btn-danger">
+            <a href="/app/profile/login" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </a>
         {% else %}
             <form action="">
 
         {{ form_row(formLogin.email, { 'attr':{'disabled':'disabled'} }) }}
-        <a href="/app/user/profile/edit/mail" class="btn btn-primary">
+        <a href="/app/profile/edit/mail" class="btn btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </a>
             </form>
@@ -29,7 +29,7 @@
 
             {{ form(formPassword) }}
 
-            <a href="/app/user/profile/login" class="btn btn-danger">
+            <a href="/app/profile/login" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </a>
 
@@ -37,7 +37,7 @@
             <form action="">
 
             {{ form_row(formLogin.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
-        <a href="/app/user/profile/edit/password" class="btn btn-primary">
+        <a href="/app/profile/edit/password" class="btn btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </a>
             </form>
