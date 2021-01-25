@@ -74,7 +74,7 @@ class WalletControllerTest extends WebTestCase
             ->eq(0)
             ->form();
 
-        $form['add_money[amount]'] = '30';
+        $form['add_money[amount]'] = '35';
 
         $client->submit($form);
 

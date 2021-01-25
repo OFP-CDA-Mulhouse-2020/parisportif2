@@ -44,7 +44,7 @@ class IdentityType extends AbstractType
 
             ->add('valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success loginForm_submit'
+                    'class' => 'btn btn-danger btn-block'
                 ]
             ]);
     }

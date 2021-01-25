@@ -21,41 +21,39 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/information", name="_information")
      */
-    public function userProfileInformation(AddressRepository $addressRepository): Response
+    public function getUserInformation(): Response
     {
         $user = $this->getUser();
-        $formIdentity = $this->createForm(IdentityType::class, $user);
+        $identityForm = $this->createForm(IdentityType::class, $user);
 
-        $address = $addressRepository->find($user->getAddress());
-        $formAddress = $this->createForm(AddressType::class, $address);
+        $address = $user->getAddress();
+        $addressForm = $this->createForm(AddressType::class, $address);
 
         return $this->render('user_profile/information.html.twig', [
             'user' => $user,
-            'formIdentity' => $formIdentity->createView(),
-            'formAddress' => $formAddress->createView(),
-            'editIdentity' => false,
-            'editAddress' => false,
+            'identityForm' => $identityForm->createView(),
+            'addressForm' => $addressForm->createView(),
+            'editedIdentity' => false,
+            'editedAddress' => false,
         ]);
     }
 
     /**
      * @Route("/edit/identity", name="_edit_identity")
      */
-    public function editUserProfileIdentity(
-        Request $request,
-        AddressRepository $addressRepository
-    ): Response {
+    public function editUserIdentity(Request $request): Response
+    {
 
         $user = $this->getUser();
-        $formIdentity = $this->createForm(IdentityType::class, $user);
+        $address = $user->getAddress();
 
-        $address = $addressRepository->find($user->getAddress());
-        $formAddress = $this->createForm(AddressType::class, $address);
-        $formIdentity->handleRequest($request);
+        $identityForm = $this->createForm(IdentityType::class, $user);
+        $addressForm = $this->createForm(AddressType::class, $address);
+        $identityForm->handleRequest($request);
 
-        if ($formIdentity->isSubmitted() && $formIdentity->isValid()) {
+        if ($identityForm->isSubmitted() && $identityForm->isValid()) {
             //On récupère le fichier transmit
-            $file = $formIdentity->get('justificatif')->getData();
+            $file = $identityForm->get('justificatif')->getData();
             if ($file) {
                 // On récupère le nom du fichier
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -71,7 +69,7 @@ class UserProfileInformationController extends AbstractController
                     );
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
-                    $formIdentity->addError(new FormError("Problème dans l\'envoi de la pièce-jointe"));
+                    $identityForm->addError(new FormError("Problème dans l\'envoi de la pièce-jointe"));
                 }
                 // Stockage du fichier dans la base de données
                 $idCard = new CardIdFile();
@@ -79,7 +77,7 @@ class UserProfileInformationController extends AbstractController
                 $idCard->setName($newFilename);
                 $user->setCardIdFile($idCard);
             } else {
-                $formIdentity->addError(new FormError("Vous devez fournir une pièce-jointe !"));
+                $identityForm->addError(new FormError("Vous devez fournir une pièce-jointe !"));
             }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -91,40 +89,40 @@ class UserProfileInformationController extends AbstractController
 
         return $this->render('user_profile/information.html.twig', [
             'user' => $user,
-            'formIdentity' => $formIdentity->createView(),
-            'formAddress' => $formAddress->createView(),
-            'editIdentity' => true,
-            'editAddress' => false,
+            'identityForm' => $identityForm->createView(),
+            'addressForm' => $addressForm->createView(),
+            'editedIdentity' => true,
+            'editedAddress' => false,
         ]);
     }
 
     /**
      * @Route("/edit/address", name="_edit_address")
      */
-    public function editUserProfileAddress(AddressRepository $addressRepository, Request $request): Response
+    public function editUserAddress(Request $request): Response
     {
         $user = $this->getUser();
-        $formIdentity = $this->createForm(IdentityType::class, $user);
+        $address = $user->getAddress();
 
-        $address = $addressRepository->find($user->getAddress());
-        $formAddress = $this->createForm(AddressType::class, $address);
-        $formAddress->handleRequest($request);
+        $identityForm = $this->createForm(IdentityType::class, $user);
+        $addressForm = $this->createForm(AddressType::class, $address);
+        $addressForm->handleRequest($request);
 
-        if ($formAddress->isSubmitted() && $formAddress->isValid()) {
+        if ($addressForm->isSubmitted() && $addressForm->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($address);
             $entityManager->flush();
 
-            $this->addFlash('message', 'Votre adresse à été modifiée avec succès !');
+            $this->addFlash('success', 'Votre adresse à été modifiée avec succès !');
             return $this->redirectToRoute('app_profile_information');
         }
 
         return $this->render('user_profile/information.html.twig', [
             'user' => $user,
-            'formIdentity' => $formIdentity->createView(),
-            'formAddress' => $formAddress->createView(),
-            'editIdentity' => false,
-            'editAddress' => true,
+            'identityForm' => $identityForm->createView(),
+            'addressForm' => $addressForm->createView(),
+            'editedIdentity' => false,
+            'editedAddress' => true,
         ]);
     }
 }

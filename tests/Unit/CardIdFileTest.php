@@ -14,7 +14,7 @@ class CardIdFileTest extends KernelTestCase
         $this->assertInstanceOf(CardIdFile::class, $cardIdFile);
         $this->assertClassHasAttribute('id', CardIdFile::class);
         $this->assertClassHasAttribute('name', CardIdFile::class);
-        $this->assertClassHasAttribute('isCardIdValid', CardIdFile::class);
+        $this->assertClassHasAttribute('valid', CardIdFile::class);
     }
 
     /************ Kernel ***************/
@@ -44,7 +44,7 @@ class CardIdFileTest extends KernelTestCase
     }
 
 
-    public function testinvalidNameCardId(): void
+    public function testInvalidNameCardId(): void
     {
         $cardIdFile = new CardIdFile();
         $cardIdFile->setName('hello');

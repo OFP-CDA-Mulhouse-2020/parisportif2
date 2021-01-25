@@ -4,53 +4,45 @@
 	<h3>Mes informations</h3>
 	<h4>Mon identité</h4>
 
-	{% if editIdentity %}
-		{{form_start(formIdentity, {"multipart":"true"})}}
-		{{ form_widget(formIdentity) }}
-		{# {{ form_row(formIdentity.lastName) }}
-				{{ form_row(formIdentity.firstName) }}
-				{{ form_row(formIdentity.birthDate) }}
-				{{ form_row(formIdentity.justificatif) }}
-				{{ form_row(formIdentity.valider) }} #}
-		{{form_end(formIdentity)}}
+	{% if editedIdentity %}
+		{{form_start(identityForm, {"multipart":"true"})}}
+			{{ form_widget(identityForm) }}
+		{{form_end(identityForm)}}
 			<a href="/app/profile/information" class="btn btn-danger"> <i class="fa fa-times" aria-hidden="true"></i>
 		</a>
 
 	{% else %}
 		<form class="" action="" method="post">
-			{{ form_row(formIdentity.lastName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(formIdentity.firstName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(formIdentity.birthDate, { 'attr':{'disabled':'disabled'} }) }}
-
-			<a href="edit/identity" class="btn btn-primary">
+			{{ form_row(identityForm.lastName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(identityForm.firstName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(identityForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}
+		</form>
+			<a href="/app/profile/edit/identity" class="btn btn-primary">
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
-		</form>
 	{% endif %}
 	<br><br>
-</form>
 
 <h4>Mon adresse</h4>
 
-<form class="" action="" method="post">
 
-	{% if editAddress %}
-		{{ form_widget(formAddress) }}
+	{% if editedAddress %}
+		{{ form(addressForm) }}
 		<a href="/app/profile/information" class="btn btn-danger">
 			<i class="fa fa-times" aria-hidden="true"></i>
 		</a>
-		<button class="btn btn-success" type="submit">Valider</button>
 
 	{% else %}
-		{{ form_row(formAddress.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
-		{{ form_row(formAddress.zipCode, { 'attr':{'disabled':'disabled'} }) }}
-		{{ form_row(formAddress.city, { 'attr':{'disabled':'disabled'} }) }}
-		{{ form_row(formAddress.country, { 'attr':{'disabled':'disabled'} }) }}
-
-		<a href="edit/address" class="btn btn-primary">
+		<form class="" action="" method="post">
+			{{ form_row(addressForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressForm.city, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressForm.country, { 'attr':{'disabled':'disabled'} }) }}
+		</form>
+		<a href="/app/profile/edit/address" class="btn btn-primary">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</a>
 	{% endif %}
 	<br><br>
 
-</form>{% endblock %}
+{% endblock %}

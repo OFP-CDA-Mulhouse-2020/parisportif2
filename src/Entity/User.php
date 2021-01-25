@@ -36,7 +36,7 @@ class User implements UserInterface
      * )
      * @Assert\Regex(
      *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     *  message="Nom : {{ value }} incorrect",
+     *  message="Nom incorrect",
      *  groups={"username", "register"}
      * )
      */
@@ -50,7 +50,7 @@ class User implements UserInterface
      * )
      * @Assert\Regex(
      *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     *  message="Prénom : {{ value }} incorrect",
+     *  message="Prénom incorrect",
      *  groups={"username", "register"}
      * )
      */
@@ -114,7 +114,7 @@ class User implements UserInterface
      * )
      * @Assert\LessThanOrEqual(
      *  value="+1 minutes",
-     *  message="Date de création incorrecte : {{ value }}",
+     *  message="Date de création incorrecte",
      *  groups={"createAt"}
      * )
      */
@@ -186,7 +186,7 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
      *  value="+1 minutes",
-     *  message="Date de suppression incorrecte : {{ value }}",
+     *  message="Date de suppression incorrecte",
      *  groups={"delete"}
      * )
      */

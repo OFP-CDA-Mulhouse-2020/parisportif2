@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\CardIdFileRepository;
+use App\Repository\BankAccountFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=CardIdFileRepository::class)
+ * @ORM\Entity(repositoryClass=BankAccountFileRepository::class)
  */
-class CardIdFile
+class BankAccountFile
 {
     /**
      * @ORM\Id
@@ -22,12 +22,12 @@ class CardIdFile
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(
      *  message="Nom vide",
-     *  groups={"cardIdFile"}
+     *  groups={"bankAccountFile"}
      * )
      * @Assert\Regex(
      *  pattern = "/([a-zA-Z0-9\s_\\.\-\(\):])+(.png|.jpeg|.jpg|.pdf)$/",
-     *  message="CardIdFile : {{ value }} incorrect",
-     *  groups={"cardIdFile"}
+     *  message="BankAccountFile : {{ value }} incorrect",
+     *  groups={"bankAccountFile"}
      * )
      */
     private string $name;
@@ -37,12 +37,10 @@ class CardIdFile
      * @Assert\Type(
      *  type="bool",
      *  message="{{ value }} n'est pas du type {{ type }}",
-     *  groups={"cardIdFile"}
+     *  groups={"bankAccountFile"}
      * )
      */
     private bool $valid = false;
-
-
 
     public function getId(): ?int
     {
