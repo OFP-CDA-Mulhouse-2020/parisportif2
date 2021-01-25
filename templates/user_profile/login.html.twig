@@ -2,13 +2,13 @@
 
 {% block main %}
 <h3>Mes identifiants</h3>
-        {% if editMail %}
-            {{ form_start(formMail) }}
+        {% if editedEmail %}
+            {{ form_start(emailForm) }}
 
-            {{ form_row(formMail.oldEmail, { 'value' : user.email })}}
-            {{ form_widget(formMail)}}
+            {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
+            {{ form_widget(emailForm)}}
 
-            {{ form_end(formMail) }}
+            {{ form_end(emailForm) }}
 
             <a href="/app/profile/login" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -16,8 +16,8 @@
         {% else %}
             <form action="">
 
-        {{ form_row(formLogin.email, { 'attr':{'disabled':'disabled'} }) }}
-        <a href="/app/profile/edit/mail" class="btn btn-primary">
+        {{ form_row(loginForm.email, { 'attr':{'disabled':'disabled'} }) }}
+        <a href="/app/profile/edit/email" class="btn btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </a>
             </form>
@@ -25,9 +25,9 @@
         {% endif %}
 
 
-        {% if editPassword %}
+        {% if editedPassword %}
 
-            {{ form(formPassword) }}
+            {{ form(passwordForm) }}
 
             <a href="/app/profile/login" class="btn btn-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -36,7 +36,7 @@
         {% else %}
             <form action="">
 
-            {{ form_row(formLogin.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
+            {{ form_row(loginForm.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
         <a href="/app/profile/edit/password" class="btn btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </a>

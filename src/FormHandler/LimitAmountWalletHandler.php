@@ -7,7 +7,7 @@ use App\Repository\WalletRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
-class WalletHandler
+class LimitAmountWalletHandler
 {
     private WalletRepository $walletRepository;
     private TypeOfPaymentRepository $typeOfPaymentRepository;

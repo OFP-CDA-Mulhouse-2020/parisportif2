@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserProfileLoginControllerTest extends WebTestCase
 {
-    public function testUserLoginResponse200(): void
+    public function testGetUserLoginResponse200(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -18,7 +18,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
-    public function testUserProfileLoginWithAllLabel(): void
+    public function testGetUserLoginWithAllLabel(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -32,7 +32,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
     }
 
-    public function testUserProfileEditMail(): void
+    public function testEditUserEmail(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -56,14 +56,14 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type="submit"]');
     }
 
-    public function testUserProfileEditMailSuccess(): void
+    public function testEditUserEmailSuccess(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/mail');
+        $crawler = $client->request('GET', '/app/profile/edit/email');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -79,14 +79,14 @@ class UserProfileLoginControllerTest extends WebTestCase
     }
 
 
-    public function testUserProfileEditMailFail(): void
+    public function testEditUserEmailFail(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/mail');
+        $crawler = $client->request('GET', '/app/profile/edit/email');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -102,7 +102,7 @@ class UserProfileLoginControllerTest extends WebTestCase
     }
 
 
-    public function testUserProfileEditPassword(): void
+    public function testEditUserPassword(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -128,7 +128,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type="submit"]');
     }
 
-    public function testUserProfileEditPasswordSuccess(): void
+    public function testEditUserPasswordSuccess(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -152,7 +152,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertResponseRedirects('/app/profile/login');
     }
 
-    public function testUserProfileEditPasswordFailOldPassword(): void
+    public function testEditUserPasswordFailWithOldPassword(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -176,7 +176,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Ancien mot de passe incorrect');
     }
 
-    public function testUserProfileEditPasswordFailNewPassword(): void
+    public function testEditUserPasswordFailWithNewPassword(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
