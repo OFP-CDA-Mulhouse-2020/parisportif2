@@ -54,7 +54,8 @@ class UserProfileInformationController extends AbstractController
 
         if ($identityForm->isSubmitted() && $identityForm->isValid()) {
             try {
-                $editedIdentityHandler->process($identityForm, $user);
+                $uploadDir = $this->getParameter('files_directory');
+                $editedIdentityHandler->process($identityForm, $user, $uploadDir);
                 $this->addFlash('message', 'Votre identité à été modifiée avec succès !');
                 return $this->redirectToRoute('app_profile_information');
             } catch (FileException $e) {
