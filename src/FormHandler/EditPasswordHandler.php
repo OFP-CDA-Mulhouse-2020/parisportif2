@@ -3,12 +3,8 @@
 namespace App\FormHandler;
 
 use App\Entity\User;
-use App\Factory\PaymentFactory;
-use App\Repository\TypeOfPaymentRepository;
 use App\Repository\UserRepository;
-use App\Repository\WalletRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
