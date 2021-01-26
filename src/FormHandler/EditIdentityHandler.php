@@ -2,16 +2,11 @@
 
 namespace App\FormHandler;
 
-use _HumbugBoxd1d863f2278d\Symfony\Component\Console\Exception\LogicException;
 use App\Entity\CardIdFile;
 use App\Entity\User;
-use App\Factory\PaymentFactory;
-use App\Repository\TypeOfPaymentRepository;
 use App\Repository\UserRepository;
-use App\Repository\WalletRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -21,21 +16,18 @@ class EditIdentityHandler
     private UserRepository $userRepository;
     private UserPasswordEncoderInterface $passwordEncoder;
     private EntityManagerInterface $entityManager;
-    private ContainerInterface $container;
 
     public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $entityManager,
-        ContainerInterface $container
+        EntityManagerInterface $entityManager
     ) {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
-        $this->container = $container;
     }
 
-    public function process(FormInterface $identityForm, User $user): void
+    public function process(FormInterface $identityForm, User $user, string $uploadDir): void
     {
         //On récupère le fichier transmit
         $file = $identityForm->get('justificatif')->getData();
@@ -47,10 +39,7 @@ class EditIdentityHandler
 
             try {
                 //Copie du fichier sur le serveur
-                $file->move(
-                    $this->container->getParameter('files_directory'),
-                    $newFilename
-                );
+                $file->move($uploadDir, $newFilename);
             } catch (FileException $e) {
                 // ... handle exception if something happens during file upload
                 throw new FileException();
