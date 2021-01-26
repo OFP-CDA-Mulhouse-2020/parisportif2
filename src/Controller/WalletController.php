@@ -6,7 +6,7 @@ use App\Form\AddMoneyType;
 use App\Form\WalletType;
 use App\Form\WithdrawMoneyType;
 use App\FormHandler\AddMoneyHandler;
-use App\FormHandler\WalletHandler;
+use App\FormHandler\LimitAmountWalletHandler;
 use App\FormHandler\WithdrawMoneyHandler;
 use App\Repository\PaymentRepository;
 use App\Repository\WalletRepository;
@@ -41,7 +41,7 @@ class WalletController extends AbstractController
      */
     public function addMoneyToWallet(
         Request $request,
-        AddMoneyHandler $addMoneyHandler
+        AddMoneyHandler $addedMoneyHandler
     ): Response {
         $user = $this->getUser();
         $wallet = $user->getWallet();
@@ -50,7 +50,7 @@ class WalletController extends AbstractController
 
         if ($addMoneyForm->isSubmitted() && $addMoneyForm->isValid()) {
             try {
-                $addMoneyHandler->process($addMoneyForm, $user);
+                $addedMoneyHandler->process($addMoneyForm, $user);
                 $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
             } catch (\LogicException $e) {
                 $addMoneyForm->addError(new FormError('La transaction a échouée'));
@@ -67,7 +67,7 @@ class WalletController extends AbstractController
      */
     public function withdrawMoneyFromWallet(
         Request $request,
-        WithdrawMoneyHandler $withdrawMoneyHandler
+        WithdrawMoneyHandler $withdrawalMoneyHandler
     ): Response {
         $user = $this->getUser();
         $wallet = $user->getWallet();
@@ -76,7 +76,7 @@ class WalletController extends AbstractController
 
         if ($withdrawMoneyForm->isSubmitted() && $withdrawMoneyForm->isValid()) {
             try {
-                $withdrawMoneyHandler->process($withdrawMoneyForm, $user);
+                $withdrawalMoneyHandler->process($withdrawMoneyForm, $user);
                 $this->addFlash('success', 'Votre versement a été réalisé avec succès !');
             } catch (\LogicException $e) {
                 $withdrawMoneyForm->addError(new FormError('Montant supérieur au solde disponible'));
@@ -110,7 +110,7 @@ class WalletController extends AbstractController
      */
     public function setLimitAmountPerWeekOfWallet(
         Request $request,
-        WalletHandler $walletHandler
+        LimitAmountWalletHandler $limitAmountWalletHandler
     ): Response {
         $user = $this->getUser();
         $wallet = $user->getWallet();
@@ -118,7 +118,7 @@ class WalletController extends AbstractController
         $walletForm->handleRequest($request);
 
         if ($walletForm->isSubmitted() && $walletForm->isValid()) {
-            $walletHandler->process($walletForm);
+            $limitAmountWalletHandler->process($walletForm);
             $this->addFlash('success', 'Votre limite de jeu a bien été changé !');
 
             return $this->redirectToRoute('app_wallet_limit-amount');

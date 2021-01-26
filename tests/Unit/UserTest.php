@@ -307,7 +307,7 @@ class UserTest extends KernelTestCase
     {
         $cardId = new CardIdFile();
         $cardId->setName('Carteidentite.jpeg');
-        $cardId->validateCardId();
+        $cardId->setValid(true);
 
         $user = new User();
         $user->setCardIdFile($cardId);

@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Address;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,13 +16,19 @@ class AddressType extends AbstractType
             ->add('addressNumberAndStreet')
             ->add('zipCode')
             ->add('city')
-            ->add('country');
+            ->add('country')
+            ->add('Valider', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-danger btn-block'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Address::class,
+            'validation_groups' => ['address'],
         ]);
     }
 }

@@ -107,4 +107,15 @@ User Profile et Home Page
 --
 18/01 Installation de easyAdmin et préparation présentation (daniel), fonctionnement du CRUD (ladji)
 
-19/01
+19/01 Rajout des entités dans easyAdmin (ladji), ajout/suppression des items au panier (daniel)
+
+20/01 Réalisation de la partie paiement (daniel), ajout/suppression des items au panier pour comprendre (ladji)
+
+21/01 Lien entre la validation du pari et le paiement (daniel), ajout/suppression des items au panier pour comprendre (ladji)
+
+22/01 Absent une partie de la journée (daniel), ajout/suppression des items au panier pour comprendre (ladji)
+
+--
+25/01 Refactorisation des méthodes trops longues dans user (daniel), ajout/suppression des items au panier pour comprendre (ladji)
+
+26/01

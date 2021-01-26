@@ -42,6 +42,12 @@ class BankAccount
      */
     private string $bicCode;
 
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccountFile::class, cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccountFile" , "bankAccount"})
+     */
+    private ?BankAccountFile $bankAccountFile;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,5 +94,17 @@ class BankAccount
         $bicCode ? $bankAccount->setBicCode($bicCode) : null;
 
         return $bankAccount;
+    }
+
+    public function getBankAccountFile(): ?BankAccountFile
+    {
+        return $this->bankAccountFile;
+    }
+
+    public function setBankAccountFile(?BankAccountFile $bankAccountFile): self
+    {
+        $this->bankAccountFile = $bankAccountFile;
+
+        return $this;
     }
 }

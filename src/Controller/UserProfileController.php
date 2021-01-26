@@ -18,12 +18,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 /**
- * @Route("/app/user", name="app_user")
+ * @Route("/app/profile", name="app_profile")
  */
 class UserProfileController extends AbstractController
 {
     /**
-     * @Route("/profile", name="_profile")
+     * @Route("", name="")
      */
     public function userProfile(): Response
     {
@@ -32,70 +32,8 @@ class UserProfileController extends AbstractController
         ]);
     }
 
-
-
-    // /**
-    //  * @Route("/profile/information", name="_profile_information")
-    //  */
-    // public function userProfileInformation(AddressRepository $addressRepository): Response
-    // {
-    //     $user = $this->getUser();
-    //     $formIdentity = $this->createForm(IdentityType::class, $user);
-
-    //     $address = $addressRepository->find($user->getAddress());
-    //     $formAddress = $this->createForm(AddressType::class, $address);
-
-    //     return $this->render('user_profile/information.html.twig', [
-    //         'user' => $user,
-    //         'formIdentity' => $formIdentity->createView(),
-    //         'formAddress' => $formAddress->createView(),
-    //         'editIdentity' => false,
-    //         'editAddress' => false,
-    //     ]);
-    // }
-
-    // /**
-    //  * @Route("/profile/edit/identity", name="_profile_edit_identity")
-    //  */
-    // public function userProfileEditIdentity(AddressRepository $addressRepository): Response
-    // {
-    //     $user = $this->getUser();
-    //     $formIdentity = $this->createForm(IdentityType::class, $user);
-
-    //     $address = $addressRepository->find($user->getAddress());
-    //     $formAddress = $this->createForm(AddressType::class, $address);
-
-    //     return $this->render('user_profile/information.html.twig', [
-    //         'user' => $user,
-    //         'formIdentity' => $formIdentity->createView(),
-    //         'formAddress' => $formAddress->createView(),
-    //         'editIdentity' => true,
-    //         'editAddress' => false,
-    //     ]);
-    // }
-
-    // /**
-    //  * @Route("/profile/edit/address", name="_profile_edit_address")
-    //  */
-    // public function userProfileEditAddress(AddressRepository $addressRepository): Response
-    // {
-    //     $user = $this->getUser();
-    //     $formIdentity = $this->createForm(IdentityType::class, $user);
-
-    //     $address = $addressRepository->find($user->getAddress());
-    //     $formAddress = $this->createForm(AddressType::class, $address);
-
-    //     return $this->render('user_profile/information.html.twig', [
-    //         'user' => $user,
-    //         'formIdentity' => $formIdentity->createView(),
-    //         'formAddress' => $formAddress->createView(),
-    //         'editIdentity' => false,
-    //         'editAddress' => true,
-    //     ]);
-    // }
-
     /**
-     * @Route("/profile/activation", name="_profile_activation")
+     * @Route("/activation", name="_activation")
      */
     public function userProfileActivation(UserInterface $user): Response
     {
@@ -106,7 +44,7 @@ class UserProfileController extends AbstractController
     }
 
     /**
-     * @Route("/profile/suspend", name="_profile_suspend")
+     * @Route("/suspend", name="_suspend")
      */
     public function userProfileSuspend(UserInterface $user): Response
     {

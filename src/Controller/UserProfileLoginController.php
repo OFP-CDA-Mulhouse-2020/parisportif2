@@ -5,109 +5,93 @@ namespace App\Controller;
 use App\Form\EditEmailType;
 use App\Form\LoginType;
 use App\Form\EditPasswordType;
+use App\FormHandler\EditPasswordHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @Route("/app/user", name="app_user")
+ * @Route("/app/profile", name="app_profile")
  */
 class UserProfileLoginController extends AbstractController
 {
     /**
-     * @Route("/profile/login", name="_profile_login")
+     * @Route("/login", name="_login")
      */
-    public function userProfileLogin(UserInterface $user): Response
+    public function getUserLogin(UserInterface $user): Response
     {
-        $formLogin = $this->createForm(LoginType::class, $user);
+        $loginForm = $this->createForm(LoginType::class, $user);
 
         return $this->render('user_profile/login.html.twig', [
             'user' => $user,
-            'formLogin' => $formLogin->createView(),
-            'editMail' => false,
-            'editPassword' => false,
+            'loginForm' => $loginForm->createView(),
+            'editedEmail' => false,
+            'editedPassword' => false,
         ]);
     }
 
     /**
-     * @Route("/profile/edit/mail", name="_profile_edit_mail")
+     * @Route("/edit/email", name="_edit_email")
      */
-    public function userProfileEditMail(
+    public function editUserMail(
         Request $request,
         UserInterface $user
     ): Response {
 
-        $formLogin = $this->createForm(LoginType::class, $user);
-        $formMail = $this->createForm(EditEmailType::class);
-        $formMail->handleRequest($request);
+        $loginForm = $this->createForm(LoginType::class, $user);
+        $emailForm = $this->createForm(EditEmailType::class);
+        $emailForm->handleRequest($request);
 
-        if ($formMail->isSubmitted() && $formMail->isValid()) {
+        if ($emailForm->isSubmitted() && $emailForm->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('notice', 'Votre email a bien été changé !');
-
-            return $this->redirectToRoute('app_user_profile_login');
+            return $this->redirectToRoute('app_profile_login');
         }
 
         return $this->render('user_profile/login.html.twig', [
             'user' => $user,
-            'formLogin' => $formLogin->createView(),
-            'formMail' => $formMail->createView(),
-            'editMail' => true,
-            'editPassword' => false,
+            'loginForm' => $loginForm->createView(),
+            'emailForm' => $emailForm->createView(),
+            'editedEmail' => true,
+            'editedPassword' => false,
         ]);
     }
 
     /**
-     * @Route("/profile/edit/password", name="_profile_edit_password")
+     * @Route("/edit/password", name="_edit_password")
      */
-    public function userProfileEditPassword(
+    public function editUserPassword(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder
+        EditPasswordHandler $editedPasswordHandler
     ): Response {
 
         $user = $this->getUser();
-        $formLogin = $this->createForm(LoginType::class, $user);
-        $formPassword = $this->createForm(EditPasswordType::class, $user);
-        $formPassword->handleRequest($request);
+        $loginForm = $this->createForm(LoginType::class, $user);
+        $passwordForm = $this->createForm(EditPasswordType::class, $user);
+        $passwordForm->handleRequest($request);
 
-        if ($formPassword->isSubmitted() && $formPassword->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $oldPassword = $request->request->get('edit_password')['oldPassword'];
-
-            // Si l'ancien mot de passe est bon
-            if ($passwordEncoder->isPasswordValid($user, $oldPassword)) {
-                $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $user,
-                        $user->getPlainPassword()
-                    )
-                );
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $this->addFlash('notice', 'Votre mot de passe a bien été changé !');
-
-                return $this->redirectToRoute('app_user_profile_login');
-            } else {
-                $formPassword->addError(new FormError('Ancien mot de passe incorrect'));
+        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            try {
+                $editedPasswordHandler->process($passwordForm, $user);
+                $this->addFlash('success', 'Votre mot de passe a bien été changé !');
+                return $this->redirectToRoute('app_profile_login');
+            } catch (\LogicException $e) {
+                $passwordForm->addError(new FormError('Ancien mot de passe incorrect'));
             }
         }
-
         return $this->render('user_profile/login.html.twig', [
             'user' => $user,
-            'formLogin' => $formLogin->createView(),
-            'formPassword' => $formPassword->createView(),
-            'editMail' => false,
-            'editPassword' => true,
+            'loginForm' => $loginForm->createView(),
+            'passwordForm' => $passwordForm->createView(),
+            'editedEmail' => false,
+            'editedPassword' => true,
         ]);
     }
 }

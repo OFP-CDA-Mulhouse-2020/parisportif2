@@ -24,4 +24,5 @@ db/*
 
 /.vscode/
 /.idea/
-/public/uploads/files/*
+public/uploads/files/*
+!public/uploads/files/.gitkeep

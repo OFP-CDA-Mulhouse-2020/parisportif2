@@ -14,7 +14,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $client->request('GET', '/app/user/profile');
+        $client->request('GET', '/app/profile');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -25,7 +25,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile');
+        $crawler = $client->request('GET', '/app/profile');
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertEquals(1, $crawler->filter('div.left-side-menu')->count());
@@ -53,7 +53,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/information');
+        $crawler = $client->request('GET', '/app/profile/information');
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertSelectorTextContains('div.main h3', 'Mes informations');
@@ -74,7 +74,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $client->request('GET', '/app/user/profile/activation');
+        $client->request('GET', '/app/profile/activation');
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertSelectorTextContains('div.main h4', 'Activation du compte');
@@ -89,7 +89,7 @@ class UserProfileControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/user/profile/suspend');
+        $crawler = $client->request('GET', '/app/profile/suspend');
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertSelectorTextContains('div.main h4', 'Description');
