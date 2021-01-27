@@ -4,6 +4,9 @@ namespace App\Tests\Functional;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Field\FileFormField;
+use Symfony\Component\DomCrawler\Form;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UserProfileInformationControllerTest extends WebTestCase
 {
@@ -82,11 +85,13 @@ class UserProfileInformationControllerTest extends WebTestCase
         $form['identity[lastName]'] = 'cda';
         $form['identity[firstName]'] = 'ladji';
         $form['identity[birthDate]'] = '1995-12-12';
-  //      $form['identity[justificatif]'] = 'ladji.cda@test.com';
+        /** @var FileFormField  $form['identity[justificatif]'] */
+        $form['identity[justificatif]']->upload('tests/Data/unknown.jpg');
 
-   //     $crawler = $client->submit($form);
+        /** @var Form  $form */
+        $client->submit($form);
 
-    //    $this->assertResponseRedirects('/app/profile/information');
+        $this->assertResponseRedirects('/app/profile/information');
     }
 
 
@@ -108,8 +113,11 @@ class UserProfileInformationControllerTest extends WebTestCase
         $form['identity[lastName]'] = 'cda';
         $form['identity[firstName]'] = 'ladji';
         $form['identity[birthDate]'] = '1995-12-12';
+        /** @var FileFormField  $form['identity[justificatif]'] */
+        $form['identity[justificatif]']->upload('');
 
-        $crawler = $client->submit($form);
+        /** @var Form  $form */
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'The file could not be found.');
     }
@@ -142,7 +150,7 @@ class UserProfileInformationControllerTest extends WebTestCase
         $this->assertSelectorExists('form button[type="submit"]');
     }
 
-    public function testEditUserSuccess(): void
+    public function testEditUserAddressSuccess(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -162,7 +170,7 @@ class UserProfileInformationControllerTest extends WebTestCase
         $form['address[city]'] = 'Paris';
         $form['address[country]'] = 'France';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertResponseRedirects('/app/profile/information');
     }
@@ -182,13 +190,13 @@ class UserProfileInformationControllerTest extends WebTestCase
             ->eq(1)
             ->form();
 
-        $client->submit($form);
-
         $form['address[addressNumberAndStreet]'] = '8 rue des champs';
-        $form['address[zipCode]'] = '2';
+        $form['address[zipCode]'] = '7';
         $form['address[city]'] = 'Paris';
         $form['address[country]'] = 'France';
 
-   //     $this->assertSelectorTextContains('', 'Code postal incorrect');
+        $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Code postal incorrect');
     }
 }
