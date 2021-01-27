@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CardIdFile;
+use App\Entity\User;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\FormHandler\EditIdentityHandler;
@@ -44,7 +45,7 @@ class UserProfileInformationController extends AbstractController
      */
     public function editUserIdentity(Request $request, EditIdentityHandler $editedIdentityHandler): Response
     {
-
+        /** @var User $user */
         $user = $this->getUser();
         $address = $user->getAddress();
 
@@ -54,11 +55,11 @@ class UserProfileInformationController extends AbstractController
 
         if ($identityForm->isSubmitted() && $identityForm->isValid()) {
             try {
-                $uploadDir = $this->getParameter('files_directory');
-                $editedIdentityHandler->process($identityForm, $user, $uploadDir);
+                // $uploadDir = $this->getParameter('files_directory');
+                $editedIdentityHandler->process($identityForm, $user);
                 $this->addFlash('message', 'Votre identité à été modifiée avec succès !');
                 return $this->redirectToRoute('app_profile_information');
-            } catch (FileException $e) {
+            } catch (\RuntimeException $e) {
                 $identityForm->addError(new FormError("Problème dans l\'envoi de la pièce-jointe"));
             } catch (\LogicException $e) {
                 $identityForm->addError(new FormError("Vous devez fournir une pièce-jointe !"));

@@ -2,53 +2,45 @@
 
 namespace App\FormHandler;
 
-use App\Entity\CardIdFile;
 use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Factory\CardIdFileFactory;
+use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class EditIdentityHandler
 {
-    private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $passwordEncoder;
     private EntityManagerInterface $entityManager;
+    private FileUploaderService $fileUploader;
 
     public function __construct(
-        UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        FileUploaderService $fileUploader
     ) {
-        $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
+        $this->fileUploader = $fileUploader;
     }
 
-    public function process(FormInterface $identityForm, User $user, string $uploadDir): void
+    public function process(FormInterface $identityForm, User $user): void
     {
         //On récupère le fichier transmit
+        /** @var UploadedFile|null $file */
         $file = $identityForm->get('justificatif')->getData();
         if ($file) {
-            // On récupère le nom du fichier
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            // On génère un nouveau nom de fichier
-            $newFilename = uniqid() . '.' . $file->guessExtension();
+            //upload du fichier
+            $newFilename = $this->fileUploader->upload($file);
+            $oldCardIdFile = $user->getCardIdFile();
 
-            try {
-                //Copie du fichier sur le serveur
-                $file->move($uploadDir, $newFilename);
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-                throw new FileException();
+            //suppression de l'ancien CardId en Database et dans le repertoire Upload
+            if ($oldCardIdFile) {
+                $this->fileUploader->delete($oldCardIdFile->getName());
+                $this->entityManager->remove($oldCardIdFile);
             }
-            // Stockage du fichier dans la base de données
-            $idCard = new CardIdFile();
+            //création de l'entité CardIdFile
+            $cardIdFile = CardIdFileFactory::makeCardIdFile($newFilename);
             //mise à jour du nom du fichier
-            $idCard->setName($newFilename);
-            $user->setCardIdFile($idCard);
+            $user->setCardIdFile($cardIdFile);
         } else {
             throw new \LogicException();
         }
