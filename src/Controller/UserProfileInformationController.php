@@ -8,6 +8,7 @@ use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\FormHandler\EditIdentityHandler;
 use App\Repository\AddressRepository;
+use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -78,7 +79,7 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/edit/address", name="_edit_address")
      */
-    public function editUserAddress(Request $request): Response
+    public function editUserAddress(Request $request, DatabaseService $databaseService): Response
     {
         $user = $this->getUser();
         $address = $user->getAddress();
@@ -88,9 +89,11 @@ class UserProfileInformationController extends AbstractController
         $addressForm->handleRequest($request);
 
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($address);
-            $entityManager->flush();
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($address);
+//            $entityManager->flush();
+              $databaseService->saveToDatabase($address);
+
 
             $this->addFlash('success', 'Votre adresse à été modifiée avec succès !');
             return $this->redirectToRoute('app_profile_information');

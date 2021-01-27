@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Controller;
+namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class DatabaseService
 {
+    private object $entityManager;
 
-
-    public function saveToDatabase(mixed $data): void
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        // $entityManager = $this->getDoctrine()->getManager();
-        // $entityManager->persist($data);
-        // $entityManager->flush();
+        $this->entityManager = $entityManager;
+    }
+
+    public function saveToDatabase(object $data): void
+    {
+        $this->entityManager->persist($data);
+        $this->entityManager->flush();
     }
 }

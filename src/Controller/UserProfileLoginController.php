@@ -6,6 +6,7 @@ use App\Form\EditEmailType;
 use App\Form\LoginType;
 use App\Form\EditPasswordType;
 use App\FormHandler\EditPasswordHandler;
+use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +51,9 @@ class UserProfileLoginController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+//            $databaseService->saveToDatabase($user);
+
+
 
             $this->addFlash('notice', 'Votre email a bien été changé !');
             return $this->redirectToRoute('app_profile_login');
