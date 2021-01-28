@@ -4,6 +4,7 @@ namespace App\FormHandler;
 
 use App\Repository\TypeOfPaymentRepository;
 use App\Repository\WalletRepository;
+use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -11,22 +12,22 @@ class LimitAmountWalletHandler
 {
     private WalletRepository $walletRepository;
     private TypeOfPaymentRepository $typeOfPaymentRepository;
-    private EntityManagerInterface $entityManager;
+    private DatabaseService $databaseService;
 
     public function __construct(
         WalletRepository $walletRepository,
         TypeOfPaymentRepository $typeOfPaymentRepository,
-        EntityManagerInterface $entityManager
+        DatabaseService $databaseService
     ) {
         $this->walletRepository = $walletRepository;
         $this->typeOfPaymentRepository = $typeOfPaymentRepository;
-        $this->entityManager = $entityManager;
+        $this->databaseService = $databaseService;
     }
 
     public function process(FormInterface $walletForm): void
     {
         $walletData = $walletForm->getData();
-        $this->entityManager->persist($walletData);
-        $this->entityManager->flush();
+
+        $this->databaseService->saveToDatabase($walletData);
     }
 }

@@ -1,47 +1,47 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
 {% block main %}
-<h3>Mes identifiants</h3>
-        {% if editedEmail %}
-            {{ form_start(emailForm) }}
+    <h3>Mes identifiants</h3>
+    {% if editedEmail %}
+        {{ form_start(emailForm) }}
 
-            {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
-            {{ form_widget(emailForm)}}
+        {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
+        {{ form_widget(emailForm)}}
 
-            {{ form_end(emailForm) }}
+        {{ form_end(emailForm) }}
 
-            <a href="/app/profile/login" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-        {% else %}
-            <form action="">
-
-        {{ form_row(loginForm.email, { 'attr':{'disabled':'disabled'} }) }}
-        <a href="/app/profile/edit/email" class="btn btn-primary">
-            <i class="fa fa-edit" aria-hidden="true"></i>
+        <a href="/app/profile/login" class="btn btn-danger">
+            <i class="fa fa-times" aria-hidden="true"></i>
         </a>
-            </form>
+    {% else %}
+        <form action="">
 
-        {% endif %}
-
-
-        {% if editedPassword %}
-
-            {{ form(passwordForm) }}
-
-            <a href="/app/profile/login" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
+            {{ form_row(loginForm.email, { 'attr':{'disabled':'disabled'} }) }}
+            <a href="/app/profile/edit/email" class="btn btn-primary">
+                <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
+        </form>
 
-        {% else %}
-            <form action="">
+    {% endif %}
+
+
+    {% if editedPassword %}
+
+        {{ form(passwordForm) }}
+
+        <a href="/app/profile/login" class="btn btn-danger">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+
+    {% else %}
+        <form action="">
 
             {{ form_row(loginForm.plainPassword, { 'attr':{'disabled':'disabled'}, 'value':'123456789' }) }}
-        <a href="/app/profile/edit/password" class="btn btn-primary">
-            <i class="fa fa-edit" aria-hidden="true"></i>
-        </a>
-            </form>
+            <a href="/app/profile/edit/password" class="btn btn-primary">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+            </a>
+        </form>
 
-        {% endif %}
+    {% endif %}
 
 {% endblock %}

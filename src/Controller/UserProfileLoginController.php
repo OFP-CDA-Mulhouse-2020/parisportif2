@@ -6,6 +6,7 @@ use App\Form\EditEmailType;
 use App\Form\LoginType;
 use App\Form\EditPasswordType;
 use App\FormHandler\EditPasswordHandler;
+use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,21 +36,25 @@ class UserProfileLoginController extends AbstractController
 
     /**
      * @Route("/edit/email", name="_edit_email")
+     * @param Request $request
+     * @param DatabaseService $databaseService
+     * @return Response
      */
     public function editUserMail(
         Request $request,
-        UserInterface $user
+        DatabaseService $databaseService
     ): Response {
-
+        $user = $this->getUser();
         $loginForm = $this->createForm(LoginType::class, $user);
         $emailForm = $this->createForm(EditEmailType::class);
         $emailForm->handleRequest($request);
 
         if ($emailForm->isSubmitted() && $emailForm->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $newEmail = $emailForm->getData()->getEmail();
+            $user->setEmail($newEmail);
+            $databaseService->saveToDatabase($user);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+
 
             $this->addFlash('notice', 'Votre email a bien été changé !');
             return $this->redirectToRoute('app_profile_login');

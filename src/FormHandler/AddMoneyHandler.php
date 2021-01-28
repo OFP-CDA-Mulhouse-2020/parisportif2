@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Factory\PaymentFactory;
 use App\Repository\TypeOfPaymentRepository;
 use App\Repository\WalletRepository;
+use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -14,15 +15,16 @@ class AddMoneyHandler
     private WalletRepository $walletRepository;
     private TypeOfPaymentRepository $typeOfPaymentRepository;
     private EntityManagerInterface $entityManager;
+    private DatabaseService $databaseService;
 
     public function __construct(
         WalletRepository $walletRepository,
         TypeOfPaymentRepository $typeOfPaymentRepository,
-        EntityManagerInterface $entityManager
+        DatabaseService $databaseService
     ) {
         $this->walletRepository = $walletRepository;
         $this->typeOfPaymentRepository = $typeOfPaymentRepository;
-        $this->entityManager = $entityManager;
+        $this->databaseService = $databaseService;
     }
 
     public function process(FormInterface $addMoneyForm, User $user): void
@@ -44,8 +46,7 @@ class AddMoneyHandler
 
             $payment->acceptPayment();
 
-            $this->entityManager->persist($payment);
-            $this->entityManager->flush();
+            $this->databaseService->saveToDatabase($payment);
         } else {
             throw new \LogicException();
         }

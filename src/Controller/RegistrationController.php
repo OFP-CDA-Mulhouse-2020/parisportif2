@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Security\LoginFormAuthenticator;
+use App\Service\DatabaseService;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,8 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         GuardAuthenticatorHandler $guardHandler,
-        LoginFormAuthenticator $authenticator
+        LoginFormAuthenticator $authenticator,
+        DatabaseService $databaseService
     ): Response {
 
         $user = new User();
@@ -41,9 +43,8 @@ class RegistrationController extends AbstractController
             $user->setCreateAt(new DateTime())
                 ->setRoles(['ROLE_USER']);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $databaseService->saveToDatabase($user);
+
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(

@@ -20,6 +20,13 @@ dbtest: ## Build the DB test, control the schema validity, load fixtures and che
 	php bin/console doctrine:schema:update -f --env=test
 	php bin/console doctrine:fixtures:load -n --env=test
 
+dbtest-local: ## Build the DB test, control the schema validity, load fixtures and check the migration status
+	symfony console cache:clear --env=test
+	symfony console doctrine:database:drop --if-exists -f --env=test
+	symfony console doctrine:database:create --env=test
+	symfony console doctrine:schema:update -f --env=test
+	symfony console doctrine:fixtures:load -n --env=test
+
 phpunit: ## Run PHPUnit
 	${CURDIR}/vendor/bin/simple-phpunit
 
@@ -39,6 +46,14 @@ dbdev: ## Build the DB, control the schema validity, load fixtures and check the
 	docker-compose exec php7.4 php bin/console doctrine:schema:create
 	docker-compose exec php7.4 php bin/console doctrine:schema:validate
 	docker-compose exec php7.4 php bin/console doctrine:fixtures:load -n
+
+dbdev-local: ## Build the DB, control the schema validity, load fixtures and check the migration status
+	symfony console doctrine:cache:clear-metadata
+	symfony console doctrine:database:create --if-not-exists
+	symfony console doctrine:schema:drop --force
+	symfony console doctrine:schema:create
+	symfony console doctrine:schema:validate
+	symfony console doctrine:fixtures:load -n
 
 cache-clear: ## Run cache:clear
 	docker-compose exec php7.4 php bin/console cache:clear
