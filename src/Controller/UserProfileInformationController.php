@@ -29,7 +29,7 @@ class UserProfileInformationController extends AbstractController
         $user = $this->getUser();
         $identityForm = $this->createForm(IdentityType::class, $user);
 
-        $address = $user->getAddress();((((((()))))))
+        $address = $user->getAddress();
         $addressForm = $this->createForm(AddressType::class, $address);
 
         return $this->render('user_profile/information.html.twig', [
@@ -89,9 +89,6 @@ class UserProfileInformationController extends AbstractController
         $addressForm->handleRequest($request);
 
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($address);
-//            $entityManager->flush();
               $databaseService->saveToDatabase($address);
 
 
