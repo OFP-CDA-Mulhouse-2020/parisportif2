@@ -28,13 +28,23 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         assert($event2 instanceof Event);
 
 
-        $bet = new Bet();
-        $bet->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
-        $bet->setListOfOdds([2.2, 1.5, 1.1]);
-        $bet->setTypeOfBet($typeOfBet1);
-        $bet->setEvent($event1);
-        $bet->openBet();
-        $manager->persist($bet);
+        $bet1 = new Bet();
+        $bet1->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
+        $bet1->setListOfOdds([2.2, 1.5, 1.1]);
+        $bet1->setTypeOfBet($typeOfBet1);
+        $bet1->setEvent($event1);
+        $bet1->openBet();
+        $manager->persist($bet1);
+
+        // bet basket
+        $bet2 = new Bet();
+        $bet2->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
+        $bet2->setListOfOdds([2, 1]);
+        $bet2->setTypeOfBet($typeOfBet2);
+        $bet2->setEvent($event2);
+        $bet2->openBet();
+
+        $manager->persist($bet2);
 
         $manager->flush();
     }
