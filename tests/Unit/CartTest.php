@@ -8,8 +8,10 @@ use App\Entity\Item;
 use App\Entity\Payment;
 use App\Entity\User;
 use App\Entity\Wallet;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CartTest extends KernelTestCase
 {
@@ -34,6 +36,7 @@ class CartTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($cart, null, $groups);
         //var_dump($violationList);
         return count($violationList);
@@ -69,6 +72,7 @@ class CartTest extends KernelTestCase
         $items = $cart->getItems();
         $this->assertEquals(3, count($items));
 
+        assert($items[2] instanceof Item);
         $cart->removeItem($items[2]);
         $items = $cart->getItems();
 
@@ -128,35 +132,5 @@ class CartTest extends KernelTestCase
         $user->setCart($cart);
         $cart->setUser($user);
         $this->assertInstanceOf(User::class, $cart->getUser());
-    }
-
-    public function testValidateCart(): void
-    {
-        $cart = new Cart();
-        $user = new User();
-        $wallet = new Wallet();
-        $user->setCart($cart);
-        $user->setWallet($wallet);
-        $cart->setUser($user);
-
-        $item = new Item(new Bet());
-        $item->isModifiedAmount(50);
-        $cart->addItem($item);
-
-        $result = $cart->validateCart();
-
-        $this->assertSame(50.00, $result->getSum());
-        $this->assertInstanceOf(Payment::class, $result);
-        $this->assertSame($cart->getItems(), $result->getItems());
-        $this->assertSame(0, $this->getViolationsCount($cart, ['cart']));
-    }
-
-    public function testNoValidateCart(): void
-    {
-        $cart = new Cart();
-
-        $result = $cart->validateCart();
-        $this->assertSame(null, $result);
-        $this->assertSame(0, $this->getViolationsCount($cart, ['cart']));
     }
 }

@@ -6,6 +6,7 @@ use App\Entity\BankAccount;
 use App\Entity\BankAccountFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BankAccountTest extends KernelTestCase
 {
@@ -36,6 +37,7 @@ class BankAccountTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($bankAccount, null, $groups);
 
         return count($violationList);

@@ -4,6 +4,7 @@
 // mdp : M1cdacda8
 namespace App\Tests\Functional;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -14,8 +15,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $client->request('GET', '/app');
 
         $this->assertResponseStatusCodeSame(200);
@@ -26,8 +30,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         $this->assertSelectorExists('header');
@@ -50,8 +57,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         // dropdown 1
@@ -67,9 +77,12 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
-        $crawler = $client->request('GET', '/app');
+
+        $client->request('GET', '/app');
 
         $this->assertSelectorExists('section#page-content');
 
@@ -89,8 +102,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         // Advertising -Insert-1
@@ -103,8 +119,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         $this->assertSelectorExists('div.nav-bet>div.accordion');
@@ -117,8 +136,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         // Carousel
@@ -132,8 +154,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         // Carousel
@@ -148,8 +173,11 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
+
         $crawler = $client->request('GET', '/app');
 
         $this->assertEquals(3, $crawler->filter('aside.aside-right section')->count());
@@ -165,9 +193,12 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
-        $crawler = $client->request('GET', '/app');
+
+        $client->request('GET', '/app');
 
         $this->assertSelectorTextContains('', 'Ticket de paris');
         $this->assertSelectorTextContains('', 'Ajouter des paris');
@@ -179,9 +210,12 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
-        $crawler = $client->request('GET', '/app');
+
+        $client->request('GET', '/app');
 
         $this->assertSelectorTextContains('', 'Chercher un pari');
         $this->assertSelectorExists('section.bet-search input[type="text"]');
@@ -193,9 +227,12 @@ class HomeControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
-        $crawler = $client->request('GET', '/app');
+
+        $client->request('GET', '/app');
 
         $this->assertSelectorExists('footer');
         $this->assertSelectorExists('.footer-content');

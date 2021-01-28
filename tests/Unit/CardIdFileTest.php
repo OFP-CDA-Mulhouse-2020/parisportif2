@@ -5,6 +5,7 @@ namespace App\Tests\Unit;
 use App\Entity\CardIdFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CardIdFileTest extends KernelTestCase
 {
@@ -31,6 +32,7 @@ class CardIdFileTest extends KernelTestCase
     {
         $kernel = $this->getKernel();
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($cardIdFile, null, $groups);
         return count($violationList);
     }

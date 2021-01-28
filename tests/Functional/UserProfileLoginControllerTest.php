@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -11,7 +12,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $client->request('GET', '/app/profile/login');
@@ -22,7 +25,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/login');
@@ -36,7 +41,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/login');
@@ -60,7 +67,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/email');
@@ -83,7 +92,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/email');
@@ -106,7 +117,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/login');
@@ -132,7 +145,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/password');
@@ -156,7 +171,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/password');
@@ -180,7 +197,9 @@ class UserProfileLoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/password');

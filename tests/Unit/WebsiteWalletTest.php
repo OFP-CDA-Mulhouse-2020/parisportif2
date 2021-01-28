@@ -5,6 +5,7 @@ namespace App\Tests\Unit;
 use App\Entity\WebsiteWallet;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class WebsiteWalletTest extends KernelTestCase
 {
@@ -14,9 +15,6 @@ class WebsiteWalletTest extends KernelTestCase
         $this->assertInstanceOf(WebsiteWallet::class, $websiteWallet);
         $this->assertClassHasAttribute('balance', WebsiteWallet::class);
     }
-
-
-
 
     /******************************** kernel ****************************** */
 
@@ -31,37 +29,12 @@ class WebsiteWalletTest extends KernelTestCase
     public function getViolationsCount(WebsiteWallet $websiteWallet, ?array $groups): int
     {
         $kernel = $this->getKernel();
-
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($websiteWallet, null, $groups);
 
         return count($violationList);
     }
-
-
-    // /**
-    //  * @dataProvider generateValidBalance
-    //  */
-
-    // public function testValidBalance(float $balance, $groups, $numberOfViolations)
-    // {
-    //     $websiteWallet = new WebsiteWallet();
-
-    //     $this->assertSame($numberOfViolations, $this->getViolationsCount($websiteWallet, $groups));
-    // }
-
-
-    // public function generateValidBalance(): array
-    // {
-    //     return [
-    //         [01222222222222, ['balance'], 0],
-    //         [56565, ['balance'], 0],
-    //         [5000, ['balance'], 0],
-
-    //     ];
-    // }
-
-
 
     /**
      * @dataProvider generateAddMoney
@@ -84,8 +57,6 @@ class WebsiteWalletTest extends KernelTestCase
             [-100001, null, 0],
         ];
     }
-
-
 
     /**
      * @dataProvider generateRemoveMoney

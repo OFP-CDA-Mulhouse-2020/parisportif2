@@ -3,6 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Entity\Payment;
+use App\Entity\User;
 use App\Repository\PaymentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,10 +14,12 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/wallet/balance');
+        $client->request('GET', '/app/wallet/balance');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -24,7 +27,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/balance');
@@ -39,10 +44,12 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/wallet/add-money');
+        $client->request('GET', '/app/wallet/add-money');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -50,7 +57,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/add-money');
@@ -65,7 +74,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/add-money');
@@ -85,10 +96,12 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/wallet/withdraw-money');
+        $client->request('GET', '/app/wallet/withdraw-money');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -96,7 +109,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/withdraw-money');
@@ -110,7 +125,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/withdraw-money');
@@ -130,6 +147,7 @@ class WalletControllerTest extends WebTestCase
     {
         static::createClient();
         $paymentRepository = static::$container->get(PaymentRepository::class);
+        assert($paymentRepository instanceof PaymentRepository);
 
         $payment = $paymentRepository->findOneBy(['sum' => 3500]);
 
@@ -140,7 +158,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/withdraw-money');
@@ -160,10 +180,12 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/wallet/limit-amount');
+        $client->request('GET', '/app/wallet/limit-amount');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -171,7 +193,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/limit-amount');
@@ -184,7 +208,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/limit-amount');
@@ -213,7 +239,9 @@ class WalletControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/limit-amount');
