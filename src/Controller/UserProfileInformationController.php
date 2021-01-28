@@ -89,8 +89,7 @@ class UserProfileInformationController extends AbstractController
         $addressForm->handleRequest($request);
 
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
-              $databaseService->saveToDatabase($address);
-
+            $databaseService->saveToDatabase($address);
 
             $this->addFlash('success', 'Votre adresse à été modifiée avec succès !');
             return $this->redirectToRoute('app_profile_information');

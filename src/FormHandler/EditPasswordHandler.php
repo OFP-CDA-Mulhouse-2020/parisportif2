@@ -4,6 +4,7 @@ namespace App\FormHandler;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -12,16 +13,15 @@ class EditPasswordHandler
 {
     private UserRepository $userRepository;
     private UserPasswordEncoderInterface $passwordEncoder;
-    private EntityManagerInterface $entityManager;
-
+    private DatabaseService $databaseService;
     public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $entityManager
+        DatabaseService $databaseService
     ) {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
-        $this->entityManager = $entityManager;
+        $this->databaseService = $databaseService;
     }
 
     public function process(FormInterface $passwordForm, User $user): void
@@ -37,8 +37,7 @@ class EditPasswordHandler
                     $user->getPlainPassword()
                 )
             );
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $this->databaseService->saveToDatabase($user);
         } else {
             throw new \LogicException();
         }
