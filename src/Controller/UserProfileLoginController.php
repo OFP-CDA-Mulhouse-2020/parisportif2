@@ -36,22 +36,23 @@ class UserProfileLoginController extends AbstractController
 
     /**
      * @Route("/edit/email", name="_edit_email")
+     * @param Request $request
+     * @param DatabaseService $databaseService
+     * @return Response
      */
     public function editUserMail(
         Request $request,
-        UserInterface $user
+        DatabaseService $databaseService
     ): Response {
-
+        $user = $this->getUser();
         $loginForm = $this->createForm(LoginType::class, $user);
         $emailForm = $this->createForm(EditEmailType::class);
         $emailForm->handleRequest($request);
 
         if ($emailForm->isSubmitted() && $emailForm->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-//            $databaseService->saveToDatabase($user);
+            $newEmail = $emailForm->getData()->getEmail();
+            $user->setEmail($newEmail);
+            $databaseService->saveToDatabase($user);
 
 
 

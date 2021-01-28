@@ -6,6 +6,7 @@
             {{ form_start(emailForm) }}
 
             {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
+            {{ form_row(emailForm.email)}}
             {{ form_widget(emailForm)}}
 
             {{ form_end(emailForm) }}
