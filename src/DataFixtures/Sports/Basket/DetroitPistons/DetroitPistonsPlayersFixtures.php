@@ -6,6 +6,8 @@ namespace App\DataFixtures\Sports\Basket\DetroitPistons;
 use App\DataFixtures\Sports\Basket\DetroitPistons\DetroitPistonsTeamFixtures;
 use App\DataFixtures\Sports\Basket\SportBasketFixtures;
 use App\Entity\Player;
+use App\Entity\Sport;
+use App\Entity\Team;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -18,6 +20,8 @@ class DetroitPistonsPlayersFixtures extends Fixture implements DependentFixtureI
 
         $team = $this->getReference(DetroitPistonsTeamFixtures::TEAM_BASKET_DETROIT_PISTONS);
         $sport = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        assert($team instanceof Team);
+        assert($sport instanceof Sport);
 
         $player->setFirstName($firstName)
             ->setLastName($lastName)

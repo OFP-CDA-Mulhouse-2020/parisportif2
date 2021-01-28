@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Payment;
 use App\Entity\TypeOfPayment;
+use App\Entity\Wallet;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -19,6 +20,11 @@ class PaymentFixtures extends Fixture implements DependentFixtureInterface
         $typeOfPayment2 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_2);
         $typeOfPayment3 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_3);
         $typeOfPayment4 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_4);
+        assert($wallet instanceof Wallet);
+        assert($typeOfPayment1 instanceof TypeOfPayment);
+        assert($typeOfPayment2 instanceof TypeOfPayment);
+        assert($typeOfPayment3 instanceof TypeOfPayment);
+        assert($typeOfPayment4 instanceof TypeOfPayment);
 
         $payment = new Payment(50);
         $payment->setPaymentName('Ajout de fonds')

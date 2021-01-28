@@ -3,6 +3,7 @@
 namespace App\DataFixtures\Sports\Football\Lyon;
 
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
+use App\Entity\Sport;
 use App\Entity\Team;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,6 +16,7 @@ class LyonTeamFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $sport = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
+        assert($sport instanceof Sport);
 
         $team = new Team();
         $team->setName("l'Olympique Lyonnais")

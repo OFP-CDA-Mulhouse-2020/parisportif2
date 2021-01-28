@@ -3,6 +3,7 @@
 namespace App\DataFixtures\Sports\Basket\DetroitPistons;
 
 use App\DataFixtures\Sports\Basket\SportBasketFixtures;
+use App\Entity\Sport;
 use App\Entity\Team;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,6 +16,7 @@ class DetroitPistonsTeamFixtures extends Fixture implements DependentFixtureInte
     public function load(ObjectManager $manager): void
     {
         $sport = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        assert($sport instanceof Sport);
 
         $team = new Team();
         $team->setName('Detroit Pistons')
