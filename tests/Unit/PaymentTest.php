@@ -8,6 +8,7 @@ use App\Entity\Wallet;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PaymentTest extends KernelTestCase
 {
@@ -45,6 +46,7 @@ class PaymentTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($payment, null, $groups);
 
         return count($violationList);

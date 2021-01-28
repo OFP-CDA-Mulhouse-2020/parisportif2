@@ -5,6 +5,7 @@ namespace App\Tests\Unit;
 use App\Entity\Player;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PlayerTest extends KernelTestCase
 {
@@ -34,6 +35,7 @@ class PlayerTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($data, null, $groups);
         return count($violationList);
     }

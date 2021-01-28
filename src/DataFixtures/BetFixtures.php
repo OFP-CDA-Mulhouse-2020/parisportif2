@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\Bet;
+use App\Entity\Event;
+use App\Entity\TypeOfBet;
 use DateInterval;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,6 +22,10 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $typeOfBet2 = $this->getReference(TypeOfBetFixtures::TYPE_OF_BET_2);
         $event1 = $this->getReference(EventFixtures::EVENT_1);
         $event2 = $this->getReference(EventFixtures::EVENT_2);
+        assert($typeOfBet1 instanceof TypeOfBet);
+        assert($typeOfBet2 instanceof TypeOfBet);
+        assert($event1 instanceof Event);
+        assert($event2 instanceof Event);
 
 
         $bet = new Bet();

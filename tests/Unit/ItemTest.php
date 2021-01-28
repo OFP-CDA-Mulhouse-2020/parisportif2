@@ -8,6 +8,7 @@ use App\Entity\Payment;
 use App\Entity\Wallet;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ItemTest extends KernelTestCase
 {
@@ -38,6 +39,7 @@ class ItemTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($item, null, $groups);
         //var_dump($violationList);
         return count($violationList);
@@ -225,25 +227,5 @@ class ItemTest extends KernelTestCase
 
         $item->calculateProfits();
         $this->assertSame(null, $item->calculateProfits());
-    }
-
-
-    public function testValidGeneratePayment(): void
-    {
-        $item = new Item(new Bet());
-        $item->isModifiedAmount(10);
-        $payment = new Payment(10);
-        $wallet = new Wallet();
-        $payment->setWallet($wallet);
-        $item->setPayment($payment);
-        $item->isModifiedRecordedOdds(2.22);
-
-        $item->winItem();
-
-        $result = $item->generatePayment();
-
-        $this->assertInstanceOf(Payment::class, $result);
-        $this->assertSame(22.2, $result->getSum());
-        $this->assertSame($item, $result->getItems()[0]);
     }
 }

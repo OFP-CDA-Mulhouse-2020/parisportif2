@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Address;
 use App\Entity\BankAccount;
 use App\Entity\User;
+use App\Entity\Wallet;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -43,6 +44,10 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $address = $this->getReference(AddressFixtures::ADDRESS_USER_2);
         $wallet = $this->getReference(WalletFixtures::WALLET_USER_2);
         $bankAccount = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_USER_2);
+        assert($address instanceof Address);
+        assert($wallet instanceof Wallet);
+        assert($bankAccount instanceof BankAccount);
+
 
         $user = new User();
         $user->setFirstName('ladji')

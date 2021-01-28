@@ -5,6 +5,7 @@ namespace App\Tests\Unit;
 use App\Entity\BankAccountFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BankAccountFileTest extends KernelTestCase
 {
@@ -31,6 +32,7 @@ class BankAccountFileTest extends KernelTestCase
     {
         $kernel = $this->getKernel();
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($bankAccountFile, null, $groups);
         return count($violationList);
     }

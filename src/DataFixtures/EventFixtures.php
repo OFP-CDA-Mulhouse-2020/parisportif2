@@ -7,6 +7,7 @@ use App\DataFixtures\Sports\Basket\DetroitPistons\DetroitPistonsTeamFixtures;
 use App\DataFixtures\Sports\Football\Lyon\LyonTeamFixtures;
 use App\DataFixtures\Sports\Football\Strasbourg\StrasbourgTeamFixtures;
 use App\Entity\Sport;
+use App\Entity\Team;
 use DateTime;
 use App\Entity\Event;
 use App\DataFixtures\Sports\Basket\SportBasketFixtures;
@@ -56,6 +57,14 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $teamFootball2  = $this->getReference(StrasbourgTeamFixtures::TEAM_FOOTBALL_RCS_ALSACE);
         $teamBasket3  = $this->getReference(DetroitPistonsTeamFixtures::TEAM_BASKET_DETROIT_PISTONS);
         $teamBasket4  = $this->getReference(CharlotteHornetsTeamFixtures::TEAM_BASKET_CHARLOTTE_HORNETS);
+        assert($competition1 instanceof Competition);
+        assert($competition2 instanceof Competition);
+        assert($sport1 instanceof Sport);
+        assert($sport2 instanceof Sport);
+        assert($teamFootball1 instanceof Team);
+        assert($teamFootball2 instanceof Team);
+        assert($teamBasket3 instanceof Team);
+        assert($teamBasket4 instanceof Team);
 
         $event1 = $this->setEventData(
             '34e journée',

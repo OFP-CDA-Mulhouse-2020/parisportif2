@@ -7,6 +7,7 @@ use App\Entity\TypeOfBet;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BetTest extends KernelTestCase
 {
@@ -35,6 +36,7 @@ class BetTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($bet, null, $groups);
         //var_dump($violationList);
         return count($violationList);

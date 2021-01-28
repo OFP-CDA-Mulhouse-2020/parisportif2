@@ -122,20 +122,4 @@ class Cart
 
         return $this;
     }
-
-    //Peut-être à mettre dans le contrôleur ???
-    public function validateCart(): ?Payment
-    {
-        if (count($this->items) > 0) {
-            $this->setSum();
-            $payment = new Payment($this->getSum());
-            $payment->setItems($this->items);
-
-            $userWallet = $this->user->getWallet();
-            $payment->setWallet($userWallet);
-
-            return $payment;
-        }
-        return null;
-    }
 }

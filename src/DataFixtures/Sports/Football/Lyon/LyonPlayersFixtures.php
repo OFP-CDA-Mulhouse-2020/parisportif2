@@ -5,6 +5,8 @@ namespace App\DataFixtures\Sports\Football\Lyon;
 
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Player;
+use App\Entity\Sport;
+use App\Entity\Team;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -17,6 +19,8 @@ class LyonPlayersFixtures extends Fixture implements DependentFixtureInterface
 
         $team = $this->getReference(LyonTeamFixtures::TEAM_FOOTBALL_OL_LYON);
         $sport = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
+        assert($team instanceof Team);
+        assert($sport instanceof Sport);
 
         $player->setFirstName($firstName)
             ->setLastName($lastName)

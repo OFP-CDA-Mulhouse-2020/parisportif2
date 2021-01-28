@@ -251,23 +251,4 @@ class Item
 
         return $profits;
     }
-
-    //Peut-être à mettre dans le contrôleur ???
-    public function generatePayment(): ?Payment
-    {
-        if ($this->itemStatusId === 2 || $this->itemStatusId === 4) {
-            $amount = $this->calculateProfits();
-            $payment = new Payment($amount);
-
-            $userWallet = $this->payment->getWallet();
-            $payment->setWallet($userWallet);
-
-            $arrayCollection  = new ArrayCollection();
-            $arrayCollection[] = $this;
-            $payment->setItems($arrayCollection);
-
-            return $payment;
-        }
-        return null;
-    }
 }

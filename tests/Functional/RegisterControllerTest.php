@@ -91,8 +91,8 @@ class RegisterControllerTest extends WebTestCase
     {
         static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
-
-        $user = $userRepository->findOneBy(['email' => 'daniel.cda@test.com']);
+        assert($userRepository instanceof UserRepository);
+        $user = $userRepository->findOneByEmail('daniel.cda@test.com');
 
         $this->assertInstanceOf(User::class, $user);
     }

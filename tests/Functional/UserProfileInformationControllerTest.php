@@ -2,6 +2,7 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\FileFormField;
@@ -14,7 +15,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $client->request('GET', '/app/profile/information');
@@ -25,7 +28,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/information');
@@ -45,7 +50,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/information');
@@ -71,7 +78,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/identity');
@@ -99,7 +108,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/identity');
@@ -127,7 +138,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/information');
@@ -154,7 +167,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/address');
@@ -179,7 +194,9 @@ class UserProfileInformationControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
         $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/profile/edit/address');

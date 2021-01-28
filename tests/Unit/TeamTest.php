@@ -7,6 +7,7 @@ use App\Entity\Sport;
 use App\Entity\Team;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TeamTest extends KernelTestCase
 {
@@ -35,6 +36,7 @@ class TeamTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($data, null, $groups);
         return count($violationList);
     }
