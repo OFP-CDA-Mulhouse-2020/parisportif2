@@ -2,12 +2,10 @@
 
 namespace App\FormHandler;
 
-use _HumbugBoxd1d863f2278d\Symfony\Component\Console\Exception\LogicException;
 use App\Entity\User;
 use App\Factory\BankAccountFileFactory;
 use App\Repository\TypeOfPaymentRepository;
 use App\Repository\WalletRepository;
-use App\Service\DatabaseService;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
