@@ -15,6 +15,8 @@ class BankAccountController extends AbstractController
 
     /**
      * @Route("/app/wallet/bank-account", name="app_wallet_bank-account")
+     * @param BankAccountRepository $bankAccountRepository
+     * @return Response
      */
     public function getBankAccountInformations(
         BankAccountRepository $bankAccountRepository

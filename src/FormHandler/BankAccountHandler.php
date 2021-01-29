@@ -29,8 +29,7 @@ class BankAccountHandler
         $bankAccountData = $bankAccountForm->getData();
 
         // TODO : Faire l'envoi de la pièce jointe
-//        $this->entityManager->persist($bankAccountData);
-//        $this->entityManager->flush();
-         $this->databaseService->saveToDatabase($bankAccountData);
+
+        $this->databaseService->saveToDatabase($bankAccountData);
     }
 }
