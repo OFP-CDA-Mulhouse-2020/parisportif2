@@ -2,7 +2,9 @@
 
 namespace App\FormHandler;
 
+use _HumbugBoxd1d863f2278d\Symfony\Component\Console\Exception\LogicException;
 use App\Entity\User;
+use App\Factory\BankAccountFileFactory;
 use App\Repository\TypeOfPaymentRepository;
 use App\Repository\WalletRepository;
 use App\Service\DatabaseService;
@@ -50,8 +52,13 @@ class BankAccountHandler
             }
 
             // Création de l'entité BankAccountFile
+            $newBankAccountFile = BankAccountFileFactory::makeBankAccountFile($newFilename);
+            // Mise à jour du nom du fichier
+            $user->getBankAccount()->setBankAccountFile($newBankAccountFile);
+        } else {
+            throw new \LogicException();
         }
-
-//        $this->databaseService->saveToDatabase($bankAccountData);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }
