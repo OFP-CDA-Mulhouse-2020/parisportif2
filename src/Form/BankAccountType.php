@@ -18,7 +18,7 @@ class BankAccountType extends AbstractType
         $builder
             ->add('ibanCode', TextType::class)
             ->add('bicCode', TextType::class)
-            ->add('justificatif', FileType::class, [
+            ->add('ribJustificatif', FileType::class, [
                 'mapped' => false,
                 'required' => false,
                 'empty_data' => 'Vous devez fournir un rib en pièce-jointe',

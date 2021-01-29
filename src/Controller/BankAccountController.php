@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\BankAccountType;
 use App\FormHandler\BankAccountHandler;
 use App\Repository\BankAccountRepository;
@@ -45,7 +46,7 @@ class BankAccountController extends AbstractController
         $bankAccountForm->handleRequest($request);
 
         if ($bankAccountForm->isSubmitted() && $bankAccountForm->isValid()) {
-            $bankAccountHandler->process($bankAccountForm);
+            $bankAccountHandler->process($bankAccountForm, $user);
             $this->addFlash('success', 'Vos coordonnées bancaires ont été mises à jour !');
 
             return $this->redirectToRoute('app_wallet_bank-account');
