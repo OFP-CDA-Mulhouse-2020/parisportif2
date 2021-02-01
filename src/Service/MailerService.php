@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 class MailerService
 {
@@ -19,7 +20,7 @@ class MailerService
     public function generateEmail(User $user): TemplatedEmail
     {
         return (new TemplatedEmail())
-            ->from('mailer@paris-sportifs.com')
+            ->from(new Address('mailer@paris-sportifs.com', 'Paris Sportifs Mail Bot'))
             ->to($user->getEmail())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')

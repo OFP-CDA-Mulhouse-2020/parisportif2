@@ -25,6 +25,7 @@
 
 		{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
 		{{ form_row(login_form.plainPassword, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
+		<a href="/reset-password" class="" >Mot de passe oublié ?</a>
 
 		<input
 		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -44,6 +45,9 @@
 	{{ form_row(login_form.Valider) }}
 
 	{{ form_end(login_form) }}
+
+
+	Pas encore de compte :  <a href="/register" class="btn btn-secondary" >Créer un compte</a>
 
 
 {% endblock %}
