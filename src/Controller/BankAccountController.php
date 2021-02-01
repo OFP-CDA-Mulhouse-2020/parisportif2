@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\BankAccountType;
 use App\FormHandler\BankAccountHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,6 +38,7 @@ class BankAccountController extends AbstractController
         Request $request,
         BankAccountHandler $bankAccountHandler
     ): Response {
+        /** @var User $user */
         $user = $this->getUser();
         $bankAccount = $user->getBankAccount();
         $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);

@@ -4,27 +4,20 @@ namespace App\FormHandler;
 
 use App\Entity\User;
 use App\Factory\BankAccountFileFactory;
-use App\Repository\TypeOfPaymentRepository;
-use App\Repository\WalletRepository;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BankAccountHandler
 {
-    private WalletRepository $walletRepository;
-    private TypeOfPaymentRepository $typeOfPaymentRepository;
     private EntityManagerInterface $entityManager;
     private FileUploaderService $fileUploader;
 
     public function __construct(
-        WalletRepository $walletRepository,
-        TypeOfPaymentRepository $typeOfPaymentRepository,
         EntityManagerInterface $entityManager,
         FileUploaderService $fileUploader
     ) {
-        $this->walletRepository = $walletRepository;
-        $this->typeOfPaymentRepository = $typeOfPaymentRepository;
         $this->entityManager = $entityManager;
         $this->fileUploader = $fileUploader;
     }
@@ -36,7 +29,9 @@ class BankAccountHandler
         // TODO : Faire l'envoi de la pièce jointe
 
 //        on récupère le fichier transmit
+        /** @var UploadedFile|null $file */
         $file = $bankAccountForm->get('ribJustificatif')->getData();
+
         if ($file) {
             //upload du nouveau fichier (rib)
             $newFilename = $this->fileUploader->upload($file);
@@ -48,7 +43,6 @@ class BankAccountHandler
                 $this->fileUploader->delete($oldBankAccountFile->getName());
                 $this->entityManager->remove($oldBankAccountFile);
             }
-
             // Création de l'entité BankAccountFile
             $newBankAccountFile = BankAccountFileFactory::makeBankAccountFile($newFilename);
             // Mise à jour du nom du fichier

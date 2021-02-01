@@ -27,7 +27,6 @@ class IdentityType extends AbstractType
             ->add('justificatif', FileType::class, [
                 'mapped' => false,
                 'required' => false,
-                'empty_data' => 'Vous devez fournir une pièce-jointe',
                 'constraints' => [
                     new File([
                         'maxSize' => '2M',
@@ -53,7 +52,7 @@ class IdentityType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'error_mapping' => [
-                'error_type_1' => 'Vous devez fournir un justificatif',
+                'error_type_1' => 'Vous devez fournir une pièce-jointe',
             ],
         ]);
     }

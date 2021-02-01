@@ -21,7 +21,6 @@ class BankAccountType extends AbstractType
             ->add('ribJustificatif', FileType::class, [
                 'mapped' => false,
                 'required' => false,
-                'empty_data' => 'Vous devez fournir un rib en pièce-jointe',
                 'constraints' => [
                     new File([
                         'maxSize' => '2M',
@@ -35,6 +34,7 @@ class BankAccountType extends AbstractType
                     ])
                 ],
             ])
+
             ->add('Valider', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success btn-block'
@@ -48,6 +48,9 @@ class BankAccountType extends AbstractType
         $resolver->setDefaults([
             'data_class' => BankAccount::class,
             'validation_groups' => ['bankAccount'],
+            'error_mapping' => [
+                'error_type_1' => 'Vous devez fournir un justificatif',
+            ],
         ]);
     }
 }

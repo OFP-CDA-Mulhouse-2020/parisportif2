@@ -5,6 +5,8 @@ namespace App\Tests\Functional;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Field\FileFormField;
+use Symfony\Component\DomCrawler\Form;
 
 class BankAccountControllerTest extends WebTestCase
 {
@@ -66,7 +68,12 @@ class BankAccountControllerTest extends WebTestCase
         $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
         $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
 
+        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
+        $form['bank_account[ribJustificatif]']->upload('tests/Data/rib.jpg');
+
+        /** @var Form  $form */
         $client->submit($form);
+
         $this->assertResponseRedirects('/app/wallet/bank-account');
     }
 
@@ -104,5 +111,64 @@ class BankAccountControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('', 'Cet IBAN n\'est pas valide.');
         $this->assertSelectorTextContains('', 'Ce code BIC n\'est pas valide.');
+    }
+
+    public function testBankAccountEditSuccess(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/wallet/bank-account/edit');
+        $this->assertResponseStatusCodeSame(200);
+
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
+        $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
+
+        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
+        $form['bank_account[ribJustificatif]']->upload('tests/Data/rib.jpg');
+
+        /** @var Form  $form */
+        $client->submit($form);
+
+        $this->assertResponseRedirects('/app/wallet/bank-account');
+    }
+
+
+    public function testBankAccountEditFail(): void
+    {
+        $client = static::createClient();
+        $userRepository = static::$container->get(UserRepository::class);
+        assert($userRepository instanceof UserRepository);
+        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+        assert($testUser instanceof User);
+        $client->loginUser($testUser);
+
+        $crawler = $client->request('GET', '/app/wallet/bank-account/edit');
+        $this->assertResponseStatusCodeSame(200);
+
+        $form = $crawler
+            ->filter('form')
+            ->eq(0)
+            ->form();
+
+        $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
+        $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
+
+        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
+        $form['bank_account[ribJustificatif]']->upload('');
+
+        /** @var Form  $form */
+        $client->submit($form);
+
+        $this->assertSelectorTextContains('', 'Vous devez fournir une pièce-jointe');
     }
 }
