@@ -130,7 +130,7 @@ class UserProfileInformationControllerTest extends WebTestCase
         /** @var Form  $form */
         $client->submit($form);
 
-        $this->assertSelectorTextContains('', 'The file could not be found.');
+        $this->assertSelectorTextContains('', 'Vous devez fournir une pièce-jointe');
     }
 
 

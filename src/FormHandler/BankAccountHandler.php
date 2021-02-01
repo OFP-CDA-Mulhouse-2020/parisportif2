@@ -2,35 +2,55 @@
 
 namespace App\FormHandler;
 
-use App\Repository\TypeOfPaymentRepository;
-use App\Repository\WalletRepository;
-use App\Service\DatabaseService;
+use App\Entity\User;
+use App\Factory\BankAccountFileFactory;
+use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BankAccountHandler
 {
-    private WalletRepository $walletRepository;
-    private TypeOfPaymentRepository $typeOfPaymentRepository;
-    private DatabaseService $databaseService;
+    private EntityManagerInterface $entityManager;
+    private FileUploaderService $fileUploader;
 
     public function __construct(
-        WalletRepository $walletRepository,
-        TypeOfPaymentRepository $typeOfPaymentRepository,
-        DatabaseService $databaseService
+        EntityManagerInterface $entityManager,
+        FileUploaderService $fileUploader
     ) {
-        $this->walletRepository = $walletRepository;
-        $this->typeOfPaymentRepository = $typeOfPaymentRepository;
-        $this->databaseService = $databaseService;
+        $this->entityManager = $entityManager;
+        $this->fileUploader = $fileUploader;
     }
 
-    public function process(FormInterface $bankAccountForm): void
+    public function process(FormInterface $bankAccountForm, User $user): void
     {
-        $bankAccountData = $bankAccountForm->getData();
+//        $bankAccountData = $bankAccountForm->getData();
 
         // TODO : Faire l'envoi de la pièce jointe
-//        $this->entityManager->persist($bankAccountData);
-//        $this->entityManager->flush();
-         $this->databaseService->saveToDatabase($bankAccountData);
+
+//        on récupère le fichier transmit
+        /** @var UploadedFile|null $file */
+        $file = $bankAccountForm->get('ribJustificatif')->getData();
+
+        if ($file) {
+            //upload du nouveau fichier (rib)
+            $newFilename = $this->fileUploader->upload($file);
+            // mise en mémoire de l'ancien fichier (rib)
+            $oldBankAccountFile = $user->getBankAccount()->getBankAccountFile();
+
+            // suppression de l'ancien RIB (bankAccountFile) dans la Database et le repertoire Upload
+            if ($oldBankAccountFile) {
+                $this->fileUploader->delete($oldBankAccountFile->getName());
+                $this->entityManager->remove($oldBankAccountFile);
+            }
+            // Création de l'entité BankAccountFile
+            $newBankAccountFile = BankAccountFileFactory::makeBankAccountFile($newFilename);
+            // Mise à jour du nom du fichier
+            $user->getBankAccount()->setBankAccountFile($newBankAccountFile);
+        } else {
+            throw new \LogicException();
+        }
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }
