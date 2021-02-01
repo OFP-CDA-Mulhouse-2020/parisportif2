@@ -6,7 +6,9 @@ use App\Entity\Cart;
 use App\Entity\Item;
 use App\Repository\BetRepository;
 use App\Repository\ItemRepository;
+use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -68,6 +70,34 @@ class CartController extends AbstractController
             $entityManager->persist($cart);
         }
         $entityManager->flush();
+
+        return $this->redirectToRoute('app');
+    }
+
+    /**
+     * @Route("app/cart/changeBetAmount/{itemId}", name="app_cart_change_amount")
+     */
+    public function changeBetAmount(
+        Request $request,
+        ItemRepository $itemRepository,
+        DatabaseService $databaseService,
+        int $itemId
+    ): Response {
+        $user = $this->getUser();
+        $cart = $user->getCart();
+
+        $newAmount = $request->request->get("change_amount");
+
+        // Récupération du pari (objet)
+        $item = $itemRepository->find($itemId);
+        //modification de la mise
+        $item->isModifiedAmount($newAmount);
+        //renvoie de l'objet dans le panier
+        $cart->addItem($item);
+        //calcul du total du panier
+        $cart->setSum();
+        //Enregistrement en base de données
+        $databaseService->saveToDatabase($item);
 
         return $this->redirectToRoute('app');
     }
