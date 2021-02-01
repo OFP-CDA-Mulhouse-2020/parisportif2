@@ -104,7 +104,7 @@ User Profile et Home Page
 
 15/01 Refactorisation, correction de code sur WalletController (daniel), fin formulaire d'édition de l'identité (ladji)
 
---
+---
 18/01 Installation de easyAdmin et préparation présentation (daniel), fonctionnement du CRUD (ladji)
 
 19/01 Rajout des entités dans easyAdmin (ladji), ajout/suppression des items au panier (daniel)
@@ -115,7 +115,18 @@ User Profile et Home Page
 
 22/01 Absent une partie de la journée (daniel), ajout/suppression des items au panier pour comprendre (ladji)
 
---
+---
 25/01 Refactorisation des méthodes trops longues dans user (daniel), ajout/suppression des items au panier pour comprendre (ladji)
 
-26/01
+26/01 Arrivé de mohamed sur le projet, présentation du projet, analyse du code pour voir ou implementer un service (tous)
+
+27/01 Mise en place du service saveToDB (ladji), mise en place service d'upload (daniel), analyse du code (mohamed)
+
+28/01 Code review phpstan level 7 (daniel), fin mise en place service (ladji), creation pages paris par sport (mohamed)
+
+29/01 Live coding Controller-Repository-Twig (tous), mise en place service email (daniel), rajout de l'upload sur le rib (ladji)
+
+---
+01/02 Mise en place du forgotten password (daniel), editer les items dans le panier (ladji), recupérer les competitions par sport (mohamed)
+
+02/02
