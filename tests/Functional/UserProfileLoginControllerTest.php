@@ -83,7 +83,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         $form['edit_email[email]'] = 'ladji.cda@test.com';
 
         $crawler = $client->submit($form);
-
+        $this->assertEmailCount(1);
         $this->assertResponseRedirects('/app/profile/login');
     }
 

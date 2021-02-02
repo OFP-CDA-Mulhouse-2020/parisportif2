@@ -51,7 +51,6 @@ class RegistrationController extends AbstractController
                 $user->getEmail()
             );
 
-
             $email = $mailerService->generateEmail($user);
 
             $email->subject('Bienvenue chez Paris Sportifs !')

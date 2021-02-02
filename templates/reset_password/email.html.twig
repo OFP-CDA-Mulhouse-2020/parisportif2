@@ -5,6 +5,6 @@
 
 <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
 
-<p>Ce lien expirera dans {{ tokenLifetime|date('g') }} heure(s).</p>
+<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} heure(s).</p>
 
 <p>L'équipe Paris Sportifs :)</p>

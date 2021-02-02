@@ -63,12 +63,12 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
-        if (!$this->canCheckEmail()) {
+        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
             return $this->redirectToRoute('app_forgot_password_request');
         }
 
         return $this->render('reset_password/check_email.html.twig', [
-            'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
+            'resetToken' => $resetToken,
         ]);
     }
 
@@ -97,6 +97,7 @@ class ResetPasswordController extends AbstractController
 
         try {
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
+            assert($user instanceof User);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash('reset_password_error', sprintf(
                 'There was a problem validating your reset request - %s',
@@ -143,7 +144,7 @@ class ResetPasswordController extends AbstractController
         ]);
 
         // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
+        //$this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
@@ -171,11 +172,13 @@ class ResetPasswordController extends AbstractController
             ->context([
                 'user' => $user,
                 'resetToken' => $resetToken,
-                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
             ])
         ;
 
         $mailerService->sendEmail($email);
+
+        // Store the token object in session for retrieval in check-email route.
+        $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('app_check_email');
     }
