@@ -53,4 +53,27 @@ class UserProfileController extends AbstractController
             'user' => $user,
         ]);
     }
+
+
+    /**
+     * @Route("/delete", name="_delete")
+     */
+    public function userProfileDelete(UserInterface $user): Response
+    {
+
+        // récupère mon utilisateur
+        $user = $this->getUser();
+        // prévenir que le compte va être fermé définitivement et autorisé à le faire
+        //si oui :
+//        le supprimer de la base de données(du moins accès et mot de passe, rib)
+
+//        si non :
+//        déconnecter l'utilisateur, et retourner à la page de login
+
+//        return $this->render('user_profile/suspend.html.twig', [
+//            'user' => $user,
+//        ]);
+
+        return new Response('Votre profil va être supprimer');
+    }
 }
