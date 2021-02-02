@@ -28,5 +28,10 @@
             </tr>
         {% endfor %}
 
+        {% for competition in listOfCompetition %}
+            <p>{{ competition.name }}</p><br/>
+            <p>{{ competition.startAt|date("l d F - H:i") }}</p><br/>
+            <p>{{ competition.endAt|date("l d F - H:i") }}</p>
+        {% endfor %}
         </tbody>
     </table>
