@@ -75,7 +75,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("app/cart/changeBetAmount/{itemId}", name="app_cart_change_amount")
+     * @Route("app/cart/changeBetAmount/{itemId}", name="app_cart_change_bet_amount")
      */
     public function changeBetAmount(
         Request $request,
@@ -88,16 +88,21 @@ class CartController extends AbstractController
 
         $newAmount = $request->request->get("change_amount");
 
+
+
         // Récupération du pari (objet)
         $item = $itemRepository->find($itemId);
         //modification de la mise
-        $item->isModifiedAmount($newAmount);
-        //renvoie de l'objet dans le panier
-        $cart->addItem($item);
+        $itemStatus = $item->isModifiedAmount($newAmount);
         //calcul du total du panier
         $cart->setSum();
+
+
+        if (!$itemStatus) {
+            $this->addFlash('error', 'Le montant est incorrect !');
+        }
         //Enregistrement en base de données
-        $databaseService->saveToDatabase($item);
+        $databaseService->saveToDatabase($cart);
 
         return $this->redirectToRoute('app');
     }

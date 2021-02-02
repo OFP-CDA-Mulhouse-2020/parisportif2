@@ -7,7 +7,8 @@
         <div class="row">
             <div class="col-10">
 
-                <p>{{ item.bet.event.teams[0] }}<br>
+                <p>
+                    {{ item.bet.event.teams[0] }}<br>
                     {{ item.bet.event.teams[1] }}<br>
                     {{ item.bet.event.eventDateTime|date("l d F - H:i")}}<br>
                     {{ item.bet.event.name }} - {{ item.bet.event.competition.name }}<br>
@@ -16,11 +17,10 @@
                 </p>
 
                 <form action="app/cart/changeBetAmount/{{ item.id }}" method="post">
-                    <label> Mise :</label>
+                    <label for ="change_amount"> Mise :</label>
                     <input type="number" value="{{ item.amount }}" name="change_amount"/>
 
                     <button type="submit" class="btn btn-primary">Valider</button>
-                    {#    <a class="btn btn-primary btn-md active" role="button" aria-pressed="true" href="app/cart/changeBetAmount">Valider</a>#}
 
                 </form>
             </div>
