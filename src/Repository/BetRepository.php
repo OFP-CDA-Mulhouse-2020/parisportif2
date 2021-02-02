@@ -47,4 +47,15 @@ class BetRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findBetBySport(string $sports): array
+    {
+        return $this->createQueryBuilder('bet')
+            ->leftJoin('bet.event', 'event')
+            ->leftJoin('event.sport', 'sport')
+            ->where('event.sport = sport')
+            ->where('sport.name = :sportName')
+            ->setParameter('sportName', $sports)
+            ->getQuery()
+            ->getResult();
+    }
 }

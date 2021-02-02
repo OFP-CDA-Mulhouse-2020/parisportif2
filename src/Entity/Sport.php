@@ -80,11 +80,19 @@ class Sport
      */
     private ?Collection $events;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Competition::class, mappedBy="sport")
+     * @var Collection<int, Competition>|null
+     */
+    private ?Collection $competitions;
+
+
 
 
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->competitions = new ArrayCollection();
     }
 
 
@@ -200,6 +208,36 @@ class Sport
             // set the owning side to null (unless already changed)
             if ($event->getSport() === $this) {
                 $event->setSport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Competition>|Competition[]
+     */
+    public function getCompetitions(): Collection
+    {
+        return $this->competitions;
+    }
+
+    public function addCompetition(Competition $competition): self
+    {
+        if (!$this->competitions->contains($competition)) {
+            $this->competitions[] = $competition;
+            $competition->setSport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetition(Competition $competition): self
+    {
+        if ($this->competitions->removeElement($competition)) {
+            // set the owning side to null (unless already changed)
+            if ($competition->getSport() === $this) {
+                $competition->setSport(null);
             }
         }
 
