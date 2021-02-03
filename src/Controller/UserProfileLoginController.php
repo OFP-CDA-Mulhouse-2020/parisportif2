@@ -2,23 +2,33 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\EditEmailType;
 use App\Form\LoginType;
 use App\Form\EditPasswordType;
+use App\FormHandler\EditEmailHandler;
 use App\FormHandler\EditPasswordHandler;
-use App\Service\DatabaseService;
+use App\Service\MailerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 /**
  * @Route("/app/profile", name="app_profile")
  */
 class UserProfileLoginController extends AbstractController
 {
+    private VerifyEmailHelperInterface $verifyEmailHelper;
+
+    public function __construct(VerifyEmailHelperInterface $verifyEmailHelper)
+    {
+        $this->verifyEmailHelper = $verifyEmailHelper;
+    }
+
     /**
      * @Route("/login", name="_login")
      */
@@ -36,27 +46,41 @@ class UserProfileLoginController extends AbstractController
 
     /**
      * @Route("/edit/email", name="_edit_email")
-     * @param Request $request
-     * @param DatabaseService $databaseService
-     * @return Response
      */
     public function editUserMail(
         Request $request,
-        DatabaseService $databaseService
+        EditEmailHandler $editEmailHandler,
+        MailerService $mailerService
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $loginForm = $this->createForm(LoginType::class, $user);
         $emailForm = $this->createForm(EditEmailType::class);
         $emailForm->handleRequest($request);
 
         if ($emailForm->isSubmitted() && $emailForm->isValid()) {
-            $newEmail = $emailForm->getData()->getEmail();
-            $user->setEmail($newEmail);
-            $databaseService->saveToDatabase($user);
+            $editEmailHandler->process($emailForm, $user);
 
 
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'registration_confirmation_route',
+                (string)$user->getId(),
+                $user->getEmail()
+            );
 
-            $this->addFlash('notice', 'Votre email a bien été changé !');
+            $email = $mailerService->generateEmail($user);
+
+            $email->subject('Votre demande de modification d\'email chez Paris Sportifs')
+                ->htmlTemplate('email/edit_email_confirmation_email.html.twig');
+            $email->context([
+                'user' => $user,
+                'signedUrl' => $signatureComponents->getSignedUrl(),
+                'expiresAt' => $signatureComponents->getExpiresAt()
+            ]);
+
+            $mailerService->sendEmail($email);
+
+            $this->addFlash('notice', 'Votre email a bien été changé, un email de confirmation vous a été envoyé !');
             return $this->redirectToRoute('app_profile_login');
         }
 
@@ -78,6 +102,7 @@ class UserProfileLoginController extends AbstractController
     ): Response {
 
         $user = $this->getUser();
+        assert($user instanceof User);
         $loginForm = $this->createForm(LoginType::class, $user);
         $passwordForm = $this->createForm(EditPasswordType::class, $user);
         $passwordForm->handleRequest($request);

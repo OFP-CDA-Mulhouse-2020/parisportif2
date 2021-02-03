@@ -1,0 +1,10 @@
+<h2>Bonjour {{user.firstName}} {{user.lastname}} !</h2>
+<h4>Votre demande de changement de mot de passe chez Paris Sportifs</h4>
+
+<p>Pour changer votre mot de passe, veuillez cliquer sur le lien suivant : </p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} heure(s).</p>
+
+<p>L'équipe Paris Sportifs :)</p>
