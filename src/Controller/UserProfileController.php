@@ -55,6 +55,57 @@ class UserProfileController extends AbstractController
         ]);
     }
 
+//    /**
+//     * @Route("/suspend/process", name="_suspend")
+//     */
+//    public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
+//    {
+        $user = $this->getUser();
+//        dd($request->request->get('suspendType'));
+//
+//        if (!$request->request->get('suspendType')) {
+//            return $this->render('user_profile/suspend.html.twig', [
+//                'user' => $user,
+//            ]);
+//        }
+//
+//        $user->deactivate();
+//        $user->suspend();
+//
+//        $databaseService->saveToDatabase($user);
+//        $machin = $request->request->get('suspendType');
+//        switch ($request->request->get('suspendType')) {
+//            case "1":
+//                $this->container->get('security.token_storage')->setToken(null);
+//                $user->deactivate();
+//                $user->suspend();
+//
+//                $databaseService->saveToDatabase($user);
+//
+//                $this->addFlash('success_delete_user', 'Votre compte utilisateur a bien été supprimé !');
+//                return $this->redirectToRoute('app_login');
+//                break;
+//            case "2":
+//                $this->container->get('security.token_storage')->setToken(null);
+//                $user->deactivate();
+//                $user->suspend();
+//
+//                $databaseService->saveToDatabase($user);
+//
+//                $this->addFlash(
+//                    'success_delete_user',
+//                    'Votre compte est suspendu jusqu\'au ' . $user->getSuspendedAt()
+//                    . 'hello'
+//                );
+//                return $this->redirectToRoute('app_login');
+//                break;
+//            default:
+//                return $this->render('user_profile/suspend.html.twig', [
+//                    'user' => $user,
+//                ]);
+//        }
+//    }
+
 
     /**
      * @Route("/delete", name="_delete")
