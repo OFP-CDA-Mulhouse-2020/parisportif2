@@ -65,7 +65,7 @@ class UserProfileLoginController extends AbstractController
             $signatureComponents = $this->verifyEmailHelper->generateSignature(
                 'registration_confirmation_route',
                 (string)$user->getId(),
-                $user->getEmail()
+                (string)$user->getEmail()
             );
 
             $email = $mailerService->generateEmail($user);

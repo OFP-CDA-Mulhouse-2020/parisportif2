@@ -2,7 +2,9 @@
 
 namespace App\FormHandler;
 
+use App\Entity\TypeOfPayment;
 use App\Entity\User;
+use App\Entity\Wallet;
 use App\Factory\PaymentFactory;
 use App\Repository\TypeOfPaymentRepository;
 use App\Repository\WalletRepository;
@@ -29,6 +31,7 @@ class WithdrawMoneyHandler
     public function process(FormInterface $withdrawMoneyForm, User $user): void
     {
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
         $withdrawMoneyData = $withdrawMoneyForm->getData();
         $paymentStatus = $wallet->withdrawMoney($withdrawMoneyData['amount']);
 
@@ -38,6 +41,9 @@ class WithdrawMoneyHandler
                     'typeOfPayment' => 'External Transfer Withdraw Money From Wallet'
                 ]
             );
+
+            assert($typeOfPayment instanceof TypeOfPayment);
+
             $payment = PaymentFactory::makePaymentFromWithdrawMoneyForm(
                 $withdrawMoneyData['amount'],
                 $wallet,

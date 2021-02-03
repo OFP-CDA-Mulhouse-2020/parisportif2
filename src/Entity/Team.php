@@ -27,7 +27,7 @@ class Team
      *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
      * )
      */
-    private string $name;
+    private string $name = '';
 
     /**
      * @ORM\Column(type="integer")
@@ -66,7 +66,7 @@ class Team
         $this->event = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -76,7 +76,7 @@ class Team
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -125,7 +125,7 @@ class Team
     /**
      * @return Collection<int, Event>|Event[]
      */
-    public function getEvent(): Collection
+    public function getEvent(): ?Collection
     {
         return $this->event;
     }
@@ -185,7 +185,7 @@ class Team
         return $this->sport;
     }
 
-    public function setSport(?Sport $sport): self
+    public function setSport(Sport $sport): self
     {
         $this->sport = $sport;
 

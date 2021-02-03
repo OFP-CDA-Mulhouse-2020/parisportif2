@@ -31,10 +31,23 @@ class CompetitionFixtures extends Fixture
     {
         $sport1 = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
         $sport2 = $this->getReference(SportBasketFixtures::SPORT_BASKET);
-        $competition1 = $this->setCompetitionData('Ligue 1 Ubereats', '2020-09-01 00:00:00', '2021-06-30 23:59:59', $sport1);
-        $competition2 = $this->setCompetitionData('NBA', '2020-10-01 00:00:00', '2021-07-31 23:59:59', $sport2);
+        assert($sport1 instanceof Sport);
+        assert($sport2 instanceof Sport);
 
-        /** @var TYPE_NAME $competition1 */
+        $competition1 = $this->setCompetitionData(
+            'Ligue 1 Ubereats',
+            '2020-09-01 00:00:00',
+            '2021-06-30 23:59:59',
+            $sport1
+        );
+        $competition2 = $this->setCompetitionData(
+            'NBA',
+            '2020-10-01 00:00:00',
+            '2021-07-31 23:59:59',
+            $sport2
+        );
+
+
         $manager->persist($competition1);
         $manager->persist($competition2);
         $manager->flush();
