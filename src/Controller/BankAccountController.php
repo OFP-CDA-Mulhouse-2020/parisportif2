@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BankAccount;
 use App\Entity\User;
 use App\Form\BankAccountType;
 use App\FormHandler\BankAccountHandler;
@@ -21,7 +22,10 @@ class BankAccountController extends AbstractController
     public function getBankAccountInformations(): Response
     {
         $user = $this->getUser();
+        assert($user instanceof User);
         $bankAccount = $user->getBankAccount();
+        assert($bankAccount instanceof BankAccount);
+
         $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
 
         return $this->render('wallet/bank-account.html.twig', [
@@ -38,9 +42,11 @@ class BankAccountController extends AbstractController
         Request $request,
         BankAccountHandler $bankAccountHandler
     ): Response {
-        /** @var User $user */
         $user = $this->getUser();
+        assert($user instanceof User);
         $bankAccount = $user->getBankAccount();
+        assert($bankAccount instanceof BankAccount);
+
         $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
         $bankAccountForm->handleRequest($request);
 

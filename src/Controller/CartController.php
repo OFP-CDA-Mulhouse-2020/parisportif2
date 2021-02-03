@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Bet;
 use App\Entity\Cart;
 use App\Entity\Item;
+use App\Entity\User;
 use App\Repository\BetRepository;
 use App\Repository\ItemRepository;
 use App\Service\DatabaseService;
@@ -20,14 +22,19 @@ class CartController extends AbstractController
     public function addItemToCart(int $betId, int $expectedResult, BetRepository $betRepository): Response
     {
         $user = $this->getUser();
+        assert($user instanceof User);
+
         if ($user->getCart() === null) {
             $cart = new Cart();
             $user->setCart($cart);
         }
 
         $cart = $user->getCart();
+        assert($cart instanceof Cart);
 
         $bet = $betRepository->find($betId);
+        assert($bet instanceof Bet);
+
         $odds = $bet->getListOfOdds()[$expectedResult];
 
         $item = new Item($bet);
@@ -53,9 +60,13 @@ class CartController extends AbstractController
     public function removeItemFromCart(int $itemId, ItemRepository $itemRepository): Response
     {
         $user = $this->getUser();
+        assert($user instanceof User);
         $cart = $user->getCart();
+        assert($cart instanceof Cart);
 
         $item = $itemRepository->find($itemId);
+        assert($item instanceof Item);
+
         $cart->removeItem($item);
         $cart->setSum();
 
@@ -84,19 +95,20 @@ class CartController extends AbstractController
         int $itemId
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $cart = $user->getCart();
+        assert($cart instanceof Cart);
 
         $newAmount = $request->request->get("change_amount");
 
-
-
         // Récupération du pari (objet)
         $item = $itemRepository->find($itemId);
+        assert($item instanceof Item);
+
         //modification de la mise
         $itemStatus = $item->isModifiedAmount($newAmount);
         //calcul du total du panier
         $cart->setSum();
-
 
         if (!$itemStatus) {
             $this->addFlash('error', 'Le montant est incorrect !');

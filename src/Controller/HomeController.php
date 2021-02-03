@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
+use App\Entity\User;
 use App\Repository\BetRepository;
 use App\Repository\PaymentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +20,11 @@ class HomeController extends AbstractController
         $listOfBet = $betRepository->findby(['betOpened' => true]);
 
         $user = $this->getUser();
+        assert($user instanceof User);
+
+        /** @var Cart|null $cart */
         $cart = $user->getCart();
+
         if ($cart) {
             $items = $cart->getItems();
         } else {

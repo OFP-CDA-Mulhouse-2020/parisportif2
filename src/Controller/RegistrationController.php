@@ -48,7 +48,7 @@ class RegistrationController extends AbstractController
             $signatureComponents = $this->verifyEmailHelper->generateSignature(
                 'registration_confirmation_route',
                 (string)$user->getId(),
-                $user->getEmail()
+                (string)$user->getEmail()
             );
 
             $email = $mailerService->generateEmail($user);
@@ -91,7 +91,7 @@ class RegistrationController extends AbstractController
             $this->verifyEmailHelper->validateEmailConfirmation(
                 $request->getUri(),
                 (string)$user->getId(),
-                $user->getEmail()
+                (string)$user->getEmail()
             );
         } catch (VerifyEmailExceptionInterface $e) {
             $this->addFlash('verify_email_error', $e->getReason());

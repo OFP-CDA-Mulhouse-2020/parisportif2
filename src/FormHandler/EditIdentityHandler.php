@@ -34,7 +34,9 @@ class EditIdentityHandler
 
             //suppression de l'ancien CardId en Database et dans le repertoire Upload
             if ($oldCardIdFile) {
-                $this->fileUploader->delete($oldCardIdFile->getName());
+                /** @var string $fileName */
+                $fileName = $oldCardIdFile->getName();
+                $this->fileUploader->delete($fileName);
                 $this->entityManager->remove($oldCardIdFile);
             }
             //création de l'entité CardIdFile

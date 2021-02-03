@@ -10,7 +10,7 @@ use Symfony\Component\Mime\Address;
 
 class MailerService
 {
-    private object $mailer;
+    private MailerInterface $mailer;
 
     public function __construct(MailerInterface $mailer)
     {
@@ -35,7 +35,6 @@ class MailerService
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            dd('test');
             throw new \RuntimeException();
         }
     }
