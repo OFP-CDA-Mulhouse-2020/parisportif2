@@ -17,8 +17,37 @@
     <br><br>
     <h4>Désactivation du compte</h4>
     Vous pouvez à tout moment décider de fermer votre compte. Cette décision est irréversible.
-    <a href="delete" class="btn btn-danger">
-            Désactiver mon compte
-        </a>
+    {#        <a href="delete" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter">#}
+    {#            Désactiver mon compte#}
+    {#        </a>#}
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Désactiver mon compte
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {# **** Title ****#}
+                    <h5 class="modal-title" id="staticBackdropLabel">Suppression de votre compte utilisateur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {# **** Content ****#}
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    {#                    <button type="button" class="btn btn-primary">Understood</button>#}
+                    <a href="delete" class="btn btn-danger">
+                        Confirmer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

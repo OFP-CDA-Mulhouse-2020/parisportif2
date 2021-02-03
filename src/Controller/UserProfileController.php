@@ -8,6 +8,7 @@ use App\Form\LoginType;
 use App\Form\EditPasswordType;
 use App\Repository\AddressRepository;
 use App\Security\LoginFormAuthenticator;
+use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,23 +58,26 @@ class UserProfileController extends AbstractController
 
     /**
      * @Route("/delete", name="_delete")
+     * @param DatabaseService $databaseService
+     * @return Response
      */
-    public function userProfileDelete(UserInterface $user): Response
+    public function userProfileDelete(DatabaseService $databaseService): Response
     {
-
         // récupère mon utilisateur
         $user = $this->getUser();
-        // prévenir que le compte va être fermé définitivement et autorisé à le faire
-        //si oui :
-//        le supprimer de la base de données(du moins accès et mot de passe, rib)
+        // suppression du token, on redirigera automatiquement(peu importe la redirection) vers la page de login
+        $this->container->get('security.token_storage')->setToken(null);
+        // désactivation de l'utilisateur
+        $user->deactivate();
+        // suppression de l'utilisateur
+        $user->delete();
+        // l'utilisateur perd son ROLE_USER
+        $user->setRoles([]);
+        // envoie des modifications vers la bdd
+        $databaseService->saveToDatabase($user);
 
-//        si non :
-//        déconnecter l'utilisateur, et retourner à la page de login
+        $this->addFlash('success_delete_user', 'Votre compte utilisateur a bien été supprimé !');
 
-//        return $this->render('user_profile/suspend.html.twig', [
-//            'user' => $user,
-//        ]);
-
-        return new Response('Votre profil va être supprimer');
+        return $this->redirectToRoute('app_login');
     }
 }
