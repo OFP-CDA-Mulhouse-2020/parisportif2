@@ -21,7 +21,7 @@
                          {{ bet.event.name }} - {{ bet.event.competition.name }}</p>
                     </td>
             {% for odds in bet.listOfOdds %}
-                <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
+                <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
             {% endfor %}
 
 
