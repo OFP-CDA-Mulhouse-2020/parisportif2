@@ -23,7 +23,7 @@ class SportController extends AbstractController
         SportRepository $sportRepository
     ): Response {
 
-        $listOfBet = $betRepository->findBetBySport($typeOfSport);
+        $listOfBet = $betRepository->findSimpleBetBySport($typeOfSport);
         $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
         $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
         $user = $this->getUser();

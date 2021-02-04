@@ -17,7 +17,7 @@ class HomeController extends AbstractController
      */
     public function homePage(BetRepository $betRepository): Response
     {
-        $listOfBet = $betRepository->findby(['betOpened' => true]);
+        $listOfBet = $betRepository->findby(['betOpened' => true, 'typeOfBet' => 2]);
 
         $user = $this->getUser();
         assert($user instanceof User);

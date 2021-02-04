@@ -1,15 +1,15 @@
 <div class="col-sm-12 bet-board card p-2">
 
-    <h4>{{ sport }} - {{ event.competition.name }} - {{ event.name }} :</h4>
+    <h5>{{ sport }} - {{ event.competition.name }} - {{ event.name }} :</h5>
     <h5>{{ event.teams[0] }} - {{ event.teams[1] }}</h5>
-    <h5>{{ event.eventDateTime|date("l d F - H:i") }} {{ event.eventTimeZone }} - Lieu : {{ event.location }}</h5>
+    <h6>{{ event.eventDateTime|date("l d F - H:i") }} {{ event.eventTimeZone }} - Lieu : {{ event.location }}</h6>
 
     <hr>
-    Paris Simple
+    <h4>Paris Simple</h4>
+
     <table class="table table-hover fw-bold">
         <thead>
         <tr>
-            <th scope="col" colspan="2">Match</th>
             <th class="text-center" scope="col">Equipe à domicile</th>
                 <th class="text-center" scope="col">Match Nul</th>
             <th class="text-center" scope="col">Equipe à l'extérieur</th>
@@ -21,14 +21,11 @@
 
             {%  if bet.typeOfBet.betType == '1N2' %}
             <tr>
-                <td class="" colspan="2">
-                    <p>{{ bet.event.teams[0] }} - {{ bet.event.teams[1] }}<br>
-                        {{ bet.event.eventDateTime|date("l d F - H:i")}}<br>
-                        {{ bet.event.name }} - {{ bet.event.competition.name }}<br>
-                        <a href="/app/sport/{{ sport|lower }}/event/{{ bet.event.id }}/">+ de paris</a></p>
-                </td>
+
                 {% for odds in bet.listOfOdds %}
-                    <td class="text-center"><a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
+                    <td class="text-center">
+                        <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a>
+                    </td>
                 {% endfor %}
 
 
@@ -40,17 +37,34 @@
     </table>
 
     <hr>
-    Under/Over
+    <h4>Under/Over</h4>
 
     {% for bet in listOfBet %}
 
-    {%  if bet.typeOfBet.betType == '1N2' %}
+    {%  if bet.typeOfBet.betType == 'over-under' %}
         {{ bet.id }}
     {% endif %}
 
     {% endfor %}
 
     <hr>
-    Score Exact
+    <h4>Score Exact</h4>
+
+    {% for bet in listOfBet %}
+
+
+
+        {%  if bet.typeOfBet.betType == 'score exact' %}
+        <div class="row">
+            {% for odds in bet.listOfOdds %}
+                <div class="col-4">
+                    <a type="button" class="btn btn-secondary btn-lg" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[0] }} - {{ odds[1] }}</a>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+    {% endfor %}
 
 </div>

@@ -117,7 +117,7 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet7 = new Bet();
         $bet7->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet7->setListOfOdds([3,2, 1.1]);
-        $bet7->setTypeOfBet($typeOfBet2);
+        $bet7->setTypeOfBet($typeOfBet1);
         $bet7->setEvent($event7);
         $bet7->openBet();
         $manager->persist($bet7);
