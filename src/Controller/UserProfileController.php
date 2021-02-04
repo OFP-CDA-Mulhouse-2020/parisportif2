@@ -56,53 +56,49 @@ class UserProfileController extends AbstractController
     }
 
 //    /**
-//     * @Route("/suspend/process", name="_suspend")
+//     * @Route("/suspend/process", name="_suspend_process")
 //     */
 //    public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
 //    {
-        $user = $this->getUser();
-//        dd($request->request->get('suspendType'));
+//        $user = $this->getUser();
 //
-//        if (!$request->request->get('suspendType')) {
-//            return $this->render('user_profile/suspend.html.twig', [
-//                'user' => $user,
-//            ]);
-//        }
-//
-//        $user->deactivate();
-//        $user->suspend();
-//
-//        $databaseService->saveToDatabase($user);
-//        $machin = $request->request->get('suspendType');
 //        switch ($request->request->get('suspendType')) {
 //            case "1":
-//                $this->container->get('security.token_storage')->setToken(null);
+//                $user->setRoles([]);
 //                $user->deactivate();
 //                $user->suspend();
 //
 //                $databaseService->saveToDatabase($user);
-//
-//                $this->addFlash('success_delete_user', 'Votre compte utilisateur a bien été supprimé !');
+//                $this->container->get('security.token_storage')->setToken(null);
+//                $this->addFlash(
+//                    'success_delete_user',
+//                    'L\'accès à votre compte est suspendu jusqu\'au: (au moins 7 jours) '
+//                );
 //                return $this->redirectToRoute('app_login');
 //                break;
 //            case "2":
-//                $this->container->get('security.token_storage')->setToken(null);
+//                $user->setRoles([]);
 //                $user->deactivate();
 //                $user->suspend();
 //
 //                $databaseService->saveToDatabase($user);
+//                $this->container->get('security.token_storage')->setToken(null);
 //
 //                $this->addFlash(
 //                    'success_delete_user',
-//                    'Votre compte est suspendu jusqu\'au ' . $user->getSuspendedAt()
-//                    . 'hello'
+//                    'Votre compte est suspendu jusqu\'au: (3ans) '
 //                );
 //                return $this->redirectToRoute('app_login');
 //                break;
 //            default:
+//                $this->addFlash(
+//                    'suspend_field_empty',
+//                    'Vous devez remplir les champs du formulaire'
+//                );
 //                return $this->render('user_profile/suspend.html.twig', [
 //                    'user' => $user,
 //                ]);
+//                return $this->redirectToRoute('app_profile_suspend');
 //        }
 //    }
 

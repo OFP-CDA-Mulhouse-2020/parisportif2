@@ -160,13 +160,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\LessThanOrEqual(
+     * @Assert\GreaterThanOrEqual(
      *  value="+1 minutes",
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
      */
-    private ?DateTimeInterface $suspendedAt;
+    private ?DateTimeInterface $endSuspendAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -185,7 +185,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+1 minutes",
+     *  value="+7 days",
      *  message="Date de suppression incorrecte",
      *  groups={"delete"}
      * )
@@ -278,7 +278,7 @@ class User implements UserInterface
 
     public function getSuspendedAt(): ?DateTimeInterface
     {
-        return $this->suspendedAt;
+        return $this->endSuspendAt;
     }
 
     public function isDeleted(): ?bool
@@ -398,13 +398,13 @@ class User implements UserInterface
     /**
      * Set user suspended
      *
+     * @param DateTimeInterface $endSuspendAt
      * @return  self
      */
-    public function suspend(): self
+    public function endSuspend(DatetimeInterface $endSuspendAt): self
     {
         $this->suspended = true;
-        $this->suspendedAt = new DateTime();
-
+        $this->endSuspendAt = $endSuspendAt;
         return $this;
     }
 
@@ -416,7 +416,7 @@ class User implements UserInterface
     public function unsuspended(): self
     {
         $this->suspended = false;
-        $this->suspendedAt = null;
+        $this->endSuspendAt = null;
 
         return $this;
     }

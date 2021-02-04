@@ -204,7 +204,13 @@ class UserTest extends KernelTestCase
     public function suspendProvider(): array
     {
         return [
-            [(new User())->suspend(), ['suspend'], 0, true, new DateTime()],
+            [(new User())
+                ->endSuspend(DateTime::createFromFormat('Y-m-d', '2022-12-12')),
+                ['suspend'],
+                0,
+                true,
+                new DateTime()
+            ],
             [(new User())->unsuspended(), ['suspend'], 0, false, null],
         ];
     }
