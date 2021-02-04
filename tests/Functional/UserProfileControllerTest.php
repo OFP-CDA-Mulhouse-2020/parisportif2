@@ -88,7 +88,7 @@ class UserProfileControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('div.main h4', 'Activation du compte');
         $this->assertSelectorTextContains('div.main h4:nth-of-type(2)', 'Désactivation du compte');
-        $this->assertSelectorTextContains('div.main a', 'Désactiver mon compte');
+        $this->assertSelectorTextContains('div.main button', 'Désactiver mon compte');
     }
 
     public function testUserProfileSuspend(): void
