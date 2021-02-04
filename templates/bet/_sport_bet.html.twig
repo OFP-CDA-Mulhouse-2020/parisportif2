@@ -1,11 +1,14 @@
+<div class="col-sm-12 bet-board card p-2">
 
-    <h4>Football - Top du moment</h4>
+<h4>{{ sport }} - Top du moment</h4>
     <table class="table table-hover fw-bold">
         <thead>
         <tr>
             <th scope="col" colspan="2">Match</th>
             <th class="text-center" scope="col">Equipe à domicile</th>
+            {% if sport == 'Football' %}
             <th class="text-center" scope="col">Match Nul</th>
+            {% endif %}
             <th class="text-center" scope="col">Equipe à l'extérieur</th>
 
         </tr>
@@ -15,23 +18,18 @@
 
         <tr>
                     <td class="" colspan="2">
-                        <p>{{ bet.event.teams[0] }}<br>
-                        {{ bet.event.teams[1] }}<br>
+                        <p>{{ bet.event.teams[0] }} - {{ bet.event.teams[1] }}<br>
                         {{ bet.event.eventDateTime|date("l d F - H:i")}}<br>
-                         {{ bet.event.name }} - {{ bet.event.competition.name }}</p>
+                         {{ bet.event.name }} - {{ bet.event.competition.name }}<br>
+                        <a href="/app/sport/{{ sport|lower }}/event/{{ bet.event.id }}/">+ de paris</a></p>
                     </td>
             {% for odds in bet.listOfOdds %}
-                <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
+                <td class="text-center"><a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
             {% endfor %}
 
 
             </tr>
         {% endfor %}
-
-        {% for competition in listOfCompetition %}
-            <p>{{ competition.name }}</p><br/>
-            <p>{{ competition.startAt|date("l d F - H:i") }}</p><br/>
-            <p>{{ competition.endAt|date("l d F - H:i") }}</p>
-        {% endfor %}
         </tbody>
     </table>
+</div>

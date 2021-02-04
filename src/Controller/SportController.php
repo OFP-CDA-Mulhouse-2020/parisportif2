@@ -6,28 +6,26 @@ use App\Entity\Cart;
 use App\Entity\User;
 use App\Repository\BetRepository;
 use App\Repository\CompetitionRepository;
+use App\Repository\SportRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SportsController extends AbstractController
+class SportController extends AbstractController
 {
     /**
-     * @Route("/app/sports/{typeOfSport}", name="app_sports")
-     * @param string $typeOfSport
-     * @param BetRepository $betRepository
-     * @param CompetitionRepository $competitionRepository
-     * @return Response
+     * @Route("/app/sport/{typeOfSport}", name="app_sport")
      */
-    public function index(
+    public function showBetsBySport(
         string $typeOfSport,
         BetRepository $betRepository,
-        CompetitionRepository $competitionRepository
+        CompetitionRepository $competitionRepository,
+        SportRepository $sportRepository
     ): Response {
 
         $listOfBet = $betRepository->findBetBySport($typeOfSport);
         $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
-
+        $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
         $user = $this->getUser();
         assert($user instanceof User);
 
@@ -40,10 +38,10 @@ class SportsController extends AbstractController
             $items = null;
         }
 
-        return $this->render('sports/sports.html.twig', [
-            'controller_name' => 'SportsController',
+        return $this->render('sport/sport.html.twig', [
             'listOfBet' => $listOfBet,
             'listOfCompetition' => $listOfCompetition,
+            'sport' => $sport,
             'cart' => $cart,
             'items' => $items,
         ]);

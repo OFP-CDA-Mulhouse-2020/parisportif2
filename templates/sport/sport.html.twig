@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Paris Sportif -
+    Paris Sportif - {{ sport }}
 {% endblock %}
 
 {% block body %}
@@ -27,7 +27,7 @@
         <div class="row">
             {# ASIDE LEFT #}
             <div class="col-sm-12 col-md-3">
-                {% include "partials/_aside_left.html.twig" %}
+                {% include "sport/_nav_left.html.twig" %}
             </div>
 
             {# SECTION CENTRAL #}
@@ -38,7 +38,7 @@
                             {# CAROUSEL #}
 
                             {########### BET BOARD CONTENT ###########}
-                            {% include "bet/_sports_bet.html.twig" %}
+                            {% include "bet/_sport_bet.html.twig" %}
 
                         </div>
                     </div>
