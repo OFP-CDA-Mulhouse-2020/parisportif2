@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateInterval;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\Form\LoginType;
@@ -55,14 +57,52 @@ class UserProfileController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/suspend/process", name="_suspend_process")
-//     */
-//    public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
-//    {
-//        $user = $this->getUser();
-//
-//        switch ($request->request->get('suspendType')) {
+    /**
+     * @Route("/suspend/process", name="_suspend_process")
+     */
+    public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
+    {
+        $user = $this->getUser();
+
+        $typeOfSuspension = $request->request->get('suspendType');
+        $timeOfSuspension = $request->request->get('suspendAt');
+//        dd($timeOfSuspension);
+
+        if ($typeOfSuspension === "1") {
+            $user->setRoles([]);
+            $user->deactivate();
+            $user->endSuspend(DateTime::createFromFormat('Y-m-d', $timeOfSuspension));
+
+            $databaseService->saveToDatabase($user);
+            $this->container->get('security.token_storage')->setToken(null);
+            $this->addFlash(
+                'success_delete_user',
+                'L\'accès à votre compte est suspendu jusqu\'au: (au moins 7 jours) '
+            );
+            return $this->redirectToRoute('app_login');
+        } elseif ($typeOfSuspension === "2") {
+            $user->setRoles([]);
+            $user->deactivate();
+
+            $user->endSuspend(DateTime::createFromFormat('Y-m-d', $timeOfSuspension));
+
+            $databaseService->saveToDatabase($user);
+            $this->container->get('security.token_storage')->setToken(null);
+
+            $this->addFlash(
+                'success_delete_user',
+                'Votre compte est suspendu jusqu\'au: (3ans) '
+            );
+            return $this->redirectToRoute('app_login');
+        } else {
+            $this->addFlash(
+                'suspend_field_empty',
+                'Vous devez remplir les champs du formulaire'
+            );
+            return $this->redirectToRoute('app_profile_suspend');
+        }
+
+//        switch ($typeOfSuspension) {
 //            case "1":
 //                $user->setRoles([]);
 //                $user->deactivate();
@@ -100,7 +140,7 @@ class UserProfileController extends AbstractController
 //                ]);
 //                return $this->redirectToRoute('app_profile_suspend');
 //        }
-//    }
+    }
 
 
     /**
