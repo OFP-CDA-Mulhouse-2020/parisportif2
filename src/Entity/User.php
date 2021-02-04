@@ -161,10 +161,11 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\GreaterThanOrEqual(
-     *  value="+1 minutes",
+     *  value="+7 days",
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
+
      */
     private ?DateTimeInterface $endSuspendAt;
 
@@ -185,7 +186,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
-     *  value="+7 days",
+     *  value="+1 minutes",
      *  message="Date de suppression incorrecte",
      *  groups={"delete"}
      * )

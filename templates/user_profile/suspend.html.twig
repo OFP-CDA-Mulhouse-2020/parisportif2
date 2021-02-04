@@ -19,52 +19,60 @@
 
     <h4>Quel type d'auto exclusion souhaitez vous ?</h4>
 
-    <form action="/app/profile/suspend/process" method="post">
-        <label for="suspendType"></label>
-        <select name="suspendType" id="exclusionType" required >
-            <option value="">--Choisir un type d'exclusion--</option>
-            <option value="1">Exclusion temporaire</option>
-            <option value="2">Exclusion définitive</option>
-        </select>
+{#    <form action="/app/profile/suspend/process" method="post">#}
+{#        <label for="suspendType"></label>#}
+{#        <select name="suspendType" id="exclusionType" required >#}
+{#            <option value="">--Choisir un type d'exclusion--</option>#}
+{#            <option value="1">Exclusion temporaire</option>#}
+{#            <option value="2">Exclusion définitive</option>#}
+{#        </select>#}
 
-        <br><br>
-        <label for="suspendAt">M'exclure jusqu'au :</label>
-        <input type="date" id="suspendAt" name="suspendAt" required >
-        <br><br>
+{#        <br><br>#}
+{#        <label for="suspendAt">M'exclure jusqu'au :</label>#}
+{#        <input type="date" id="suspendAt" name="suspendAt" required >#}
+{#        <br><br>#}
 
-        {#        <button type="submit"  class="btn btn-danger">Confirmer</button>#}
+{#        #}{#        <button type="submit"  class="btn btn-danger">Confirmer</button>#}
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Désactiver mon compte
-        </button>
-        {#        <a href="suspend" class="btn btn-danger">#}
-        {#            Confirmer#}
-        {#        </a>#}
+{#        <!-- Button trigger modal -->#}
+{#        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">#}
+{#            Désactiver mon compte#}
+{#        </button>#}
+{#        #}{#        <a href="suspend" class="btn btn-danger">#}
+{#        #}{#            Confirmer#}
+{#        #}{#        </a>#}
 
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        {# **** Title ****#}
-                        <h5 class="modal-title" id="staticBackdropLabel">Suspension de votre compte utilisateur</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    {# **** Content ****#}
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        {#                        <a href="/app/profile/suspend/process" class="btn btn-danger" type="submit">#}
-                        {#                            Confirmer#}
-                        {#                        </a>#}
-                        <button type="submit"  class="btn btn-danger">Confirmer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+{#        <!-- Modal -->#}
+{#        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">#}
+{#            <div class="modal-dialog">#}
+{#                <div class="modal-content">#}
+{#                    <div class="modal-header">#}
+{#                        #}{# **** Title ****#}
+{#                        <h5 class="modal-title" id="staticBackdropLabel">Suspension de votre compte utilisateur</h5>#}
+{#                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#                    </div>#}
+{#                    #}{# **** Content ****#}
+{#                    <div class="modal-body">#}
+{#                        ...#}
+{#                    </div>#}
+{#                    <div class="modal-footer">#}
+{#                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>#}
+{#                        #}{#                        <a href="/app/profile/suspend/process" class="btn btn-danger" type="submit">#}
+{#                        #}{#                            Confirmer#}
+{#                        #}{#                        </a>#}
+{#                        <button type="submit"  class="btn btn-danger">Confirmer</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </form>#}
 
+    {{ form_start(suspendAccountForm, { attr: {novalidate: 'novalidate'} }) }}
+    {{ form_row(suspendAccountForm.suspendType) }}
+    {{ form_row(suspendAccountForm.suspendAt) }}
+    {{ form_row(suspendAccountForm.submit) }}
+    {{ form_end(suspendAccountForm) }}
+
+
+{#    , {'id' : 'inputEmail', 'full_name' : 'email'}#}
 {% endblock %}
