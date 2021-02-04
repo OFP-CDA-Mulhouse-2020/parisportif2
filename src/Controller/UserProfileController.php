@@ -117,7 +117,7 @@ class UserProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $typeOfSuspension = $form->get('suspendType')->getData();
-            $timeOfSuspension = $form->get('suspendAt')->getData();
+            $timeOfSuspension = $form->get('suspendUntil')->getData();
 //            dd($typeOfSuspension, $timeOfSuspension);
 
             if ($typeOfSuspension === 1) {

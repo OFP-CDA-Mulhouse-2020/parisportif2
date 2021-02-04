@@ -165,7 +165,6 @@ class User implements UserInterface
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
-
      */
     private ?DateTimeInterface $endSuspendAt;
 

@@ -9,7 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SuspendAccountType extends AbstractType
@@ -20,21 +22,36 @@ class SuspendAccountType extends AbstractType
             ->add('suspendType', ChoiceType::class, [
                 'mapped' => false,
                 'label' => false,
-                'choices'  => array(
+                'choices'  => [
                     '-- Choisir un type d\'exclusion --' => null,
                     'Exclusion temporaire' => 1,
                     'Exclusion définitive' => 2,
-                )
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'groups' => 'suspend',
+                        'message' => 'Vous devez choisir un type d\'exclusion.'
+                    ]),
+                ],
+
             ])
 
-            ->add('suspendAt', DateType::class, [
+            ->add('suspendUntil', DateType::class, [
                 'mapped' => false,
                 'label' => false,
                 'widget' => 'single_text',
                 'required' => false,
-//                'attr' => [
-//                    'min' => "now + 7 days",
-//                ],
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'groups' => 'suspend',
+                        'value' => '+7 days',
+                        'message' => 'La durée de suspension doit être supérieur à 1 semaine .'
+                    ]),
+                    new NotBlank([
+                        'groups' => 'suspend',
+                        'message' => 'Vous devez définir une date de suspension d\'au moins 1 semaine .'
+                    ]),
+                ],
 
             ])
 
@@ -46,10 +63,11 @@ class SuspendAccountType extends AbstractType
             ]);
     }
 //
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
-//            'validation_groups' => ['suspend'],
-//        ]);
-//    }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+//            'data_class' => User::class,
+            'validation_groups' => ['suspend'],
+        ]);
+    }
 }
