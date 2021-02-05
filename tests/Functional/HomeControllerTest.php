@@ -68,7 +68,7 @@ class HomeControllerTest extends WebTestCase
         $this->assertEquals(5, $crawler->filter('.dropdown-1 a.dropdown-item')->count());
 
         // dropdown 2
-        $this->assertEquals(4, $crawler->filter('.dropdown-2 a.dropdown-item')->count());
+        $this->assertEquals(5, $crawler->filter('.dropdown-2 a.dropdown-item')->count());
     }
 
 

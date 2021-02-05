@@ -129,4 +129,13 @@ User Profile et Home Page
 ---
 01/02 Mise en place du forgotten password (daniel), editer les items dans le panier (ladji), recupérer les competitions par sport (mohamed)
 
-02/02
+02/02 Rajout du service mailer pour le changement d'email (daniel), pages sport (mohamed), fin edition du panier (ladji)
+
+03/02 Revue de code phpstan et identification des taches restantes (daniel), suspension et suppression de compte (ladji), pages sport en live (mohamed)
+
+04/02 Ajout des pages et revue twig (daniel), implementer mailer (mohamed), suspension et suppression de compte (ladji)
+
+05/02 Ajout des pages et revue twig (daniel), implementer mailer (mohamed), implementer mailer (ladji)
+
+---
+08/02
