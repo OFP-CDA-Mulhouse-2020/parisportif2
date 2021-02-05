@@ -47,4 +47,15 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findCompetitionBySport(string $sports): array
+    {
+        return $this->createQueryBuilder('competition')
+            ->leftJoin('competition.sport', 'sport')
+            ->where('competition.sport = sport')
+            ->where('sport.name = :sportName')
+            ->setParameter('sportName', $sports)
+            ->getQuery()
+            ->getResult();
+    }
 }

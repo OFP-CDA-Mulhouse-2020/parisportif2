@@ -44,6 +44,7 @@ class RegisterControllerTest extends WebTestCase
         $form['registration[agreeTerms]'] = "1";
 
         $client->submit($form);
+        $this->assertEmailCount(1);
 
         $this->assertResponseRedirects('/app');
         $client->followRedirect();
@@ -68,7 +69,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Vous devez accepter les termes du contrat');
     }
 
-    public function testInvalidRegisterSubmitwithEmailAlreadyUse(): void
+    public function testInvalidRegisterSubmitWithEmailAlreadyUse(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
@@ -82,7 +83,6 @@ class RegisterControllerTest extends WebTestCase
         $form['registration[agreeTerms]'] = "1";
 
         $client->submit($form);
-
         $this->assertSelectorTextContains('', 'Il y a déjà un compte avec cet email');
     }
 

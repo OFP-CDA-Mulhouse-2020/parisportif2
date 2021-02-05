@@ -2,16 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\CardIdFile;
+use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddressType;
 use App\Form\IdentityType;
 use App\FormHandler\EditIdentityHandler;
-use App\Repository\AddressRepository;
 use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,9 +25,11 @@ class UserProfileInformationController extends AbstractController
     public function getUserInformation(): Response
     {
         $user = $this->getUser();
-        $identityForm = $this->createForm(IdentityType::class, $user);
-
+        assert($user instanceof User);
         $address = $user->getAddress();
+        assert($address instanceof Address);
+
+        $identityForm = $this->createForm(IdentityType::class, $user);
         $addressForm = $this->createForm(AddressType::class, $address);
 
         return $this->render('user_profile/information.html.twig', [
@@ -46,9 +46,10 @@ class UserProfileInformationController extends AbstractController
      */
     public function editUserIdentity(Request $request, EditIdentityHandler $editedIdentityHandler): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+        assert($user instanceof User);
         $address = $user->getAddress();
+        assert($address instanceof Address);
 
         $identityForm = $this->createForm(IdentityType::class, $user);
         $addressForm = $this->createForm(AddressType::class, $address);
@@ -82,7 +83,9 @@ class UserProfileInformationController extends AbstractController
     public function editUserAddress(Request $request, DatabaseService $databaseService): Response
     {
         $user = $this->getUser();
+        assert($user instanceof User);
         $address = $user->getAddress();
+        assert($address instanceof Address);
 
         $identityForm = $this->createForm(IdentityType::class, $user);
         $addressForm = $this->createForm(AddressType::class, $address);

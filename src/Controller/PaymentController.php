@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Bet;
+use App\Entity\Cart;
 use App\Entity\Payment;
+use App\Entity\TypeOfPayment;
+use App\Entity\User;
+use App\Entity\Wallet;
 use App\Repository\BetRepository;
 use App\Repository\ItemRepository;
 use App\Repository\PaymentRepository;
@@ -23,9 +28,14 @@ class PaymentController extends AbstractController
         PaymentRepository $paymentRepository
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $cart = $user->getCart();
+        assert($cart instanceof Cart);
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $cart->setSum();
+        /** @var float $sum */
         $sum = $cart->getSum();
 
         $typeOfPayment = $typeOfPaymentRepository->findOneBy(
@@ -33,6 +43,7 @@ class PaymentController extends AbstractController
                 'typeOfPayment' => 'Internal Transfer Bet Payment'
             ]
         );
+        assert($typeOfPayment instanceof TypeOfPayment);
 
         $payment = new Payment($sum);
         $payment->setWallet($wallet);
@@ -42,7 +53,11 @@ class PaymentController extends AbstractController
 
         //TODO : add website wallet
 
-        $sumOfLastWeekPayment = $paymentRepository->findAmountOfLastWeek($wallet->getId(), $typeOfPayment->getId());
+        /** @var array $sumOfLastWeekPayment */
+        $sumOfLastWeekPayment = $paymentRepository->findAmountOfLastWeek(
+            $wallet->getId(),
+            (int) $typeOfPayment->getId()
+        );
 
         $walletStatus = $wallet->betPayment($sum, $sumOfLastWeekPayment['amountOfLastWeek']);
 
@@ -88,13 +103,18 @@ class PaymentController extends AbstractController
     ): Response {
 
         $bet = $betRepository->find($id);
+        assert($bet instanceof Bet);
+
         if ($bet->isBetOpened()) {
             return new RedirectResponse($request->server->get('HTTP_REFERER'));
         }
 
         $user = $this->getUser();
+        assert($user instanceof User);
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
 
+        /** @var array $result */
         $result = $bet->getBetResult();
 
         $listOfItems = $itemRepository->findBy(['bet' => $bet->getId(), 'itemStatusId' => 1]);
@@ -112,14 +132,16 @@ class PaymentController extends AbstractController
                 $sum = $item->calculateProfits();
 
             if ($sum !== null) {
-                $payment = new Payment($sum);
-                $payment->setWallet($wallet);
-                $payment->setPaymentName('Gain sur ticket de pari n°');
                 $typeOfPayment = $typeOfPaymentRepository->findOneBy(
                     [
                     'typeOfPayment' => 'Internal Transfer Bet Earning'
                     ]
                 );
+                assert($typeOfPayment instanceof TypeOfPayment);
+
+                $payment = new Payment($sum);
+                $payment->setWallet($wallet);
+                $payment->setPaymentName('Gain sur ticket de pari n°');
                 $payment->setTypeOfPayment($typeOfPayment);
 
                 $walletStatus = $wallet->addMoney($sum);

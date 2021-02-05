@@ -94,10 +94,12 @@ class UserProfileInformationControllerTest extends WebTestCase
         $form['identity[lastName]'] = 'cda';
         $form['identity[firstName]'] = 'ladji';
         $form['identity[birthDate]'] = '1995-12-12';
-        /** @var FileFormField  $form['identity[justificatif]'] */
-        $form['identity[justificatif]']->upload('tests/Data/unknown.jpg');
 
-        /** @var Form  $form */
+        $fileField = $form['identity[justificatif]'];
+        assert($fileField instanceof FileFormField);
+        $fileField->upload('tests/Data/unknown.jpg');
+
+        /** @param Form  $form */
         $client->submit($form);
 
         $this->assertResponseRedirects('/app/profile/information');
@@ -124,10 +126,12 @@ class UserProfileInformationControllerTest extends WebTestCase
         $form['identity[lastName]'] = 'cda';
         $form['identity[firstName]'] = 'ladji';
         $form['identity[birthDate]'] = '1995-12-12';
-        /** @var FileFormField  $form['identity[justificatif]'] */
-        $form['identity[justificatif]']->upload('');
 
-        /** @var Form  $form */
+        $fileField = $form['identity[justificatif]'];
+        assert($fileField instanceof FileFormField);
+        $fileField->upload('');
+
+        /** @param Form  $form */
         $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Vous devez fournir une pièce-jointe');

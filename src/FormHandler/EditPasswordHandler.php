@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\DatabaseService;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\ClassString;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -31,10 +32,12 @@ class EditPasswordHandler
 
         // Si l'ancien mot de passe est bon
         if ($this->passwordEncoder->isPasswordValid($user, $oldPassword)) {
+            /** @var string $plainPassword */
+            $plainPassword = $user->getPlainPassword();
             $user->setPassword(
                 $this->passwordEncoder->encodePassword(
                     $user,
-                    $user->getPlainPassword()
+                    $plainPassword
                 )
             );
             $this->databaseService->saveToDatabase($user);

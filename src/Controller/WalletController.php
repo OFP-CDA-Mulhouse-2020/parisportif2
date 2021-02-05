@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Wallet;
 use App\Form\AddMoneyType;
 use App\Form\WalletType;
 use App\Form\WithdrawMoneyType;
@@ -21,12 +23,15 @@ class WalletController extends AbstractController
     /**
      * @Route("/app/wallet/balance", name="app_wallet_balance")
      */
-    public function getWalletBalance(WalletRepository $walletRepository, PaymentRepository $paymentRepository): Response
+    public function getWalletBalance(PaymentRepository $paymentRepository): Response
     {
         $user = $this->getUser();
-        $wallet = $walletRepository->find($user->getWallet()->getId());
+        assert($user instanceof User);
+        $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $payments = $paymentRepository->findBy(
-            ['wallet' => $user->getWallet()->getId(), 'paymentStatusId' => 2],
+            ['wallet' => $wallet->getId(), 'paymentStatusId' => 2],
             ['datePayment' => 'ASC']
         );
 
@@ -44,7 +49,10 @@ class WalletController extends AbstractController
         AddMoneyHandler $addedMoneyHandler
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $addMoneyForm = $this->createForm(AddMoneyType::class);
         $addMoneyForm->handleRequest($request);
 
@@ -70,7 +78,10 @@ class WalletController extends AbstractController
         WithdrawMoneyHandler $withdrawalMoneyHandler
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $withdrawMoneyForm = $this->createForm(WithdrawMoneyType::class);
         $withdrawMoneyForm->handleRequest($request);
 
@@ -92,10 +103,13 @@ class WalletController extends AbstractController
     /**
      * @Route("/app/wallet/limit-amount", name="app_wallet_limit-amount")
      */
-    public function getLimitAmountPerWeekOfWallet(WalletRepository $walletRepository): Response
+    public function getLimitAmountPerWeekOfWallet(): Response
     {
         $user = $this->getUser();
-        $wallet = $walletRepository->find($user->getWallet()->getId());
+        assert($user instanceof User);
+        $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $walletForm = $this->createForm(WalletType::class, $wallet);
 
         return $this->render('wallet/limit-amount.html.twig', [
@@ -113,7 +127,10 @@ class WalletController extends AbstractController
         LimitAmountWalletHandler $limitAmountWalletHandler
     ): Response {
         $user = $this->getUser();
+        assert($user instanceof User);
         $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
         $walletForm = $this->createForm(WalletType::class, $wallet);
         $walletForm->handleRequest($request);
 

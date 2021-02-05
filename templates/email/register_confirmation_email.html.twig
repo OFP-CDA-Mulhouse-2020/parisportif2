@@ -1,0 +1,10 @@
+
+<h2>Bonjour {{user.firstName}} {{user.lastname}} !</h2>
+<h4>Bienvenue chez Paris Sportifs</h4>
+<p>
+    Merci de confirmer votre adresse email en cliquant sur le lien ci-dessous: <br><br>
+    <a href="{{ signedUrl|raw }}">Confirmer mon adresse email</a><br>
+    Attention, ce lien expire dans {{ expiresAt|date('g') }}  heure(s).
+</p>
+<br>
+<p>L'équipe Paris Sportifs :)</p>

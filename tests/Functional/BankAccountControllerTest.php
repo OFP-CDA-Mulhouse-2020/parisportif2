@@ -68,10 +68,12 @@ class BankAccountControllerTest extends WebTestCase
         $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
         $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
 
-        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
-        $form['bank_account[ribJustificatif]']->upload('tests/Data/rib.jpg');
+        $fileField = $form['bank_account[ribJustificatif]'];
+        assert($fileField instanceof FileFormField);
 
-        /** @var Form  $form */
+        $fileField->upload('tests/Data/rib.jpg');
+
+        /** @param Form  $form */
         $client->submit($form);
 
         $this->assertResponseRedirects('/app/wallet/bank-account');
@@ -133,10 +135,11 @@ class BankAccountControllerTest extends WebTestCase
         $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
         $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
 
-        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
-        $form['bank_account[ribJustificatif]']->upload('tests/Data/rib.jpg');
+        $fileField = $form['bank_account[ribJustificatif]'];
+        assert($fileField instanceof FileFormField);
+        $fileField->upload('tests/Data/rib.jpg');
 
-        /** @var Form  $form */
+        /** @param Form  $form */
         $client->submit($form);
 
         $this->assertResponseRedirects('/app/wallet/bank-account');
@@ -163,10 +166,12 @@ class BankAccountControllerTest extends WebTestCase
         $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
         $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
 
-        /** @var FileFormField  $form['bank_account[ribJustificatif]'] */
-        $form['bank_account[ribJustificatif]']->upload('');
+        $fileField = $form['bank_account[ribJustificatif]'];
+        assert($fileField instanceof FileFormField);
 
-        /** @var Form  $form */
+        $fileField->upload('');
+
+        /** @param Form  $form */
         $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Vous devez fournir une pièce-jointe');
