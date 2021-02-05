@@ -8,6 +8,7 @@
 
 	{{ form_start(login_form, {'attr': {novalidate: 'novalidate', id : 'loginForm'}}) }}
 	{% if error %}
+
 			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 
@@ -48,6 +49,7 @@
 
 
 	Pas encore de compte :  <a href="/register" class="btn btn-secondary" >Créer un compte</a>
+
 
 
 {% endblock %}

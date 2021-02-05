@@ -87,8 +87,8 @@ class UserProfileControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertSelectorTextContains('div.main h4', 'Activation du compte');
-        $this->assertSelectorTextContains('div.main h4:nth-of-type(2)', 'Désactivation du compte');
-        $this->assertSelectorTextContains('div.main a', 'Désactiver mon compte');
+        $this->assertSelectorTextContains('div.main h4:nth-of-type(2)', 'Fermeture du compte');
+        $this->assertSelectorTextContains('div.main button', 'Fermer mon compte');
     }
 
     public function testUserProfileSuspend(): void
@@ -106,7 +106,7 @@ class UserProfileControllerTest extends WebTestCase
         $this->assertSelectorTextContains('div.main h4', 'Description');
         $this->assertSelectorTextContains('div.main h4:nth-of-type(2)', 'Quel type d\'auto exclusion souhaitez vous ?');
         $this->assertCount(1, $crawler->filter('form select[name*="suspendType"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="suspendAt"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="suspendUntil"]'));
         $this->assertSelectorExists('form button[type="submit"]');
     }
 }
