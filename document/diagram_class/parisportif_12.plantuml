@@ -87,12 +87,12 @@ class Item {
 class Bet {
     - id :int
     - name :string
-    - BetLimitTime :DateTime
+    - betLimitTime :DateTime
     - listOfOdds :array
     - result :array
     - eventId :int
 
-    + getResultofBet()
+    + getResultOfBet()
 }
 
 class TypeOfBet {
@@ -185,9 +185,10 @@ Item "1..*" -right- "1..*" Payment
 Bet "1..*" -up- "1..*" TypeOfBet
 
 Event "1" *-up- "1.." Bet
-Event "1..*" -up-* "1" Competition
+Event "1..*" --* "1" Competition
 Event "1" -- "0..*" Sport
 Team "1" -up- "0..*" Sport
+Competition "1" -- "0..*" Sport
 
 
 Event "1..*" o-- "1..*" Team
