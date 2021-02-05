@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\DataFixtures\Sports\Basket\SportBasketFixtures;
+use App\DataFixtures\Sports\Basketball\SportBasketballFixtures;
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Competition;
 use App\Entity\Sport;
@@ -37,7 +37,7 @@ class CompetitionFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $sport1 = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
-        $sport2 = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        $sport2 = $this->getReference(SportBasketballFixtures::SPORT_BASKETBALL);
         assert($sport1 instanceof Sport);
         assert($sport2 instanceof Sport);
 

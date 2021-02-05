@@ -2,8 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\DataFixtures\Sports\Basket\CharlotteHornets\CharlotteHornetsTeamFixtures;
-use App\DataFixtures\Sports\Basket\DetroitPistons\DetroitPistonsTeamFixtures;
+use App\DataFixtures\Sports\Basketball\CharlotteHornets\CharlotteHornetsTeamFixtures;
+use App\DataFixtures\Sports\Basketball\DetroitPistons\DetroitPistonsTeamFixtures;
 use App\DataFixtures\Sports\Football\Lyon\LyonTeamFixtures;
 use App\DataFixtures\Sports\Football\Strasbourg\StrasbourgTeamFixtures;
 use App\Entity\Sport;
@@ -11,7 +11,7 @@ use App\Entity\Team;
 use DateInterval;
 use DateTime;
 use App\Entity\Event;
-use App\DataFixtures\Sports\Basket\SportBasketFixtures;
+use App\DataFixtures\Sports\Basketball\SportBasketballFixtures;
 use App\DataFixtures\Sports\Football\SportFootballFixtures;
 use App\Entity\Competition;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -22,13 +22,13 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public const EVENT_1 = 'football1';
-    public const EVENT_2 = 'basket2';
+    public const EVENT_2 = 'basketball2';
     public const EVENT_3 = 'football3';
-    public const EVENT_4 = 'basket4';
+    public const EVENT_4 = 'basketball4';
     public const EVENT_5 = 'football5';
-    public const EVENT_6 = 'basket6';
+    public const EVENT_6 = 'basketball6';
     public const EVENT_7 = 'football7';
-    public const EVENT_8 = 'basket8';
+    public const EVENT_8 = 'basketball8';
 
 
     public function setEventData(
@@ -59,7 +59,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $competition1 = $this->getReference(CompetitionFixtures::COMPETITION_LIGUE_1);
         $competition2  = $this->getReference(CompetitionFixtures::COMPETITION_NBA);
         $sport1 = $this->getReference(SportFootballFixtures::SPORT_FOOTBALL);
-        $sport2  = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        $sport2  = $this->getReference(SportBasketballFixtures::SPORT_BASKETBALL);
         $teamFootball1  = $this->getReference(LyonTeamFixtures::TEAM_FOOTBALL_OL_LYON);
         $teamFootball2  = $this->getReference(StrasbourgTeamFixtures::TEAM_FOOTBALL_RCS_ALSACE);
         $teamBasket3  = $this->getReference(DetroitPistonsTeamFixtures::TEAM_BASKET_DETROIT_PISTONS);
@@ -191,7 +191,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             SportFootballFixtures::class,
-            SportBasketFixtures::class,
+            SportBasketballFixtures::class,
             CompetitionFixtures::class,
             LyonTeamFixtures::class,
             StrasbourgTeamFixtures::class,

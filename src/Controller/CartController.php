@@ -39,7 +39,7 @@ class CartController extends AbstractController
 
         $item = new Item($bet);
         $item->setExpectedBetResult($expectedResult);
-        $item->isModifiedRecordedOdds($odds);
+        $item->isModifiedRecordedOdds($odds[1]);
         $item->isModifiedAmount(5);
 
         $cart->addItem($item);

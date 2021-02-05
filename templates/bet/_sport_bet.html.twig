@@ -24,7 +24,7 @@
                         <a href="/app/sport/{{ sport|lower }}/event/{{ bet.event.id }}/">+ de paris</a></p>
                     </td>
             {% for odds in bet.listOfOdds %}
-                <td class="text-center"><a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
+                <td class="text-center"><a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[1] }}</a></td>
             {% endfor %}
 
 

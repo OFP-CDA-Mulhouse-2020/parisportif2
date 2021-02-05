@@ -5,7 +5,7 @@
     <h6>{{ event.eventDateTime|date("l d F - H:i") }} {{ event.eventTimeZone }} - Lieu : {{ event.location }}</h6>
 
     <hr>
-    <h4>Paris Simple</h4>
+    <h4>Résultat du match</h4>
 
     <table class="table table-hover fw-bold">
         <thead>
@@ -24,7 +24,7 @@
 
                 {% for odds in bet.listOfOdds %}
                     <td class="text-center">
-                        <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a>
+                        <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[1] }}</a>
                     </td>
                 {% endfor %}
 
@@ -37,12 +37,18 @@
     </table>
 
     <hr>
-    <h4>Under/Over</h4>
+    <h4>Over/Under</h4>
 
     {% for bet in listOfBet %}
 
     {%  if bet.typeOfBet.betType == 'over-under' %}
-        {{ bet.id }}
+        <div class="row">
+            {% for odds in bet.listOfOdds %}
+                <div class="col-6">
+                    <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[0] }} - {{ odds[1] }}</a>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     {% endfor %}
@@ -52,17 +58,33 @@
 
     {% for bet in listOfBet %}
 
-
-
         {%  if bet.typeOfBet.betType == 'score exact' %}
         <div class="row">
             {% for odds in bet.listOfOdds %}
                 <div class="col-4">
-                    <a type="button" class="btn btn-secondary btn-lg" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[0] }} - {{ odds[1] }}</a>
+                    <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[0] }} - {{ odds[1] }}</a>
                 </div>
             {% endfor %}
         </div>
 
+        {% endif %}
+
+    {% endfor %}
+
+
+    <hr>
+    <h4>Mi-temps/Fin du match</h4>
+
+    {% for bet in listOfBet %}
+
+        {%  if bet.typeOfBet.betType == 'mi-temps fin de match' %}
+            <div class="row">
+                {% for odds in bet.listOfOdds %}
+                    <div class="col-12">
+                        <a type="button" class="btn btn-secondary btn-lg btn-block" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[0] }} - {{ odds[1] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
     {% endfor %}
