@@ -47,63 +47,6 @@ class UserProfileController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/suspend", name="_suspend")
-//     */
-//    public function userProfileSuspend(UserInterface $user): Response
-//    {
-//        $form = $this->createForm(SuspendAccountType::class, $user);
-//
-//        return $this->render('user_profile/suspend.html.twig', [
-//            'user' => $user,
-//            'suspendAccountForm' => $form->createView(),
-//        ]);
-//    }
-
-//    /**
-//     * @Route("/suspend/process", name="_suspend_process")
-//     */
-//    public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
-//    {
-//        $user = $this->getUser();
-//
-//        $typeOfSuspension = $request->request->get('suspendType');
-//        $timeOfSuspension = $request->request->get('suspendAt');
-////        dd($timeOfSuspension);
-//
-//        if ($typeOfSuspension === "1") {
-//            $user->setRoles([]);
-//            $user->deactivate();
-//            $user->endSuspend(DateTime::createFromFormat('Y-m-d', $timeOfSuspension));
-//
-//            $databaseService->saveToDatabase($user);
-//            $this->container->get('security.token_storage')->setToken(null);
-//            $this->addFlash(
-//                'success_delete_user',
-//                'L\'accès à votre compte est suspendu jusqu\'au: (au moins 7 jours) '
-//            );
-//            return $this->redirectToRoute('app_login');
-//        } elseif ($typeOfSuspension === "2") {
-//            $user->setRoles([]);
-//            $user->deactivate();
-//
-//            $user->endSuspend(DateTime::createFromFormat('Y-m-d', $timeOfSuspension));
-//
-//            $databaseService->saveToDatabase($user);
-//            $this->container->get('security.token_storage')->setToken(null);
-//
-//            $this->addFlash(
-//                'success_delete_user',
-//                'Votre compte est suspendu jusqu\'au: (3ans) '
-//            );
-//            return $this->redirectToRoute('app_login');
-//        } else {
-//            $this->addFlash(
-//                'suspend_field_empty',
-//                'Vous devez remplir les champs du formulaire'
-//            );
-//            return $this->redirectToRoute('app_profile_suspend');
-//        }
 
     /**
      * @Route("/suspend", name="_suspend")
@@ -111,14 +54,12 @@ class UserProfileController extends AbstractController
     public function userProfileSuspendProcess(Request $request, DatabaseService $databaseService): Response
     {
         $user = $this->getUser();
-//        dd($request);
         $form = $this->createForm(SuspendAccountType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $typeOfSuspension = $form->get('suspendType')->getData();
             $timeOfSuspension = $form->get('suspendUntil')->getData();
-//            dd($typeOfSuspension, $timeOfSuspension);
 
             if ($typeOfSuspension === 1) {
                 $user->setRoles([]);
@@ -129,21 +70,22 @@ class UserProfileController extends AbstractController
                 $this->container->get('security.token_storage')->setToken(null);
                 $this->addFlash(
                     'success_delete_user',
-                    'L\'accès à votre compte est suspendu jusqu\'au: (au moins 7 jours) '
+                    'Votre compte est suspendu jusqu\'au : ' . $user->getSuspendedAt()->format('d-m-Y') . '.'
                 );
                 return $this->redirectToRoute('app_login');
             } elseif ($typeOfSuspension === 2) {
                 $user->setRoles([]);
                 $user->deactivate();
+                $timeOfSuspension = new DateTime();
+                $timeOfSuspension->add(new DateInterval('P3Y'));
 
                 $user->endSuspend($timeOfSuspension);
 
                 $databaseService->saveToDatabase($user);
                 $this->container->get('security.token_storage')->setToken(null);
-
                 $this->addFlash(
                     'success_delete_user',
-                    'Votre compte est suspendu jusqu\'au: (3ans) '
+                    'Votre compte est suspendu jusqu\'au : ' . $user->getSuspendedAt()->format('d-m-Y') . '.'
                 );
                 return $this->redirectToRoute('app_login');
             }
@@ -153,46 +95,6 @@ class UserProfileController extends AbstractController
             'suspendAccountForm' => $form->createView(),
         ]);
     }
-
-//        switch ($typeOfSuspension) {
-//            case "1":
-//                $user->setRoles([]);
-//                $user->deactivate();
-//                $user->suspend();
-//
-//                $databaseService->saveToDatabase($user);
-//                $this->container->get('security.token_storage')->setToken(null);
-//                $this->addFlash(
-//                    'success_delete_user',
-//                    'L\'accès à votre compte est suspendu jusqu\'au: (au moins 7 jours) '
-//                );
-//                return $this->redirectToRoute('app_login');
-//                break;
-//            case "2":
-//                $user->setRoles([]);
-//                $user->deactivate();
-//                $user->suspend();
-//
-//                $databaseService->saveToDatabase($user);
-//                $this->container->get('security.token_storage')->setToken(null);
-//
-//                $this->addFlash(
-//                    'success_delete_user',
-//                    'Votre compte est suspendu jusqu\'au: (3ans) '
-//                );
-//                return $this->redirectToRoute('app_login');
-//                break;
-//            default:
-//                $this->addFlash(
-//                    'suspend_field_empty',
-//                    'Vous devez remplir les champs du formulaire'
-//                );
-//                return $this->render('user_profile/suspend.html.twig', [
-//                    'user' => $user,
-//                ]);
-//                return $this->redirectToRoute('app_profile_suspend');
-//        }
-//    }
 
 
     /**

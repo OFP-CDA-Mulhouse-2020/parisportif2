@@ -22,6 +22,7 @@ class SuspendAccountType extends AbstractType
             ->add('suspendType', ChoiceType::class, [
                 'mapped' => false,
                 'label' => false,
+                'required' => false,
                 'choices'  => [
                     '-- Choisir un type d\'exclusion --' => null,
                     'Exclusion temporaire' => 1,
