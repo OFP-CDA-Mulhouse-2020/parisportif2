@@ -19,18 +19,13 @@
 		</div>
 	{% endif %}
 
-	{% for message in app.flashes('success_delete_user') %}
-		<div class="alert alert-success">
-			{{ message }}
-		</div>
-	{% endfor %}
-
 	{# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> #}
 	<h1 id="titre-principal" class="h3 mb-3 font-weight-normal">Titre principal</h1>
 	<h2>Entrez vos paramètres de connexion :</h2>
 
 	{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
 	{{ form_row(login_form.plainPassword, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
+	<a href="/reset-password" class="" >Mot de passe oublié ?</a>
 
 	<input
 			type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -50,6 +45,9 @@
 	{{ form_row(login_form.Valider) }}
 
 	{{ form_end(login_form) }}
+
+
+	Pas encore de compte :  <a href="/register" class="btn btn-secondary" >Créer un compte</a>
 
 
 {% endblock %}
