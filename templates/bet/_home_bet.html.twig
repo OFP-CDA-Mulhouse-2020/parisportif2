@@ -1,5 +1,6 @@
+<div class="col-sm-12 mt-4 bet-board card p-2">
 
-    <h4>Football - Top du moment</h4>
+<h4>Football - Top du moment</h4>
     <table class="table table-hover fw-bold">
         <thead>
         <tr>
@@ -18,10 +19,11 @@
                         <p>{{ bet.event.teams[0] }}<br>
                         {{ bet.event.teams[1] }}<br>
                         {{ bet.event.eventDateTime|date("l d F - H:i")}}<br>
-                         {{ bet.event.name }} - {{ bet.event.competition.name }}</p>
+                         {{ bet.event.name }} - {{ bet.event.competition.name }}<br>
+                        <a href="/app/sport/{{ bet.event.sport.name|lower }}/event/{{ bet.event.id }}/">+ de paris</a></p>
                     </td>
             {% for odds in bet.listOfOdds %}
-                <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds }}</a></td>
+                <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[1] }}</a></td>
             {% endfor %}
 
 
@@ -30,3 +32,4 @@
 
         </tbody>
     </table>
+</div>

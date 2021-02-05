@@ -12,6 +12,8 @@ class TypeOfBetFixtures extends Fixture
     public const TYPE_OF_BET_2 = '1-2';
     public const TYPE_OF_BET_3 = 'over-under';
     public const TYPE_OF_BET_4 = 'handicap';
+    public const TYPE_OF_BET_5 = 'score exact';
+    public const TYPE_OF_BET_6 = 'mi-temps fin de match';
 
     public function load(ObjectManager $manager): void
     {
@@ -34,10 +36,20 @@ class TypeOfBetFixtures extends Fixture
         $typeOfBet4->setBetType('handicap');
         $manager->persist($typeOfBet4);
 
+        $typeOfBet5 = new TypeOfBet();
+        $typeOfBet5->setBetType('score exact');
+        $manager->persist($typeOfBet5);
+
+        $typeOfBet6 = new TypeOfBet();
+        $typeOfBet6->setBetType('mi-temps fin de match');
+        $manager->persist($typeOfBet6);
+
         $this->addReference(self::TYPE_OF_BET_1, $typeOfBet1);
         $this->addReference(self::TYPE_OF_BET_2, $typeOfBet2);
         $this->addReference(self::TYPE_OF_BET_3, $typeOfBet3);
         $this->addReference(self::TYPE_OF_BET_4, $typeOfBet4);
+        $this->addReference(self::TYPE_OF_BET_5, $typeOfBet5);
+        $this->addReference(self::TYPE_OF_BET_6, $typeOfBet6);
 
         $manager->flush();
     }

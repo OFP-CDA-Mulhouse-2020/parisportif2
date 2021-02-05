@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataFixtures\Sports\Basket\CharlotteHornets;
+namespace App\DataFixtures\Sports\Basketball\CharlotteHornets;
 
-use App\DataFixtures\Sports\Basket\SportBasketFixtures;
+use App\DataFixtures\Sports\Basketball\SportBasketballFixtures;
 use App\Entity\Sport;
 use App\Entity\Team;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -15,7 +15,7 @@ class CharlotteHornetsTeamFixtures extends Fixture implements DependentFixtureIn
 
     public function load(ObjectManager $manager): void
     {
-        $sport = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        $sport = $this->getReference(SportBasketballFixtures::SPORT_BASKETBALL);
         assert($sport instanceof Sport);
 
         $team = new Team();
@@ -33,7 +33,7 @@ class CharlotteHornetsTeamFixtures extends Fixture implements DependentFixtureIn
     public function getDependencies(): array
     {
         return [
-            SportBasketFixtures::class,
+            SportBasketballFixtures::class,
         ];
     }
 }

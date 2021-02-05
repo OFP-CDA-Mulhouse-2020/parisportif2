@@ -1,10 +1,10 @@
 <?php
 
 // Basket - Detroit Pistons
-namespace App\DataFixtures\Sports\Basket\DetroitPistons;
+namespace App\DataFixtures\Sports\Basketball\DetroitPistons;
 
-use App\DataFixtures\Sports\Basket\DetroitPistons\DetroitPistonsTeamFixtures;
-use App\DataFixtures\Sports\Basket\SportBasketFixtures;
+use App\DataFixtures\Sports\Basketball\DetroitPistons\DetroitPistonsTeamFixtures;
+use App\DataFixtures\Sports\Basketball\SportBasketballFixtures;
 use App\Entity\Player;
 use App\Entity\Sport;
 use App\Entity\Team;
@@ -19,7 +19,7 @@ class DetroitPistonsPlayersFixtures extends Fixture implements DependentFixtureI
         $player = new Player();
 
         $team = $this->getReference(DetroitPistonsTeamFixtures::TEAM_BASKET_DETROIT_PISTONS);
-        $sport = $this->getReference(SportBasketFixtures::SPORT_BASKET);
+        $sport = $this->getReference(SportBasketballFixtures::SPORT_BASKETBALL);
         assert($team instanceof Team);
         assert($sport instanceof Sport);
 
@@ -62,7 +62,7 @@ class DetroitPistonsPlayersFixtures extends Fixture implements DependentFixtureI
     {
         return [
             DetroitPistonsTeamFixtures::class,
-            SportBasketFixtures::class,
+            SportBasketballFixtures::class,
         ];
     }
 }
