@@ -1,0 +1,26 @@
+[
+
+    {
+        "id": 1,
+        "eventName": "Le bon pain",
+        "teams": ["Nice", "Bordeaux"],
+        "date" : "23/10/2021",
+        "odds" : [1.5, 6.5]
+    },
+    {
+        "id": 2,
+        "eventName": "Le bon pain",
+        "teams": ["Nice", "Bordeaux"],
+        "date" : "23/10/2021",
+        "odds" : [1.5, 6.5]
+    },
+    {
+        "id": 3,
+        "eventName": "Le bon pain",
+        "teams": ["Nice", "Bordeaux"],
+        "date" : "23/10/2021",
+        "odds" : [1.5, 6.5]
+    }
+]
+
+    

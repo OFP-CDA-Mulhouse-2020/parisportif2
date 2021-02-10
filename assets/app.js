@@ -12,6 +12,7 @@ import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Cart from './cart/components/Cart';
+import BetBoard from './betBoard/components/BetBoard';
 
 
 function App() {
@@ -20,5 +21,11 @@ function App() {
     )
 }
 
-
+function App2() {
+    return (
+        <BetBoard/>
+    )
+}
 ReactDOM.render(<App/>, document.querySelector('#cart'));
+
+ReactDOM.render(<App2/>, document.querySelector('#betBoard'));
