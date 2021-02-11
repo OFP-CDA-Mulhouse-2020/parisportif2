@@ -1,27 +1,32 @@
-import React, {Component, Fragment} from 'react';
-import Odds from "./Odds";
+import React, {Component} from 'react';
+import OddsList from "./OddsList";
 
-const Event = (props) => {
+class EventList extends Component{
 
-    const rows = props.eventData.map((row, index) => {
-        console.log(row, index);
+    selectedBet = (props) => {
+        this.props.fetchBets(props);
+    }
 
-        return (
-            <tr key={index}>
-                <td className="" colSpan="2">
-                    <p>
-                        {row.teams[0]} <br/>
-                        {row.teams[1]} <br/>
-                        {row.date} <br/>
-                        {row.eventName}<br/>
-                    </p>
-                </td>
-                <Odds eventData={row.odds}  value={props.handleChange}/>
-            </tr>
-        )
-    })
-
-    return <Fragment>{rows}</Fragment>
+        render() {
+            return (
+                this.props.eventData.map( (row, index)  => (
+                <tr key={index}>
+                    <td className="" colSpan="2">
+                        <p>
+                            {row.teams[0]} <br/>
+                            {row.teams[1]} <br/>
+                            {row.date} <br/>
+                            {row.eventName}<br/>
+                        </p>
+                    </td>
+                    <OddsList oddsListData={row} selectedBet={this.selectedBet}/>
+                </tr>
+            ))
+            );
+        }
 }
 
-export default Event;
+
+
+
+export default EventList;
