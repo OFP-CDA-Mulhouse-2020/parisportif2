@@ -1,0 +1,11 @@
+{# admin/field/map.html.twig #}
+{% if 'google' === field.customOptions.get('mapProvider') %}
+    {# ... #}
+{% endif %}
+
+{# if you defined the field options as public constants, you can access
+   them in the template too (although resulting code is a bit verbose) #}
+{% set map_provider_option = constant('App\\Admin\\MapField::OPTION_MAP_PROVIDER') %}
+{% if 'google' === field.customOptions.get(map_provider_option) %}
+    {# ... #}
+{% endif %}
