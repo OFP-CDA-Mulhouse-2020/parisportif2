@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=SportRepository::class)
  */
-class Sport
+class Sport implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -242,5 +242,13 @@ class Sport
         }
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }

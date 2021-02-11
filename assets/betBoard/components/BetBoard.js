@@ -6,19 +6,16 @@ import EventList from "./Event";
      constructor(props){
          super(props);
          this.state = {
-             EventData : EventData,
+             EventData : [],
              CartData : [],
              loading :false,
          }
      }
 
-     fetchBets = (props) => {
-        console.log('odds', props);
-         //      this.setState({coords: coordinates, loading: true});
+     componentDidMount() {
+         this.setState({loading: false});
 
-        // const url = `/api/cart/add/selectedBet?betId=` + this.state.coords.lat + `&selectedOdds=` + this.state.coords.lng;
-
-          const url = `/api/cart/add/` + props[0] + `/` + props[1];
+         const url = `/api/home`;
 
          fetch(url, {method: 'get'})
              .then(function (response) {
@@ -26,11 +23,14 @@ import EventList from "./Event";
                  return response.json();
              })
              .then(json => {
-                 this.setState({marketData: json, loading: true});
+                 console.log(json);
+                 this.setState({EventData: json, loading: true});
              });
      }
 
+
      render() {
+         if(this.state.loading){
 
          return (
             <Fragment>
@@ -46,11 +46,18 @@ import EventList from "./Event";
                      </tr>
                      </thead>
                      <tbody>
-                        <EventList eventData={this.state.EventData} fetchBets = {this.fetchBets} />
+                        <EventList eventData={this.state.EventData} />
                      </tbody>
                  </table>
             </Fragment>
          );
+             }
+             else{
+                 return (
+                 <div>wait</div>
+                 );
+         }
+
     }
 
  }

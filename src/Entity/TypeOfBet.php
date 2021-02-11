@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TypeOfBetRepository::class)
  */
-class TypeOfBet
+class TypeOfBet implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -54,5 +54,13 @@ class TypeOfBet
         $this->betType = $betType;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getBetType(),
+        ];
     }
 }

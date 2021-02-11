@@ -4,7 +4,8 @@ import OddsList from "./OddsList";
 class EventList extends Component{
 
     selectedBet = (props) => {
-        this.props.fetchBets(props);
+       // this.props.fetchBets(props);
+        console.log('OK')
     }
 
         render() {
@@ -13,13 +14,16 @@ class EventList extends Component{
                 <tr key={index}>
                     <td className="" colSpan="2">
                         <p>
-                            {row.teams[0]} <br/>
-                            {row.teams[1]} <br/>
-                            {row.date} <br/>
-                            {row.eventName}<br/>
-                        </p>
+                            {row.event.teams[0].name} <br/>
+                            {row.event.teams[1].name} <br/>
+                            {row.event.date} <br/>
+                            {row.event.name} - {row.event.competition.name}<br/>
+                            <a href={`/app/sport/${row.event.sport.name}/event/${row.id}`}>
+                                + de paris
+                            </a>
+                    </p>
                     </td>
-                    <OddsList oddsListData={row} selectedBet={this.selectedBet}/>
+                   <OddsList oddsListData={row} selectedBet={this.selectedBet}/>
                 </tr>
             ))
             );

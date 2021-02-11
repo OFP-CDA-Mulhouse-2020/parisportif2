@@ -14,17 +14,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class ApiController extends AbstractController
 {
     /**
      * @Route("/api/home", name="api_home")
      */
-    public function homePage(): Response
+    public function homePage(BetRepository $betRepository): Response
     {
-        return $this->render('api/index.html.twig', [
-            'controller_name' => 'ApiController',
-        ]);
+        $listOfBet = $betRepository->findAllSimpleBet();
+
+        return $this->json($listOfBet);
     }
 
 
@@ -65,11 +73,11 @@ class ApiController extends AbstractController
         $entityManager->flush();
 
 
-        return $response = JsonResponse::fromJsonString('{"validation" : "true"}');
+        return $response = JsonResponse::fromJsonString('{"itemId" : ' . $item->getId() . '}');
     }
 
     /**
-     * @Route("api/cart/remove/{itemId}", name="app_cart_remove_item")
+     * @Route("api/cart/remove/{itemId}", name="api_cart_remove_item")
      */
     public function removeItemFromCart(int $itemId, ItemRepository $itemRepository): Response
     {

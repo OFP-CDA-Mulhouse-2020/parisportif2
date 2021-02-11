@@ -7,9 +7,8 @@ class OddsList extends Component {
 }
 
 render() {
-console.log(this.props.oddsListData)
     return (
-        this.props.oddsListData.odds.map( (row, index )  => (
+        this.props.oddsListData.listOfOdds.map( (row, index )  => (
             <Odds row={[this.props.oddsListData.id, index, row]}  key={index} selectedEvent={this.selectedEvent} />
 
             ))
@@ -22,54 +21,43 @@ class Odds extends Component{
         super(props);
         this.state = {
             selected: false,
-            color:"btn btn-secondary btn-lg"
+            color:"btn btn-secondary btn-lg",
+            buttonData: [],
+            loading: true
         };
     }
 
     addOddsToCart = (props) => {
-        console.log('odds', props);
-        //      this.setState({coords: coordinates, loading: true});
-
-        // const url = `/api/cart/add/selectedBet?betId=` + this.state.coords.lat + `&selectedOdds=` + this.state.coords.lng;
-
         const url = `/api/cart/add/` + props[0] + `/` + props[1];
 
         fetch(url, {method: 'get'})
             .then(function (response) {
                 console.log(response);
+
                 return response.json();
             })
             .then(json => {
-                this.setState({marketData: json, loading: true});
+                this.setState({buttonData: json.itemId, loading: true});
+                console.log(this.state.buttonData);
+
             });
     }
 
 
 
     removeOddsFromCart = (props) => {
-        console.log('odds', props);
-        //      this.setState({coords: coordinates, loading: true});
 
-        // const url = `/api/cart/add/selectedBet?betId=` + this.state.coords.lat + `&selectedOdds=` + this.state.coords.lng;
-/*
-        const url = `/api/cart/add/` + props[0] + `/` + props[1];
+         const url = `/api/cart/remove/` + this.state.buttonData;
 
         fetch(url, {method: 'get'})
             .then(function (response) {
                 console.log(response);
                 return response.json();
-            })
-            .then(json => {
-                this.setState({marketData: json, loading: true});
-            });*/
+            });
     }
 
 
-
-
-
     selectedOdds = (props) => {
-        //this.props.selectedEvent([this.props.row[0],this.props.row[1]]);
         if(!this.state.selected){
             this.setState({selected: true, color: "btn btn-success btn-lg active"})
             this.addOddsToCart([this.props.row[0],this.props.row[1]]);
@@ -84,7 +72,7 @@ class Odds extends Component{
         <td  className="text-center">
             <button className={ this.state.color}  role="button" aria-pressed="true"
                    onClick={this.selectedOdds} >
-                {this.props.row[2]}
+                {this.props.row[2][1]}
             </button>
         </td>
     );

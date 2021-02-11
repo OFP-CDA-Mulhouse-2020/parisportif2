@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompetitionRepository", repositoryClass=CompetitionRepository::class)
  */
-class Competition
+class Competition implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -75,7 +75,7 @@ class Competition
     /**
      * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="competitions")
      */
-    private Sport $sport;
+    private ?Sport $sport;
 
     public function __construct()
     {
@@ -189,5 +189,13 @@ class Competition
         $this->sport = $sport;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }
