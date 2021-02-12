@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from 'react';
-import EventData from '../data/event.json';
-import EventList from "./Event";
+import EventList from "./EventList";
+import {CartContext, Theme}  from "../../app/CartContext";
 
  class BetBoard extends Component{
      constructor(props){
          super(props);
          this.state = {
-             EventData : [],
-             CartData : [],
+             eventData : [],
+             cartData : [],
              loading :false,
          }
      }
@@ -24,16 +24,22 @@ import EventList from "./Event";
              })
              .then(json => {
                  console.log(json);
-                 this.setState({EventData: json, loading: true});
+                 this.setState({eventData: json, loading: true});
              });
      }
 
+
+     updateCart = (props) => {
+         console.log('cart')
+     }
 
      render() {
          if(this.state.loading){
 
          return (
-            <Fragment>
+             <CartContext.Provider value={this.state}>
+
+             <Fragment>
                      <h4>Football - Top du moment</h4>
                  <table className="table table-hover fw-bold">
                      <thead>
@@ -46,10 +52,15 @@ import EventList from "./Event";
                      </tr>
                      </thead>
                      <tbody>
-                        <EventList eventData={this.state.EventData} />
+                        <EventList eventData={this.state.eventData}
+                                   updateCart = {this.updateCart}
+
+                        />
                      </tbody>
                  </table>
             </Fragment>
+
+             </CartContext.Provider>
          );
              }
              else{

@@ -23,7 +23,10 @@ class EventList extends Component{
                             </a>
                     </p>
                     </td>
-                   <OddsList oddsListData={row} selectedBet={this.selectedBet}/>
+                   <OddsList oddsListData={row}
+                             selectedBet={this.selectedBet}
+                             updateCart = {this.props.updateCart}
+                   />
                 </tr>
             ))
             );

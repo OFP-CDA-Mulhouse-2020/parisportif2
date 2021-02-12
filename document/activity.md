@@ -138,4 +138,15 @@ User Profile et Home Page
 05/02 Ajout des pages et revue twig (daniel), implementer mailer (mohamed), implementer mailer (ladji)
 
 ---
-08/02
+08/02 Debug panther et webpack (daniel), demarrage easyAdmin (mohamed), easyAdmin partie Bet (ladji)
+
+09/02 easyAdmin partie Bet (daniel), easyAdmin partie Bet (ladji), easyAdmin partie User (mohamed)
+
+10/02 easyAdmin partie Bet (daniel), easyAdmin partie Bet (ladji), easyAdmin partie User (mohamed)
+
+11/02 reactJs liste des paris (daniel), symfony et reactjs (ladji), easyAdmin partie User (mohamed)
+
+12/02 reactJs liste des paris (daniel), symfony et reactjs (ladji), easyAdmin partie User (mohamed)
+
+---
+15/02 

@@ -9,7 +9,11 @@ class OddsList extends Component {
 render() {
     return (
         this.props.oddsListData.listOfOdds.map( (row, index )  => (
-            <Odds row={[this.props.oddsListData.id, index, row]}  key={index} selectedEvent={this.selectedEvent} />
+            <Odds row={[this.props.oddsListData.id, index, row]}  key={index}
+                  selectedEvent={this.selectedEvent}
+                  updateCart = {this.props.updateCart}
+
+            />
 
             ))
     );
@@ -28,8 +32,9 @@ class Odds extends Component{
     }
 
     addOddsToCart = (props) => {
-        const url = `/api/cart/add/` + props[0] + `/` + props[1];
 
+        this.props.updateCart();
+        const url = `/api/cart/add/` + props[0] + `/` + props[1];
         fetch(url, {method: 'get'})
             .then(function (response) {
                 console.log(response);
@@ -47,8 +52,8 @@ class Odds extends Component{
 
     removeOddsFromCart = (props) => {
 
+        this.props.updateCart();
          const url = `/api/cart/remove/` + this.state.buttonData;
-
         fetch(url, {method: 'get'})
             .then(function (response) {
                 console.log(response);

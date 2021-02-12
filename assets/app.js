@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom';
 import Cart from './cart/components/Cart';
 import BetBoard from './betBoard/components/BetBoard';
 
-
+/*
 function App() {
     return (
         <Cart/>
@@ -26,6 +26,7 @@ function App2() {
         <BetBoard/>
     )
 }
-ReactDOM.render(<App/>, document.querySelector('#cart'));
+*/
+ReactDOM.render(<Cart/>, document.querySelector('#cart'));
 
-ReactDOM.render(<App2/>, document.querySelector('#betBoard'));
+ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));

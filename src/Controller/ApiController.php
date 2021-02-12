@@ -14,25 +14,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class ApiController extends AbstractController
 {
     /**
      * @Route("/api/home", name="api_home")
      */
-    public function homePage(BetRepository $betRepository): Response
+    public function showHomeBet(BetRepository $betRepository): Response
     {
         $listOfBet = $betRepository->findAllSimpleBet();
 
         return $this->json($listOfBet);
+    }
+
+    /**
+     * @Route("/api/cart", name="api_cart")
+     */
+    public function showCart(): Response
+    {
+        $user = $this->getUser();
+        assert($user instanceof User);
+
+        /** @var Cart|null $cart */
+        $cart = $user->getCart();
+
+        return $this->json($cart);
     }
 
 
@@ -104,11 +110,11 @@ class ApiController extends AbstractController
         }
         $entityManager->flush();
 
-        return $response = JsonResponse::fromJsonString('{"validation" : "true"}');
+        return $this->showCart();
     }
 
     /**
-     * @Route("api/cart/changeBetAmount/{itemId}", name="app_cart_change_bet_amount")
+     * @Route("api/cart/changeBetAmount/{itemId}", name="api_cart_change_bet_amount")
      */
     public function changeBetAmount(
         Request $request,
@@ -121,7 +127,7 @@ class ApiController extends AbstractController
         $cart = $user->getCart();
         assert($cart instanceof Cart);
 
-        $newAmount = $request->request->get("change_amount");
+        $newAmount = (int) $request->getContent();
 
         // Récupération du pari (objet)
         $item = $itemRepository->find($itemId);
@@ -138,6 +144,6 @@ class ApiController extends AbstractController
         //Enregistrement en base de données
         $databaseService->saveToDatabase($cart);
 
-        return $response = JsonResponse::fromJsonString('{"validation" : "true"}');
+        return $this->showCart();
     }
 }
