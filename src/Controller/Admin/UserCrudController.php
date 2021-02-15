@@ -2,16 +2,13 @@
 
 namespace App\Controller\Admin;
 
-use App\Admin\Field\MapMkField;
+use App\Admin\Field\MapField;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
@@ -21,64 +18,76 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+        // ...
+        ->overrideTemplate('crud/index', 'bundles/EasyAdminBundle/crud/custom_index.html.twig');
+    }
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id', 'ID')->onlyOnIndex(),
-            TextField::new('lastName'),
-            TextField::new('firstName'),
-            TextField::new('email'),
-            ArrayField::new('roles'),
-            DateTimeField::new('birth_date'),
-            DateTimeField::new('create_at'),
-            BooleanField::new('active'),
-            DateTimeField::new('active_at'),
-            BooleanField::new('suspended'),
-            BooleanField::new('deleted'),
-            //end_suspend_at
-            //deleted_at
-            AssociationField::new('wallet'),
-
-            // Mes Fields Custom
-            $activeUser = MapMkField::new('active')
-                ->formatValue(function ($value, $entity) {
+        $id = IdField::new('id', 'ID')->onlyOnIndex();
+        $lastName = TextField::new('lastName');
+        $firstName = TextField::new('firstName');
+        $email = TextField::new('email');
+        $roles = ArrayField::new('roles');
+        $birthDate = DateTimeField::new('birthDate');
+        $createAt = DateTimeField::new('createAt');
+        $userActive =  MapField::new('active')
+            ->addCssClass('custom-badge')
+            ->formatValue(function ($value, $entity) {
+                if ($value) {
+                    return 'yes';
+                }
+                return 'no';
+            });
+        $userSuspend = MapField::new('suspended')
+            ->addCssClass('custom-badge')
+            ->formatValue(
+                function ($value, $entity) {
                     if ($value) {
-                        return 'open';
+                        return 'yes';
                     }
-                        return 'closed';
-                }),
-            $suspendedUser = MapMkField::new('suspended')
-                ->formatValue(
-                    function ($value, $entity) {
-                        if ($value) {
-                            return 'open';
-                        }
-                        return 'closed';
-                    }
-                ),
-            $DeletedUser = MapMkField::new('deleted')
-                ->formatValue(
-                    function ($value, $entity) {
-                        if ($value) {
-                            return 'open';
-                        }
-                        return 'closed';
-                    }
-                )
-        ];
+                    return 'no';
+                }
+            );
+        $userDelete = MapField::new('deleted')
+            ->addCssClass('custom-badge')
+        ->formatValue(
+            function ($value, $entity) {
+                if ($value) {
+                    return 'yes';
+                }
+                return 'no';
+            }
+        );
+
+        if (Crud::PAGE_INDEX === $pageName) {
+            return [
+                $id,
+                $lastName,
+                $firstName,
+                $email,
+                $roles,
+                $birthDate,
+                $createAt,
+                $userActive,
+                $userSuspend,
+                $userDelete
+            ];
+        } else {
+            return [
+                $lastName,
+                $firstName,
+                $email,
+                $roles,
+                $birthDate,
+                $createAt,
+                $userActive,
+                $userSuspend,
+                $userDelete
+            ];
+        }
     }
-    /*public function configureCrud(Crud $crud): Crud
-    {
-        return $crud
-            // ...
-
-            ->overrideTemplate('crud/layout', 'admin/advanced_layout.html.twig')
-
-            ->overrideTemplates([
-                                    'crud/field/text' => 'admin/product/field_id.html.twig',
-                                    'label/null' => 'admin/labels/null_product.html.twig',
-                                ])
-            ;
-    }*/
 }

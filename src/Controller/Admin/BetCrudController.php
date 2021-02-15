@@ -22,12 +22,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class BetCrudController extends AbstractCrudController
 {
@@ -40,7 +35,13 @@ class BetCrudController extends AbstractCrudController
     {
         // this action executes the 'renderInvoice()' method of the current CRUD controller
         $viewInvoice = Action::new('viewValidateBetPayment', 'Validate Bet Payment', 'fa fa-file-invoice')
-            ->linkToCrudAction('renderValidateBetPayment');
+            ->displayIf(static function ($entity) {
+                if (!$entity->isBetOpened() && count($entity->getBetResult()) > 0) {
+                    return true;
+                }
+                return false;
+            })
+                ->linkToCrudAction('renderValidateBetPayment');
 
         $new = Action::new('test', 'Edition', '')
             ->linkToCrudAction('test');
@@ -93,11 +94,7 @@ class BetCrudController extends AbstractCrudController
         $oddsList = CollectionField::new('oddsList')->setEntryType(BetType::class);
 
         $betOpened = MapField::new('betOpened')
-            ->addCssClass('badge badge-secondary custom-badge')
-          //  ->addJsFiles('assets/js/badge.js')
-              ->setCssClass('text-center badge badge-secondary')
-            ->addHtmlContentsToBody('<h1>hi</h1>>')
-            ->addJsFiles('admin/app.js')
+            ->addCssClass('custom-badge')
                 ->formatValue(function ($value, $entity) {
                     if ($value) {
                         return 'open';

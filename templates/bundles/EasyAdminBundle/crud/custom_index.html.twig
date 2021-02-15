@@ -225,6 +225,28 @@
     {% endif %}
 
     <script type="text/javascript">
+        //custom function for css
+        function displayBadge(){
+            const customBadges = document.querySelectorAll('.custom-badge')
+            customBadges.forEach(item => {
+               if(item.innerHTML.includes('yes')){
+                   item.innerHTML = '<span class="badge badge-success">yes</span>';
+                   //item.classList.replace('badge-danger','badge-success')
+
+               }else if(item.innerHTML.includes('open') ){
+                    item.innerHTML = '<span class="badge badge-success">open</span>';
+
+                }else if(item.innerHTML.includes('closed') ){
+                    item.innerHTML = '<span class="badge badge-danger">closed</span>';
+
+                }
+               else {
+                   item.innerHTML = '<span class="badge badge-danger">no</span>';
+               }
+            })
+        }
+        displayBadge();
+
         $(function() {
             const customSwitches = document.querySelectorAll('td.field-boolean .custom-control.custom-switch input[type="checkbox"]');
             for (i = 0; i < customSwitches.length; i++) {
