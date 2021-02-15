@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Admin\Field\MapMkField;
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -67,4 +68,17 @@ class UserCrudController extends AbstractCrudController
                 )
         ];
     }
+    /*public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            // ...
+
+            ->overrideTemplate('crud/layout', 'admin/advanced_layout.html.twig')
+
+            ->overrideTemplates([
+                                    'crud/field/text' => 'admin/product/field_id.html.twig',
+                                    'label/null' => 'admin/labels/null_product.html.twig',
+                                ])
+            ;
+    }*/
 }
