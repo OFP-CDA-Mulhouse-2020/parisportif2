@@ -13,6 +13,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./app/App";
 import display from "./js/display";
+import customBadge from "./js/badge";
 /*
 function App() {
     return (
@@ -37,3 +38,4 @@ if(document.querySelector('#page-content')){
 ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
 
 display();
+customBadge();

@@ -93,12 +93,18 @@ class BetCrudController extends AbstractCrudController
         $oddsList = CollectionField::new('oddsList')->setEntryType(BetType::class);
 
         $betOpened = MapField::new('betOpened')
-            ->formatValue(function ($value, $entity) {
-                if ($value) {
-                    return 'open';
-                }
-                return 'closed';
-            });
+            ->addCssClass('badge badge-secondary custom-badge')
+          //  ->addJsFiles('assets/js/badge.js')
+              ->setCssClass('text-center badge badge-secondary')
+            ->addHtmlContentsToBody('<h1>hi</h1>>')
+            ->addJsFiles('admin/app.js')
+                ->formatValue(function ($value, $entity) {
+                    if ($value) {
+                        return 'open';
+                    }
+                    return 'closed';
+                });
+
 
         $betOpened2 = BooleanField::new('betOpened');
         $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
@@ -115,6 +121,8 @@ class BetCrudController extends AbstractCrudController
     {
         return $crud->setPageTitle(Crud::PAGE_INDEX, 'Liste des paris')
             ->overrideTemplate('crud/edit', 'bundles/EasyAdminBundle/crud/custom_edit.html.twig')
+            ->overrideTemplate('crud/index', 'bundles/EasyAdminBundle/crud/custom_index.html.twig')
+
             ;
     }
 
