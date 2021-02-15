@@ -2,19 +2,14 @@ import React, {Component} from 'react';
 
 class OddsList extends Component {
 
-    selectedEvent = (props) => {
-    this.props.selectedBet(props);
-}
-
 render() {
     return (
-        this.props.oddsListData.listOfOdds.map( (row, index )  => (
-            <Odds row={[this.props.oddsListData.id, index, row]}  key={index}
-                  selectedEvent={this.selectedEvent}
-                  updateCart = {this.props.updateCart}
+        this.props.oddsListData[0].listOfOdds.map( (row, index )  => (
+            <Odds row={[this.props.oddsListData[0].id, index, row, this.props.oddsListData[1]]}  key={index}
+                  addOddsToCart = {this.props.addOddsToCart}
+                  removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
 
             />
-
             ))
     );
     }
@@ -26,61 +21,42 @@ class Odds extends Component{
         this.state = {
             selected: false,
             color:"btn btn-secondary btn-lg",
-            buttonData: [],
-            loading: true
+            itemId: null,
+            betId: this.props.row[0],
+            oddsIndex: this.props.row[1],
+            loading: true,
         };
     }
 
-    addOddsToCart = (props) => {
-
-        this.props.updateCart();
-        const url = `/api/cart/add/` + props[0] + `/` + props[1];
-        fetch(url, {method: 'get'})
-            .then(function (response) {
-                console.log(response);
-
-                return response.json();
-            })
-            .then(json => {
-                this.setState({buttonData: json.itemId, loading: true});
-                console.log(this.state.buttonData);
-
-            });
+    componentDidMount() {
+        console.log(this.props)
+        this.props.row[3].forEach(item => {
+            if(this.props.row[0] === item[0] && this.props.row[1] === item[1]){
+                this.setState({selected: true, color: "btn btn-success btn-lg active", itemId: item[2]})
+            }
+        })
     }
 
-
-
-    removeOddsFromCart = (props) => {
-
-        this.props.updateCart();
-         const url = `/api/cart/remove/` + this.state.buttonData;
-        fetch(url, {method: 'get'})
-            .then(function (response) {
-                console.log(response);
-                return response.json();
-            });
-    }
-
-
-    selectedOdds = (props) => {
+    selectedOdds = () => {
         if(!this.state.selected){
             this.setState({selected: true, color: "btn btn-success btn-lg active"})
-            this.addOddsToCart([this.props.row[0],this.props.row[1]]);
+            this.props.addOddsToCart([this.state.betId,this.state.oddsIndex]);
         }else{
             this.setState({selected: false, color: "btn btn-secondary btn-lg"})
-            this.removeOddsFromCart([this.props.row[0],this.props.row[1]]);
-        }
+            this.props.removeOddsFromBetBoard(this.state.itemId);
+            }
     }
 
     render() {
+
     return(
         <td  className="text-center">
             <button className={ this.state.color}  role="button" aria-pressed="true"
-                   onClick={this.selectedOdds} >
+                   onClick={this.selectedOdds}  >
                 {this.props.row[2][1]}
             </button>
         </td>
-    );
+            );
 
     }
 }

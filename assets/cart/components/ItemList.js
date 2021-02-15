@@ -1,19 +1,13 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 
 class ItemList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cartData: [],
-        }
-    }
 
     render() {
         return (
             this.props.cartData.map((row, index) => (
                     <Item row={row} key={index}
-                          deleteItem = {this.props.deleteItem}
-                          editItemAmount = {this.props.editItemAmount}
+                          editOddsFromCart = {this.props.editOddsFromCart}
+                          removeOddsFromCart = {this.props.removeOddsFromCart}
                     />
             ))
         );
@@ -35,18 +29,17 @@ class Item extends Component{
 
     editItemAmount = (e) => {
         this.setState({itemAmount : e.target.value});
-        this.props.editItemAmount([this.state.itemData, e.target.value])
+        this.props.editOddsFromCart([this.state.itemData, e.target.value])
     }
 
     removeItemFromCart = (props) => {
-        this.props.deleteItem([this.state.itemData, 0]);
+        this.props.removeOddsFromCart([this.state.itemData, null]);
         this.setState({display: false});
     }
 
     render() {
         if(this.state.display) {
             return (
-                <Fragment>
                     <div className="row">
                         <div className="col-10">
 
@@ -69,13 +62,12 @@ class Item extends Component{
 
                         <div className="col-2">
                             <button className="btn btn-danger" onClick={this.removeItemFromCart}>
-                                <i className="fa fa-times" aria-hidden="true"></i>
+                                <i className="fa fa-times" aria-hidden="true"/>
                             </button>
                         </div>
                         <hr/>
 
                     </div>
-                </Fragment>
             );
         }else{
             return (

@@ -11,9 +11,8 @@ import './styles/app.css';
 import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Cart from './cart/components/Cart';
-import BetBoard from './betBoard/components/BetBoard';
-
+import App from "./app/App";
+import display from "./js/display";
 /*
 function App() {
     return (
@@ -27,6 +26,14 @@ function App2() {
     )
 }
 */
-ReactDOM.render(<Cart/>, document.querySelector('#cart'));
 
-ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));
+
+if(document.querySelector('#page-content')){
+
+    ReactDOM.render(<App/>, document.querySelector('#page-content'));
+}
+
+/*
+ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
+
+display();

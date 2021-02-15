@@ -79,7 +79,7 @@ class ApiController extends AbstractController
         $entityManager->flush();
 
 
-        return $response = JsonResponse::fromJsonString('{"itemId" : ' . $item->getId() . '}');
+        return $this->showCart();
     }
 
     /**
