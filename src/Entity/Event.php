@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
  */
-class Event
+class Event implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -271,4 +271,18 @@ class Event
     //     }
     //     return false;
     // }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'location' => $this->getLocation(),
+            'date' => $this->getEventDateTime()->format('d/m/Y'),
+            'teams' => $this->getTeams(),
+            'sport' => $this->getSport(),
+            'competition' => $this->getCompetition(),
+
+        ];
+    }
 }

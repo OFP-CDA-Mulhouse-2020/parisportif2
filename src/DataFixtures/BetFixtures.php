@@ -54,9 +54,9 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet1 = new Bet();
         $bet1->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet1->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
-            ['', 1.1],
+            ['Team1', 2.2],
+            ['Nul', 1.5],
+            ['Team2', 1.1],
         ]);
         $bet1->setTypeOfBet($typeOfBet1);
         $bet1->setEvent($event1);
@@ -149,8 +149,8 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet2 = new Bet();
         $bet2->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet2->setListOfOdds([
-                ['', 2.2],
-                ['', 1.5],
+            ['Team1', 2.2],
+            ['Team2', 1.3],
             ]);
         $bet2->setTypeOfBet($typeOfBet2);
         $bet2->setEvent($event2);
@@ -161,9 +161,9 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet3 = new Bet();
         $bet3->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet3->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
-            ['', 1.1],
+            ['Team1', 2.2],
+            ['Nul', 1.5],
+            ['Team2', 1.1],
         ]);
         $bet3->setTypeOfBet($typeOfBet1);
         $bet3->setEvent($event3);
@@ -174,8 +174,8 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet4 = new Bet();
         $bet4->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet4->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
+            ['Team1', 2.2],
+            ['Team2', 1.3],
         ]);
         $bet4->setTypeOfBet($typeOfBet2);
         $bet4->setEvent($event4);
@@ -186,9 +186,9 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet5 = new Bet();
         $bet5->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet5->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
-            ['', 1.1],
+            ['Team1', 2.2],
+            ['Nul', 1.5],
+            ['Team2', 1.1],
         ]);
         $bet5->setTypeOfBet($typeOfBet1);
         $bet5->setEvent($event5);
@@ -199,8 +199,8 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet6 = new Bet();
         $bet6->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet6->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
+            ['Team1', 2.2],
+            ['Team2', 1.3],
         ]);
         $bet6->setTypeOfBet($typeOfBet2);
         $bet6->setEvent($event6);
@@ -211,9 +211,9 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet7 = new Bet();
         $bet7->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet7->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
-            ['', 1.1],
+            ['Team1', 2.2],
+            ['Nul', 1.5],
+            ['Team2', 1.1],
         ]);
         $bet7->setTypeOfBet($typeOfBet1);
         $bet7->setEvent($event7);
@@ -224,8 +224,8 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $bet8 = new Bet();
         $bet8->setBetLimitTime((new DateTime())->add(new DateInterval('P2D')));
         $bet8->setListOfOdds([
-            ['', 2.2],
-            ['', 1.5],
+            ['Team1', 2.2],
+            ['Team2', 1.3],
         ]);
         $bet8->setTypeOfBet($typeOfBet2);
         $bet8->setEvent($event8);

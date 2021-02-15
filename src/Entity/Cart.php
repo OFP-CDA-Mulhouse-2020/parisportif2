@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CartRepository::class)
  */
-class Cart
+class Cart implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -121,5 +121,14 @@ class Cart
         }
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'sum' => $this->getSum(),
+            'items' => $this->getItems(),
+        ];
     }
 }

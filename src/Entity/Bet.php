@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=BetRepository::class)
  */
-class Bet
+class Bet implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -41,6 +41,7 @@ class Bet
      *      message="Liste vide",
      *      groups={"bet"}
      * )
+     * @Assert\Valid
      */
     private array $listOfOdds = [];
 
@@ -73,7 +74,15 @@ class Bet
      */
     private array $betResult = [];
 
+    /**
+     * @Assert\Valid
+     */
+    private array $oddsList;
 
+    /**
+     * @Assert\Valid
+     */
+    private array $resultList;
 
 
     public function getId(): ?int
@@ -185,5 +194,47 @@ class Bet
     public function setBetOpened(bool $betOpened): void
     {
         $this->betOpened = $betOpened;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOddsList(): array
+    {
+        return $this->oddsList;
+    }
+
+    /**
+     * @param array $oddsList
+     */
+    public function setOddsList(array $oddsList): void
+    {
+        $this->oddsList = $oddsList;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResultList(): array
+    {
+        return $this->resultList;
+    }
+
+    /**
+     * @param array $resultList
+     */
+    public function setResultList(array $resultList): void
+    {
+        $this->resultList = $resultList;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'listOfOdds' => $this->getListOfOdds(),
+            'typeOfBet' => $this->getTypeOfBet(),
+            'event' => $this->getEvent(),
+        ];
     }
 }
