@@ -1,3 +1,11 @@
 body {
     background-color: lightgray;
 }
+
+.form_identity {
+    display:none;
+}
+
+.form_identity.active{
+    display:block;
+}

@@ -1,40 +1,89 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
+{#{% block main %}#}
+{#	<h3>Mes informations</h3>#}
+{#	<h4>Mon identité</h4>#}
+
+{#	{% if editedIdentity %}#}
+{#		{{form_start(identityForm, {"multipart":"true"})}}#}
+{#			{{ form_widget(identityForm) }}#}
+{#		{{form_end(identityForm)}}#}
+{#			<a href="/app/profile/information" class="btn btn-danger"> <i class="fa fa-times" aria-hidden="true"></i>#}
+{#		</a>#}
+
+{#	{% else %}#}
+{#		<form class="" action="" method="post">#}
+{#			{{ form_row(identityForm.lastName, { 'attr':{'disabled':'disabled'} }) }}#}
+{#			{{ form_row(identityForm.firstName, { 'attr':{'disabled':'disabled'} }) }}#}
+{#			{{ form_row(identityForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}#}
+{#		</form>#}
+{#			<a href="/app/profile/edit/identity" class="btn btn-primary">#}
+{#				<i class="fa fa-edit" aria-hidden="true"></i>#}
+{#			</a>#}
+{#	{% endif %}#}
+{#	<br><br>#}
+
+{#<h4>Mon adresse</h4>#}
+
+
+
+
+{#	{% if editedAddress %}#}
+{#		{{ form(addressForm) }}#}
+{#		<a href="/app/profile/information" class="btn btn-danger">#}
+{#			<i class="fa fa-times" aria-hidden="true"></i>#}
+{#		</a>#}
+
+{#	{% else %}#}
+{#		<form class="" action="" method="post">#}
+{#			{{ form_row(addressForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}#}
+{#			{{ form_row(addressForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}#}
+{#			{{ form_row(addressForm.city, { 'attr':{'disabled':'disabled'} }) }}#}
+{#			{{ form_row(addressForm.country, { 'attr':{'disabled':'disabled'} }) }}#}
+{#		</form>#}
+{#		<a href="/app/profile/edit/address" class="btn btn-primary">#}
+{#			<i class="fa fa-edit" aria-hidden="true"></i>#}
+{#		</a>#}
+{#	{% endif %}#}
+{#	<br><br>#}
+
+{#{% endblock %}#}
+
+
 {% block main %}
 	<h3>Mes informations</h3>
 	<h4>Mon identité</h4>
 
-	{% if editedIdentity %}
-		{{form_start(identityForm, {"multipart":"true"})}}
-			{{ form_widget(identityForm) }}
-		{{form_end(identityForm)}}
-			<a href="/app/profile/information" class="btn btn-danger"> <i class="fa fa-times" aria-hidden="true"></i>
-		</a>
-
-	{% else %}
+	{# IDENTITY FORM #}
+	<div class="form_identity form_identity_1 index active">
 		<form class="" action="" method="post">
-			{{ form_row(identityForm.lastName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(identityForm.firstName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(identityForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(identityDisabledForm.lastName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(identityDisabledForm.firstName, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(identityDisabledForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}
 		</form>
-			<a href="/app/profile/edit/identity" class="btn btn-primary">
-				<i class="fa fa-edit" aria-hidden="true"></i>
-			</a>
-	{% endif %}
+		<button class="btn btn-primary edit-btn">
+			<i class="fa fa-edit" aria-hidden="true"></i>
+		</button>
+	</div>
+
+
+	{# Modify identity Form #}
+	<div class="form_identity form_identity-2">
+		{{form_start(identityForm, {"multipart":"true"})}}
+		{{ form_widget(identityForm) }}
+		{{form_end(identityForm)}}
+		<button class="btn btn-danger cancel-btn"> <i class="fa fa-times" aria-hidden="true"></i>
+		</button>
+	</div>
+
+
+
 	<br><br>
+	{# ADDRESS FORM #}
+	<h4>Mon adresse</h4>
 
-<h4>Mon adresse</h4>
-
-
-
-
-	{% if editedAddress %}
-		{{ form(addressForm) }}
-		<a href="/app/profile/information" class="btn btn-danger">
-			<i class="fa fa-times" aria-hidden="true"></i>
-		</a>
-
-	{% else %}
+	{# Address Form #}
+	<div class="form_address form_address_2">
 		<form class="" action="" method="post">
 			{{ form_row(addressForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
 			{{ form_row(addressForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}
@@ -44,7 +93,17 @@
 		<a href="/app/profile/edit/address" class="btn btn-primary">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</a>
-	{% endif %}
+	</div>
+
+	{# Edited adress Form #}
+	{#	<div class="form_address form_address_1">#}
+	{#		{{ form(addressForm) }}#}
+	{#		<a href="/app/profile/information" class="btn btn-danger">#}
+	{#			<i class="fa fa-times" aria-hidden="true"></i>#}
+	{#		</a>#}
+	{#	</div>#}
+
+
 	<br><br>
 
 {% endblock %}
