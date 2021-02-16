@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\BankAccount;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class BankAccountCrudController extends AbstractCrudController
 {
@@ -12,14 +14,13 @@ class BankAccountCrudController extends AbstractCrudController
         return BankAccount::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('id', 'ID')->onlyOnIndex(),
+            TextField::new('fullName')->setLabel('User Name')->onlyOnIndex(),
+            TextField::new('ibanCode'),
+            TextField::new('bicCode'),
         ];
     }
-    */
 }

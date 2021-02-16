@@ -8,9 +8,10 @@ use App\Entity\Competition;
 use App\Entity\Sport;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class CompetitionFixtures extends Fixture
+class CompetitionFixtures extends Fixture implements DependentFixtureInterface
 {
     public const COMPETITION_LIGUE_1 = 'compétition Lique 1';
     public const COMPETITION_LIGUE_2 = 'compétition Lique 2';
@@ -114,5 +115,13 @@ class CompetitionFixtures extends Fixture
         $this->addReference(self::COMPETITION_SERIE_A, $competition6);
         $this->addReference(self::COMPETITION_BUNDESLIGA, $competition7);
         $this->addReference(self::COMPETITION_NBA, $competition10);
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            SportFootballFixtures::class,
+            SportBasketballFixtures::class,
+        ];
     }
 }

@@ -20,5 +20,27 @@ class JsControllerTest extends PantherTestCase
         $this->assertSelectorTextContains('a', 'LOGO');
 
         sleep(3);
+        $client->waitForElementToContain('#page-content', 'Top du moment');
+        // wait for text to be inserted in the element content
+
+      //  $crawler->selectButton('Football');
+        $client->waitForElementToContain('#betBoard', 'Match');
+
+
+
+        $crawler = $client->clickLink('Mon Portefeuille');
+        sleep(1);
+        $client->followRedirects();
+        $crawler = $client->clickLink('Solde du compte');
+
+        $this->assertSelectorTextContains('h3', 'Solde du compte');
+
+        sleep(1);
+
+
+        // return to Home
+        /*$crawler = $client->clickLink('Accueil');
+        $client->waitForElementToContain('#betBoard', 'Match');
+        sleep(3);*/
     }
 }

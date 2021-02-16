@@ -53,7 +53,7 @@ class WebsiteWallet
 
     public function initializeWallet(): void
     {
-        $this->balance = 100000 * 100;
+        $this->balance = 500000 * 100;
     }
 
     /******************************** balance ****************************** */

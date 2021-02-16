@@ -1,0 +1,99 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title 'Welcome to EasyAdmin 3' %}
+
+{% block page_content %}
+
+    <div class="container h-75">
+        <div class="row d-flex justify-content-around ">
+            <div class="col-6">
+
+                <a href="{{ userUrl }}">
+                <div class="card mt-2">
+                    <div class="row">
+
+                        <div class="col-4 alert-info">
+                        <span class="display-3 ">
+                            <i class="fas fa-users "></i>
+                        </span>
+                        </div>
+
+                        <div class="col-8">
+                            <span class="display-3">{{ countAllUser }} </span>  Active Users
+                        </div>
+
+                    </div>
+                </div>
+                </a>
+
+                <a href="{{ eventUrl }}">
+
+                <div class="card mt-2">
+                    <div class="row">
+
+                        <div class="col-4 alert-primary">
+                        <span class="display-3 ">
+                            <i class="fas fa-calendar-week"></i>
+                        </span>
+                        </div>
+
+                        <div class="col-8">
+                            <span class="display-3">{{ countAllEvent }} </span> Open Events
+                        </div>
+                    </div>
+                </div>
+                </a>
+
+            </div>
+
+                <div class="col-6">
+
+                    <a href="{{ betUrl }}">
+
+                <div class="card mt-2">
+                    <div class="row">
+
+                        <div class="col-4 alert-warning">
+                        <span class="display-3 ">
+                                <i class="fas fa-dice"></i>
+                        </span>
+                        </div>
+
+                        <div class="col-8">
+                            <span class="display-3">{{ countAllBet }} </span> Available Bets
+                        </div>
+
+                    </div>
+                </div>
+                    </a>
+
+                    <a href="{{ websiteWalletUrl }}">
+
+                <div class="card mt-2">
+                    <div class="row">
+
+                        <div class="col-4 alert-danger">
+                        <span class="display-3 ">
+                                <i class="fas fa-wallet"></i>
+                        </span>
+                        </div>
+
+                        <div class="col-8">
+                            <span class="display-3">{{ wallet.balance }} €</span>
+                        </div>
+
+                    </div>
+                </div>
+                    </a>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+{% endblock %}

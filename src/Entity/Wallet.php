@@ -72,6 +72,16 @@ class Wallet
      */
     private ?Collection $payments;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="wallet", cascade={"persist", "remove"})
+     */
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
+
     public function __construct()
     {
         $this->payments = new ArrayCollection();
@@ -202,5 +212,23 @@ class Wallet
     public function __toString(): string
     {
         return (string)$this->getBalance();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newWallet = null === $user ? null : $this;
+        if ($user->getWallet() !== $newWallet) {
+            $user->setWallet($newWallet);
+        }
+
+        return $this;
     }
 }

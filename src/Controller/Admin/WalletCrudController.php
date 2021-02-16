@@ -24,6 +24,7 @@ class WalletCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id', 'ID')->onlyOnIndex(),
+            TextField::new('fullName')->setLabel('User Name')->onlyOnIndex(),
             NumberField::new('balance'),
             NumberField::new('limitAmountPerWeek'),
             BooleanField::new('realMoney'),

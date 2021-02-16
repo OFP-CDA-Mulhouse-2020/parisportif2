@@ -199,7 +199,7 @@ class User implements UserInterface
     private ?Address $address;
 
     /**
-     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=BankAccount::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"bankAccount"})
      */
     private ?BankAccount $bankAccount;
@@ -211,19 +211,23 @@ class User implements UserInterface
     private ?Cart $cart;
 
     /**
-     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Wallet::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"wallet"})
      */
     private ?Wallet $wallet;
 
     /**
-     * @ORM\OneToOne(targetEntity=CardIdFile::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=CardIdFile::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"cardIdFile"})
+
      */
     private ?CardIdFile $cardIdFile;
 
-
-
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccountFile::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccountFile"})
+     */
+    private ?BankAccountFile $bankAccountFile;
 
 
     public function getId(): ?int
@@ -596,6 +600,18 @@ class User implements UserInterface
     public function setCardIdFile(?CardIdFile $cardIdFile): self
     {
         $this->cardIdFile = $cardIdFile;
+
+        return $this;
+    }
+
+    public function getBankAccountFile(): ?BankAccountFile
+    {
+        return $this->bankAccountFile;
+    }
+
+    public function setBankAccountFile(?BankAccountFile $bankAccountFile): self
+    {
+        $this->bankAccountFile = $bankAccountFile;
 
         return $this;
     }

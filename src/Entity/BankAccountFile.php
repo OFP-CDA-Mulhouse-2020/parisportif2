@@ -42,6 +42,16 @@ class BankAccountFile
      */
     private bool $valid = false;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="bankAccountFile", cascade={"persist", "remove"})
+     */
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,6 +77,24 @@ class BankAccountFile
     public function setValid(bool $valid): self
     {
         $this->valid = $valid;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBankAccountFile = null === $user ? null : $this;
+        if ($user->getBankAccountFile() !== $newBankAccountFile) {
+            $user->setBankAccountFile($newBankAccountFile);
+        }
 
         return $this;
     }

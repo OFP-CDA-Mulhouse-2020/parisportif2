@@ -34,7 +34,7 @@ class BetCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         // this action executes the 'renderInvoice()' method of the current CRUD controller
-        $viewInvoice = Action::new('viewValidateBetPayment', 'Validate Bet Payment', 'fa fa-file-invoice')
+        $setInvoice = Action::new('validateBetPayment', 'Validate Bet Payment', 'fa fa-file-invoice')
             ->displayIf(static function ($entity) {
                 if (!$entity->isBetOpened() && count($entity->getBetResult()) > 0) {
                     return true;
@@ -43,11 +43,18 @@ class BetCrudController extends AbstractCrudController
             })
                 ->linkToCrudAction('renderValidateBetPayment');
 
-        $new = Action::new('test', 'Edition', '')
+        $setResult = Action::new('setResult', 'Set Result', 'fas fa-trophy')
+            ->displayIf(static function ($entity) {
+                if (!$entity->isBetOpened()) {
+                    return true;
+                }
+                return false;
+            })
             ->linkToCrudAction('test');
 
         return $actions
-            ->add(Crud::PAGE_EDIT, $viewInvoice);
+            ->add(Crud::PAGE_EDIT, $setInvoice)
+            ->add(Crud::PAGE_INDEX, $setResult);
     }
 
     public function renderValidateBetPayment(
@@ -119,7 +126,6 @@ class BetCrudController extends AbstractCrudController
         return $crud->setPageTitle(Crud::PAGE_INDEX, 'Liste des paris')
             ->overrideTemplate('crud/edit', 'bundles/EasyAdminBundle/crud/custom_edit.html.twig')
             ->overrideTemplate('crud/index', 'bundles/EasyAdminBundle/crud/custom_index.html.twig')
-
             ;
     }
 
