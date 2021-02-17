@@ -3,6 +3,11 @@
 {% block page_title %}{% endblock %}
 
 {% block page_content %}
+    <h3>  Set Result of Event : </h3>
+    <h5>{{ bet.event.sport.name }} - {{ bet.event.competition.name }} - {{ bet.event.name }} :</h5>
+    <h5>{{ bet.event.teams[0] }} - {{ bet.event.teams[1] }}</h5>
+    <h6>{{ bet.event.eventDateTime|date("l d F - H:i") }} {{ bet.event.eventTimeZone }} - Lieu : {{ bet.event.location }}</h6>
+    <h6>Bet : N°{{ bet.id }} - Type : {{ bet.typeOfBet.betType }} </h6>
 
-{{ id }}
+    {{ form(resultEventForm) }}
 {% endblock %}

@@ -7,12 +7,14 @@ use App\Dto\BetDto;
 use App\Dto\ResultDto;
 use App\Entity\Bet;
 use App\Form\BetType;
+use App\Form\ResultEventType;
 use App\Form\ResultType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -21,7 +23,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class BetCrudController extends AbstractCrudController
@@ -53,7 +57,7 @@ class BetCrudController extends AbstractCrudController
             ->linkToCrudAction('setResult');
 
         return $actions
-            ->add(Crud::PAGE_EDIT, $setInvoice)
+            ->add(Crud::PAGE_INDEX, $setInvoice)
             ->add(Crud::PAGE_INDEX, $setResult);
     }
 
@@ -70,16 +74,33 @@ class BetCrudController extends AbstractCrudController
         AdminContext $context
     ): Response {
 
-        $id = $context->getEntity()->getInstance()->getId();
+        $entityInstance = $context->getEntity()->getInstance();
+        $resultEventForm =  $this->createForm(ResultEventType::class, $entityInstance);
+        $resultEventForm->handleRequest($context->getRequest());
 
-        $formResult = 0;
+        if ($resultEventForm->isSubmitted() && $resultEventForm->isValid()) {
+            $results = $context->getRequest()->request->get('result_event');
+               $betResult = [];
+            foreach ($results as $key => $result) {
+                if ($result === "1") {
+                    $betResult[] = $key;
+                }
+            }
+            $entityInstance->setBetResult($betResult);
+            $entityManager =  $this->getDoctrine()->getManager();
+            $entityManager->persist($entityInstance);
+            $entityManager->flush();
+            $this->addFlash('success', 'Les résultats ont été enregistrés');
 
+                return $this->redirect($context->getReferrer());
+        }
 
 
         return  $this->render(
             'bundles/EasyAdminBundle/crud/custom_form_bet_result.html.twig',
             [
-                'id' => $id,
+                'bet' => $entityInstance,
+                'resultEventForm' => $resultEventForm->createView(),
             ]
         );
     }
@@ -131,13 +152,13 @@ class BetCrudController extends AbstractCrudController
 
 
         $betOpened2 = BooleanField::new('betOpened');
-        $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
+      //  $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
 
 
         if (Crud::PAGE_INDEX === $pageName) {
             return [$id, $event, $typeOfBet, $betLimitTime, $listOfOdds, $betOpened];
         } else {
-            return [ $event, $typeOfBet, $betLimitTime, $oddsList, $betOpened2, $betResult];
+            return [ $event, $typeOfBet, $betLimitTime, $oddsList, $betOpened2];
         }
     }
 
@@ -181,11 +202,11 @@ class BetCrudController extends AbstractCrudController
         for ($i = 0; $i < count($oddsList); $i++) {
             $list[$i] = [$oddsList[$i]->getName(), $oddsList[$i]->getOdds()];
         }
-
+/*
         if (!$entityInstance->isBetOpened()) {
             $resultList = $entityInstance->getResultList();
             $entityInstance->setBetResult(array_keys($resultList));
-        }
+        }*/
         $entityInstance->setListOfOdds($list);
 
         return $entityInstance;
