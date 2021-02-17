@@ -21,31 +21,20 @@ class IdentityDisabledType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('lastName', TextType::class)
-            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class, [
+                'attr' => [
+                    'disabled' => 'disabled',
+                ]
+            ])
+            ->add('firstName', TextType::class, [
+                'attr' => [
+                    'disabled' => 'disabled',
+                ]
+            ])
             ->add('birthDate', BirthdayType::class, [
                 'widget' => 'single_text',
-            ])
-            ->add('justificatif', FileType::class, [
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2M',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/x-pdf',
-                            'image/jpeg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid PDF, PNG or JPEG document',
-                    ])
-                ],
-            ])
-
-            ->add('valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-danger btn-block'
+                    'disabled' => 'disabled',
                 ]
             ]);
     }

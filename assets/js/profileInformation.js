@@ -33,10 +33,12 @@ export default function profileInformation()
         formIdentities[index].classList.remove('active');
         if (btn === 'next') {
             index++;
+            formAddresses[1].classList.remove('active');
         } else if (btn === 'cancel') {
             index--;
         }
         formIdentities[index].classList.add('active');
+        formAddresses[0].classList.add('active');
     }
 
 
@@ -61,24 +63,13 @@ export default function profileInformation()
         formAddresses[index].classList.remove('active');
         if (btn === 'next') {
             index++;
+            formIdentities[1].classList.remove('active');
         } else if (btn === 'cancel') {
             index--;
         }
         formAddresses[index].classList.add('active');
+        formIdentities[0].classList.add('active');
     }
 
-    // function changeStep(btn)
-    // {
-    //     let index = 0;
-    //     const active = document.querySelector('.form_address.active');
-    //     index = formAddresses.indexOf(active);
-    //     formAddresses[index].classList.remove('active');
-    //     if (btn === 'next') {
-    //         index++;
-    //     } else if (btn === 'cancel') {
-    //         index--;
-    //     }
-    //     formAddresses[index].classList.add('active');
-    // }
 
 }

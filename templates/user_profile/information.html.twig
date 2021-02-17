@@ -56,18 +56,14 @@
 
 	{# IDENTITY FORM #}
 	<div class="form_identity form_identity_1 index active">
-		<form class="" action="" method="post">
-			{{ form_row(identityDisabledForm.lastName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(identityDisabledForm.firstName, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(identityDisabledForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}
-		</form>
+		{{ form(identityDisabledForm) }}
 		<button class="btn btn-primary edit-btn_identity">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</button>
 	</div>
 
 
-	{# Modify identity Form #}
+	{# Edited identity Form #}
 	<div class="form_identity form_identity-2">
 		{{form_start(identityForm, {"multipart":"true"})}}
 		{{ form_widget(identityForm) }}
@@ -84,12 +80,7 @@
 
 	{# Address Form #}
 	<div class="form_address form_address_2 index active">
-		<form class="" action="" method="post">
-			{{ form_row(addressDisabledForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressDisabledForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressDisabledForm.city, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressDisabledForm.country, { 'attr':{'disabled':'disabled'} }) }}
-		</form>
+		{{ form(addressDisabledForm) }}
 		<button class="btn btn-primary edit-btn_address">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</button>
