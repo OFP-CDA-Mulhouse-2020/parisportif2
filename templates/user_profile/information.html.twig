@@ -61,7 +61,7 @@
 			{{ form_row(identityDisabledForm.firstName, { 'attr':{'disabled':'disabled'} }) }}
 			{{ form_row(identityDisabledForm.birthDate, { 'attr':{'disabled':'disabled'} }) }}
 		</form>
-		<button class="btn btn-primary edit-btn">
+		<button class="btn btn-primary edit-btn_identity">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</button>
 	</div>
@@ -72,7 +72,7 @@
 		{{form_start(identityForm, {"multipart":"true"})}}
 		{{ form_widget(identityForm) }}
 		{{form_end(identityForm)}}
-		<button class="btn btn-danger cancel-btn"> <i class="fa fa-times" aria-hidden="true"></i>
+		<button class="btn btn-danger cancel-btn_identity"> <i class="fa fa-times" aria-hidden="true"></i>
 		</button>
 	</div>
 
@@ -83,25 +83,25 @@
 	<h4>Mon adresse</h4>
 
 	{# Address Form #}
-	<div class="form_address form_address_2">
+	<div class="form_address form_address_2 index active">
 		<form class="" action="" method="post">
-			{{ form_row(addressForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressForm.city, { 'attr':{'disabled':'disabled'} }) }}
-			{{ form_row(addressForm.country, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressDisabledForm.addressNumberAndStreet, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressDisabledForm.zipCode, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressDisabledForm.city, { 'attr':{'disabled':'disabled'} }) }}
+			{{ form_row(addressDisabledForm.country, { 'attr':{'disabled':'disabled'} }) }}
 		</form>
-		<a href="/app/profile/edit/address" class="btn btn-primary">
+		<button class="btn btn-primary edit-btn_address">
 			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>
+		</button>
 	</div>
 
-	{# Edited adress Form #}
-	{#	<div class="form_address form_address_1">#}
-	{#		{{ form(addressForm) }}#}
-	{#		<a href="/app/profile/information" class="btn btn-danger">#}
-	{#			<i class="fa fa-times" aria-hidden="true"></i>#}
-	{#		</a>#}
-	{#	</div>#}
+	{#	 Edited adress Form #}
+	<div class="form_address form_address_1">
+		{{ form(addressForm) }}
+		<button class="btn btn-danger cancel-btn_address">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</button>
+	</div>
 
 
 	<br><br>

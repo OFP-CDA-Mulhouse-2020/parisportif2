@@ -1,24 +1,31 @@
+
+
 export default function profileInformation()
 {
     console.log('test profile Information');
+
     const formIdentities = Array.from(document.querySelectorAll('.form_identity'));
-    const editBtn = document.querySelectorAll('.edit-btn');
-    const cancelBtn = document.querySelectorAll('.cancel-btn');
-    console.log(formIdentities)
+    const editBtnIdentity = document.querySelectorAll('.edit-btn_identity');
+    const cancelBtnIdentity = document.querySelectorAll('.cancel-btn_identity');
 
-    editBtn.forEach(button => {
+    const formAddresses = Array.from(document.querySelectorAll('.form_address'));
+    const editBtnAddress = document.querySelectorAll('.edit-btn_address');
+    const cancelBtnAddress = document.querySelectorAll('.cancel-btn_address');
+
+    /* Identity Form */
+    editBtnIdentity.forEach(button => {
         button.addEventListener('click', (e) => {
-            changeStep('next');
+            changeStepIdentityForm('next');
         })
     })
 
-    cancelBtn.forEach(button => {
+    cancelBtnIdentity.forEach(button => {
         button.addEventListener('click', (e) => {
-            changeStep('cancel');
+            changeStepIdentityForm('cancel');
         })
     })
 
-    function changeStep(btn)
+    function changeStepIdentityForm(btn)
     {
         let index = 0;
         const active = document.querySelector('.form_identity.active');
@@ -31,5 +38,47 @@ export default function profileInformation()
         }
         formIdentities[index].classList.add('active');
     }
+
+
+    /* Address Form */
+    editBtnAddress.forEach(button => {
+        button.addEventListener('click', (e) => {
+            changeStepAddressForm('next');
+        })
+    })
+
+    cancelBtnAddress.forEach(button => {
+        button.addEventListener('click', (e) => {
+            changeStepAddressForm('cancel');
+        })
+    })
+
+    function changeStepAddressForm(btn)
+    {
+        let index = 0;
+        const active = document.querySelector('.form_address.active');
+        index = formAddresses.indexOf(active);
+        formAddresses[index].classList.remove('active');
+        if (btn === 'next') {
+            index++;
+        } else if (btn === 'cancel') {
+            index--;
+        }
+        formAddresses[index].classList.add('active');
+    }
+
+    // function changeStep(btn)
+    // {
+    //     let index = 0;
+    //     const active = document.querySelector('.form_address.active');
+    //     index = formAddresses.indexOf(active);
+    //     formAddresses[index].classList.remove('active');
+    //     if (btn === 'next') {
+    //         index++;
+    //     } else if (btn === 'cancel') {
+    //         index--;
+    //     }
+    //     formAddresses[index].classList.add('active');
+    // }
 
 }
