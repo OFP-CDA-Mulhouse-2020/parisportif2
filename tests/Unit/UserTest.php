@@ -200,7 +200,7 @@ class UserTest extends KernelTestCase
     ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedSuspendedValue, $user->isSuspended());
-        $this->assertGreaterThanOrEqual($expectedsuspendedAtValue, $user->getSuspendedAt());
+        $this->assertGreaterThanOrEqual($expectedsuspendedAtValue, $user->getEndSuspendedAt());
     }
 
     public function suspendProvider(): array

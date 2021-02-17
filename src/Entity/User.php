@@ -229,6 +229,19 @@ class User implements UserInterface
      */
     private ?BankAccountFile $bankAccountFile;
 
+    private bool $activateDto = false;
+
+    private bool $suspendedDto = false;
+
+    /**
+     * @Assert\GreaterThanOrEqual(
+     *  value="+7 days",
+     *  message="Date de suspension incorrecte : {{ value }}")
+     * )
+     */
+    private ?DateTimeInterface $endSuspendAtDto;
+
+    private bool $deletedDto = false;
 
     public function getId(): ?int
     {
@@ -280,7 +293,7 @@ class User implements UserInterface
         return $this->suspended;
     }
 
-    public function getSuspendedAt(): ?DateTimeInterface
+    public function getEndSuspendedAt(): ?DateTimeInterface
     {
         return $this->endSuspendAt;
     }
@@ -614,5 +627,69 @@ class User implements UserInterface
         $this->bankAccountFile = $bankAccountFile;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActivateDto(): bool
+    {
+        return $this->activateDto;
+    }
+
+    /**
+     * @param bool $activateDto
+     */
+    public function setActivateDto(bool $activateDto): void
+    {
+        $this->activateDto = $activateDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuspendedDto(): bool
+    {
+        return $this->suspendedDto;
+    }
+
+    /**
+     * @param bool $suspendedDto
+     */
+    public function setSuspendedDto(bool $suspendedDto): void
+    {
+        $this->suspendedDto = $suspendedDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeletedDto(): bool
+    {
+        return $this->deletedDto;
+    }
+
+    /**
+     * @param bool $deletedDto
+     */
+    public function setDeletedDto(bool $deletedDto): void
+    {
+        $this->deletedDto = $deletedDto;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getEndSuspendAtDto(): ?DateTimeInterface
+    {
+        return $this->endSuspendAtDto;
+    }
+
+    /**
+     * @param DateTimeInterface|null $endSuspendAtDto
+     */
+    public function setEndSuspendAtDto(?DateTimeInterface $endSuspendAtDto): void
+    {
+        $this->endSuspendAtDto = $endSuspendAtDto;
     }
 }

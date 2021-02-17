@@ -52,9 +52,9 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        $listOfUser = $this->userRepository->findAll();
-        $listOfBet = $this->betRepository->findAll();
-        $listOfEvent = $this->eventRepository->findAll();
+        $listOfUser = $this->userRepository->findBy(['active' => true]);
+        $listOfBet = $this->betRepository->findBy(['betOpened' => true]);
+        $listOfEvent = $this->eventRepository->findAllNextEvent();
         $websiteWallet = $this->websiteWalletRepository->findAll();
 
         // redirect to some CRUD controller

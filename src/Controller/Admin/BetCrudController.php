@@ -50,7 +50,7 @@ class BetCrudController extends AbstractCrudController
                 }
                 return false;
             })
-            ->linkToCrudAction('test');
+            ->linkToCrudAction('setResult');
 
         return $actions
             ->add(Crud::PAGE_EDIT, $setInvoice)
@@ -65,6 +65,21 @@ class BetCrudController extends AbstractCrudController
 
         return  $this->redirectToRoute('app_cart_bet_payment', ['id' => $id]);
     }
+
+    public function setResult(
+        AdminContext $context
+    ): Response {
+
+        $id = $context->getEntity()->getInstance()->getId();
+
+        $formResult = 0;
+
+
+
+        return  $this->redirectToRoute('app_cart_bet_payment', ['id' => $id]);
+    }
+
+
 
     public function createEditForm(
         EntityDto $entityDto,
