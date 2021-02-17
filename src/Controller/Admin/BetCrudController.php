@@ -76,7 +76,12 @@ class BetCrudController extends AbstractCrudController
 
 
 
-        return  $this->redirectToRoute('app_cart_bet_payment', ['id' => $id]);
+        return  $this->render(
+            'bundles/EasyAdminBundle/crud/custom_form_bet_result.html.twig',
+            [
+                'id' => $id,
+            ]
+        );
     }
 
 

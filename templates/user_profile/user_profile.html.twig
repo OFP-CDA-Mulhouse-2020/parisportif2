@@ -7,143 +7,201 @@
     {# HEADER #}
     {% include "partials/_header.html.twig" %}
 
+    {# HOMEPAGE CONTENT #}
 
-    <div class="container-fluid">
-
-        <div class="row mt-4">
-
-            <div class="left-side-menu card col-3">
-                <div class="accordion accordion-flush" id="accordionFlushExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
-                                    aria-controls="flush-collapseOne">
-                                Mon profil
-                            </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/profile/login">Mes
-                                    identifiants</a>
-                                <a class="list-group-item list-group-item-action" href="/app/profile/information">Mes
-                                    informations</a>
-                                <a class="list-group-item list-group-item-action" href="/app/profile/activation">Activation/Désactivation
-                                    de compte</a>
-                                <a class="list-group-item list-group-item-action" href="/app/profile/suspend">Exclusion/Clôture
-                                    du compte</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
-                                    aria-controls="flush-collapseTwo">
-                                Mon portefeuille
-                            </button>
-                        </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/wallet/balance">Solde du
-                                    compte</a>
-                                <a class="list-group-item list-group-item-action" href="/app/wallet/add-money">Ajouter
-                                    des fonds</a>
-                                <a class="list-group-item list-group-item-action" href="/app/wallet/withdraw-money">Faire
-                                    un retrait</a>
-                                <a class="list-group-item list-group-item-action" href="/app/wallet/bank-account">Modifier
-                                    les coordonnées bancaires</a>
-                                <a class="list-group-item list-group-item-action" href="/app/wallet/limit-amount">Limite
-                                    de jeu</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseThree" aria-expanded="false"
-                                    aria-controls="flush-collapseThree">
-                                Aide
-                            </button>
-                        </h2>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/help">Aide</a>
-                                <a class="list-group-item list-group-item-action" href="/app/faq">FAQ</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseFour" aria-expanded="false"
-                                    aria-controls="flush-collapseFour">
-                                Nous contacter
-                            </button>
-                        </h2>
-                        <div id="flush-collapseFour" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/contact-us">Nous
-                                    contacter</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="main card col-6">
-                {% block main %}
-                {% endblock %}
-
-            </div>
-
-            <div class="right-side-menu card col-3">
-
-                <div class="accordion accordion-flush" id="accordionFlushExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseFive" aria-expanded="false"
-                                    aria-controls="flush-collapseFive">
-                                Mes tickets
-                            </button>
-                        </h2>
-                        <div id="flush-collapseFive" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/user/tickets">Mes
-                                    tickets</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#flush-collapseSix" aria-expanded="false"
-                                    aria-controls="flush-collapseSix">
-                                Mes favoris
-                            </button>
-                        </h2>
-                        <div id="flush-collapseSix" class="accordion-collapse collapse"
-                             aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="/app/user/favorites">Mes
-                                    favoris</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
         </div>
-    </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+    <section class="container-fluid" id="page-user">
+        <div class="row">
+
+            {# ASIDE LEFT #}
+            <div class="col-sm-12 col-md-3">
+                <aside class="container-fluid aside-left">
+
+                    <div class="row card mt-4">
+                        <div class="container-fluid col-sm-12 nav-user-left">
+
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingOne">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                                aria-controls="flush-collapseOne">
+                                            Mon profil
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action" href="/app/profile/login">Mes
+                                                identifiants</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/profile/information">Mes
+                                                informations</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/profile/activation">Activation/Désactivation
+                                                de compte</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/profile/suspend">Exclusion/Clôture
+                                                du compte</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                                aria-controls="flush-collapseTwo">
+                                            Mon portefeuille
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/wallet/balance">Solde du
+                                                compte</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/wallet/add-money">Ajouter
+                                                des fonds</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/wallet/withdraw-money">Faire
+                                                un retrait</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/wallet/bank-account">Modifier
+                                                les coordonnées bancaires</a>
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/wallet/limit-amount">Limite
+                                                de jeu</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingThree">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                                aria-controls="flush-collapseThree">
+                                            Aide
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseThree" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action" href="/app/help">Aide</a>
+                                            <a class="list-group-item list-group-item-action" href="/app/faq">FAQ</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingFour">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseFour" aria-expanded="false"
+                                                aria-controls="flush-collapseFour">
+                                            Nous contacter
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseFour" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action" href="/app/contact-us">Nous
+                                                contacter</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            {# SECTION CENTRAL #}
+            <div class="col-sm-12 col-md-6">
+                <section class="central">
+                    <div class="container-fluid p-0">
+                        <div class="row mt-4">
+                            {########### USER BOARD CONTENT ###########}
+                            <div class="col-sm-12 bet-board card p-2">
+
+                            {% block main %}
+                            {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+
+            {# ASIDE RIGHT #}
+            <div class="col-sm-12 col-md-3">
+                <aside class="container-fluid aside-right">
+                    <div class="row card mt-4">
+                        <div class="container-fluid col-sm-12 nav-user-right">
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingFive">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseFive" aria-expanded="false"
+                                                aria-controls="flush-collapseFive">
+                                            Mes tickets
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseFive" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action" href="/app/user/tickets">Mes
+                                                tickets</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingSix">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapseSix" aria-expanded="false"
+                                                aria-controls="flush-collapseSix">
+                                            Mes favoris
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseSix" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action"
+                                               href="/app/user/favorites">Mes
+                                                favoris</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </aside>
+            </div>
+
+
+        </div>
+    </section>
 
     {# FOOTER #}
     {% include "partials/_footer.html.twig" %}
