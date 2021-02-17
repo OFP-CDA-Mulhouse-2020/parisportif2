@@ -23,7 +23,7 @@ class ResultEventType extends AbstractType
             $builder->add($key, CheckboxType::class, [
                     'mapped' => false,
                     'required' => false,
-                    'label' => $odds[0] . ' - ' . $odds[1],
+                    'label' => 'Resultat : ' . $odds[0] . ' - Cote : ' . $odds[1],
                 ]);
         }
 

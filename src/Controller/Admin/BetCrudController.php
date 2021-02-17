@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Admin\Field\MapField;
 use App\Dto\BetDto;
+use App\Dto\GenerateBetPaymentDto;
 use App\Dto\ResultDto;
 use App\Entity\Bet;
 use App\Form\BetType;
@@ -30,6 +31,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BetCrudController extends AbstractCrudController
 {
+    private GenerateBetPaymentDto $generateBetPaymentDto;
+
+    public function __construct(GenerateBetPaymentDto $generateBetPaymentDto)
+    {
+        $this->generateBetPaymentDto = $generateBetPaymentDto;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Bet::class;
@@ -45,7 +53,11 @@ class BetCrudController extends AbstractCrudController
                 }
                 return false;
             })
-                ->linkToCrudAction('renderValidateBetPayment');
+         //   ->linkToCrudAction('validateBetPayment')
+                ->linkToRoute('app_cart_bet_payment', function (Bet $bet): array {
+                    return ['id' => $bet->getId()];
+                })
+        ;
 
         $setResult = Action::new('setResult', 'Set Result', 'fas fa-trophy')
             ->displayIf(static function ($entity) {
@@ -60,19 +72,17 @@ class BetCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $setInvoice)
             ->add(Crud::PAGE_INDEX, $setResult);
     }
-
-    public function renderValidateBetPayment(
-        AdminContext $context
-    ): Response {
-
+/*
+    public function validateBetPayment(AdminContext $context): Response
+    {
         $id = $context->getEntity()->getInstance()->getId();
 
-        return  $this->redirectToRoute('app_cart_bet_payment', ['id' => $id]);
+         //   $this->generateBetPaymentDto->validateBetToPayment($context);
     }
 
-    public function setResult(
-        AdminContext $context
-    ): Response {
+*/
+    public function setResult(AdminContext $context): Response
+    {
 
         $entityInstance = $context->getEntity()->getInstance();
         $resultEventForm =  $this->createForm(ResultEventType::class, $entityInstance);

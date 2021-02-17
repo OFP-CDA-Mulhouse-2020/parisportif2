@@ -31,9 +31,9 @@ class JsControllerTest extends PantherTestCase
         $crawler = $client->clickLink('Mon Portefeuille');
         sleep(1);
         $client->followRedirects();
-        $crawler = $client->clickLink('Solde du compte');
+       // $crawler = $client->clickLink('Solde du compte');
 
-        $this->assertSelectorTextContains('h3', 'Solde du compte');
+     //   $this->assertSelectorTextContains('h3', 'Solde du compte');
 
         sleep(1);
 
