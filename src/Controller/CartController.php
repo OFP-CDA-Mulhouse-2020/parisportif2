@@ -6,6 +6,8 @@ use App\Entity\Bet;
 use App\Entity\Cart;
 use App\Entity\Item;
 use App\Entity\User;
+use App\Entity\Wallet;
+use App\Factory\ItemFactory;
 use App\Repository\BetRepository;
 use App\Repository\ItemRepository;
 use App\Service\DatabaseService;
@@ -19,8 +21,12 @@ class CartController extends AbstractController
     /**
      * @Route("app/cart/add/{betId}/{expectedResult}", name="app_cart_add_item")
      */
-    public function addItemToCart(int $betId, int $expectedResult, BetRepository $betRepository): Response
-    {
+    public function addItemToCart(
+        int $betId,
+        int $expectedResult,
+        BetRepository $betRepository,
+        DatabaseService $databaseService
+    ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
 
@@ -35,21 +41,13 @@ class CartController extends AbstractController
         $bet = $betRepository->find($betId);
         assert($bet instanceof Bet);
 
-        $odds = $bet->getListOfOdds()[$expectedResult];
-
-        $item = new Item($bet);
-        $item->setExpectedBetResult($expectedResult);
-        $item->isModifiedRecordedOdds($odds[1]);
-        $item->isModifiedAmount(5);
+        $item = ItemFactory::makeItem($bet, $expectedResult);
 
         $cart->addItem($item);
         $cart->setSum();
 
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($item);
-        $entityManager->persist($cart);
-        $entityManager->flush();
+        $databaseService->saveToDatabase($item);
+        $databaseService->saveToDatabase($cart);
 
         return $this->redirectToRoute('app');
     }
@@ -117,5 +115,23 @@ class CartController extends AbstractController
         $databaseService->saveToDatabase($cart);
 
         return $this->redirectToRoute('app');
+    }
+
+
+    /**
+     * @Route("app/cart/history", name="app_cart_history")
+     */
+    public function displayCartHistory(ItemRepository $itemRepository): Response
+    {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $wallet = $user->getWallet();
+        assert($wallet instanceof Wallet);
+
+        $listOfItems = $itemRepository->findAllItemsByUserWallet($wallet);
+
+        return $this->render('cart/cart_history.html.twig', [
+            'listOfItems' => $listOfItems
+        ]);
     }
 }
