@@ -4,12 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Admin\Field\MapField;
 use App\Dto\BetDto;
-use App\Dto\GenerateBetPaymentDto;
 use App\Dto\ResultDto;
 use App\Entity\Bet;
 use App\Form\BetType;
 use App\Form\ResultEventType;
 use App\Form\ResultType;
+use App\Service\GenerateBetPaymentService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -31,11 +31,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BetCrudController extends AbstractCrudController
 {
-    private GenerateBetPaymentDto $generateBetPaymentDto;
+    private GenerateBetPaymentService $generateBetPaymentService;
 
-    public function __construct(GenerateBetPaymentDto $generateBetPaymentDto)
+    public function __construct(GenerateBetPaymentService $generateBetPaymentService)
     {
-        $this->generateBetPaymentDto = $generateBetPaymentDto;
+        $this->generateBetPaymentService = $generateBetPaymentService;
     }
 
     public static function getEntityFqcn(): string
@@ -53,10 +53,7 @@ class BetCrudController extends AbstractCrudController
                 }
                 return false;
             })
-         //   ->linkToCrudAction('validateBetPayment')
-                ->linkToRoute('app_cart_bet_payment', function (Bet $bet): array {
-                    return ['id' => $bet->getId()];
-                })
+            ->linkToCrudAction('validateBetPayment')
         ;
 
         $setResult = Action::new('setResult', 'Set Result', 'fas fa-trophy')
@@ -72,15 +69,19 @@ class BetCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $setInvoice)
             ->add(Crud::PAGE_INDEX, $setResult);
     }
-/*
+
     public function validateBetPayment(AdminContext $context): Response
     {
-        $id = $context->getEntity()->getInstance()->getId();
+        $entityInstance = $context->getEntity()->getInstance();
+        if ($entityInstance->isBetOpened()) {
+            return $this->redirect($context->getReferrer());
+        }
+        $this->generateBetPaymentService->validateBetToPayment($entityInstance);
 
-         //   $this->generateBetPaymentDto->validateBetToPayment($context);
+        return $this->redirect($context->getReferrer());
     }
 
-*/
+
     public function setResult(AdminContext $context): Response
     {
 
