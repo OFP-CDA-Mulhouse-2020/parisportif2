@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Form\AddressDisabledType;
 use App\Form\AddressType;
+use App\Form\IdentityDisabledType;
 use App\Form\IdentityType;
 use App\FormHandler\EditIdentityHandler;
 use App\Service\DatabaseService;
@@ -22,38 +24,27 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/information", name="_information")
      */
-    public function getUserInformation(): Response
-    {
+    public function getUserInformation(
+        Request $request,
+        EditIdentityHandler $editedIdentityHandler,
+        DatabaseService $databaseService
+    ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
         $address = $user->getAddress();
         assert($address instanceof Address);
 
         $identityForm = $this->createForm(IdentityType::class, $user);
+        $identityDisabledForm = $this->createForm(IdentityDisabledType::class, $user);
+
         $addressForm = $this->createForm(AddressType::class, $address);
+        $addressDisabledForm = $this->createForm(AddressDisabledType::class, $address);
 
-        return $this->render('user_profile/information.html.twig', [
-            'user' => $user,
-            'identityForm' => $identityForm->createView(),
-            'addressForm' => $addressForm->createView(),
-            'editedIdentity' => false,
-            'editedAddress' => false,
-        ]);
-    }
 
-    /**
-     * @Route("/edit/identity", name="_edit_identity")
-     */
-    public function editUserIdentity(Request $request, EditIdentityHandler $editedIdentityHandler): Response
-    {
-        $user = $this->getUser();
-        assert($user instanceof User);
-        $address = $user->getAddress();
-        assert($address instanceof Address);
-
-        $identityForm = $this->createForm(IdentityType::class, $user);
-        $addressForm = $this->createForm(AddressType::class, $address);
         $identityForm->handleRequest($request);
+        $addressForm->handleRequest($request);
+
+        // Identity Edition :
 
         if ($identityForm->isSubmitted() && $identityForm->isValid()) {
             try {
@@ -68,29 +59,7 @@ class UserProfileInformationController extends AbstractController
             }
         }
 
-        return $this->render('user_profile/information.html.twig', [
-            'user' => $user,
-            'identityForm' => $identityForm->createView(),
-            'addressForm' => $addressForm->createView(),
-            'editedIdentity' => true,
-            'editedAddress' => false,
-        ]);
-    }
-
-    /**
-     * @Route("/edit/address", name="_edit_address")
-     */
-    public function editUserAddress(Request $request, DatabaseService $databaseService): Response
-    {
-        $user = $this->getUser();
-        assert($user instanceof User);
-        $address = $user->getAddress();
-        assert($address instanceof Address);
-
-        $identityForm = $this->createForm(IdentityType::class, $user);
-        $addressForm = $this->createForm(AddressType::class, $address);
-        $addressForm->handleRequest($request);
-
+        // Adresse Edition :
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
             $databaseService->saveToDatabase($address);
 
@@ -98,12 +67,15 @@ class UserProfileInformationController extends AbstractController
             return $this->redirectToRoute('app_profile_information');
         }
 
+
         return $this->render('user_profile/information.html.twig', [
             'user' => $user,
             'identityForm' => $identityForm->createView(),
+            'identityDisabledForm' => $identityDisabledForm->createView(),
             'addressForm' => $addressForm->createView(),
-            'editedIdentity' => false,
-            'editedAddress' => true,
+            'addressDisabledForm' => $addressDisabledForm->createView(),
+
+
         ]);
     }
 }
