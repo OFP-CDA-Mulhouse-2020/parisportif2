@@ -70,6 +70,4 @@ export default function profileInformation()
         formAddresses[index].classList.add('active');
         formIdentities[0].classList.add('active');
     }
-
-
 }
