@@ -27,7 +27,7 @@
                 See note below about the "defer" attribute -->
         {% endblock %}
     </head>
-    <body>
+    <body style="{% block style %} {% endblock %}" class="{% block class %}{% endblock %}">
         {% block body %}
 
 
