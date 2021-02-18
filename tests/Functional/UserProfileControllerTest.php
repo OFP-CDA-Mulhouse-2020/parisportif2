@@ -51,28 +51,28 @@ class UserProfileControllerTest extends WebTestCase
     }
 
 
-    public function testUserProfileIdentity(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        assert($userRepository instanceof UserRepository);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        assert($testUser instanceof User);
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/profile/information');
-        $this->assertResponseStatusCodeSame(200);
-
-        $this->assertSelectorTextContains('div.main h3', 'Mes informations');
-        $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
-
-        $this->assertCount(1, $crawler->filter('form input[name*="addressNumberAndStreet"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="zipCode"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="city"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="country"]'));
-    }
+//    public function testUserProfileIdentity(): void
+//    {
+//        $client = static::createClient();
+//        $userRepository = static::$container->get(UserRepository::class);
+//        assert($userRepository instanceof UserRepository);
+//        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
+//        assert($testUser instanceof User);
+//        $client->loginUser($testUser);
+//
+//        $crawler = $client->request('GET', '/app/profile/information');
+//        $this->assertResponseStatusCodeSame(200);
+//
+//        $this->assertSelectorTextContains('div.main h3', 'Mes informations');
+//        $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
+//        $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
+//        $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
+//
+//        $this->assertCount(1, $crawler->filter('form input[name*="addressNumberAndStreet"]'));
+//        $this->assertCount(1, $crawler->filter('form input[name*="zipCode"]'));
+//        $this->assertCount(1, $crawler->filter('form input[name*="city"]'));
+//        $this->assertCount(1, $crawler->filter('form input[name*="country"]'));
+//    }
 
     public function testUserProfileActivation(): void
     {

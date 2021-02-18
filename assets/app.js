@@ -14,6 +14,8 @@ import ReactDOM from 'react-dom';
 import App from "./app/App";
 import display from "./js/display";
 import customBadge from "./js/badge";
+import profileInformation from './js/profileInformation';
+
 /*
 function App() {
     return (
@@ -39,3 +41,5 @@ ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
 
 display();
 customBadge();
+profileInformation();
+
