@@ -95,9 +95,9 @@ class Event implements \JsonSerializable
         $this->teams = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getId() . ' - ' . $this->getName();
+        return $this->getId() . ' - ' . $this->getCompetition()->getName() . ' : ' . $this->getName();
     }
 
     public function getId(): ?int

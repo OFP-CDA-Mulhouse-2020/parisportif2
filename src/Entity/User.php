@@ -26,7 +26,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -199,7 +199,7 @@ class User implements UserInterface
     private ?Address $address;
 
     /**
-     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=BankAccount::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"bankAccount"})
      */
     private ?BankAccount $bankAccount;
@@ -211,20 +211,37 @@ class User implements UserInterface
     private ?Cart $cart;
 
     /**
-     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Wallet::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"wallet"})
      */
     private ?Wallet $wallet;
 
     /**
-     * @ORM\OneToOne(targetEntity=CardIdFile::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=CardIdFile::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"cardIdFile"})
+
      */
     private ?CardIdFile $cardIdFile;
 
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccountFile::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccountFile"})
+     */
+    private ?BankAccountFile $bankAccountFile;
 
+    private bool $activateDto = false;
 
+    private bool $suspendedDto = false;
 
+    /**
+     * @Assert\GreaterThanOrEqual(
+     *  value="+7 days",
+     *  message="Date de suspension incorrecte : {{ value }}")
+     * )
+     */
+    private ?DateTimeInterface $endSuspendAtDto;
+
+    private bool $deletedDto = false;
 
     public function getId(): ?int
     {
@@ -276,7 +293,7 @@ class User implements UserInterface
         return $this->suspended;
     }
 
-    public function getSuspendedAt(): ?DateTimeInterface
+    public function getEndSuspendedAt(): ?DateTimeInterface
     {
         return $this->endSuspendAt;
     }
@@ -598,5 +615,81 @@ class User implements UserInterface
         $this->cardIdFile = $cardIdFile;
 
         return $this;
+    }
+
+    public function getBankAccountFile(): ?BankAccountFile
+    {
+        return $this->bankAccountFile;
+    }
+
+    public function setBankAccountFile(?BankAccountFile $bankAccountFile): self
+    {
+        $this->bankAccountFile = $bankAccountFile;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActivateDto(): bool
+    {
+        return $this->activateDto;
+    }
+
+    /**
+     * @param bool $activateDto
+     */
+    public function setActivateDto(bool $activateDto): void
+    {
+        $this->activateDto = $activateDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuspendedDto(): bool
+    {
+        return $this->suspendedDto;
+    }
+
+    /**
+     * @param bool $suspendedDto
+     */
+    public function setSuspendedDto(bool $suspendedDto): void
+    {
+        $this->suspendedDto = $suspendedDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeletedDto(): bool
+    {
+        return $this->deletedDto;
+    }
+
+    /**
+     * @param bool $deletedDto
+     */
+    public function setDeletedDto(bool $deletedDto): void
+    {
+        $this->deletedDto = $deletedDto;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getEndSuspendAtDto(): ?DateTimeInterface
+    {
+        return $this->endSuspendAtDto;
+    }
+
+    /**
+     * @param DateTimeInterface|null $endSuspendAtDto
+     */
+    public function setEndSuspendAtDto(?DateTimeInterface $endSuspendAtDto): void
+    {
+        $this->endSuspendAtDto = $endSuspendAtDto;
     }
 }

@@ -47,4 +47,14 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllNextEvent(): ?array
+    {
+        return $this->createQueryBuilder('event')
+            ->where('event.eventDateTime  >= :today')
+            ->setParameters(['today' => date('Y-m-d h:i:s')])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

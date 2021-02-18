@@ -29,8 +29,6 @@ class BankAccountHandler
 
     public function process(FormInterface $bankAccountForm, User $user): void
     {
-        $bankAccount = $user->getBankAccount();
-        assert($bankAccount instanceof BankAccount);
 
         //on récupère le fichier transmit
         /** @var UploadedFile|null $file */
@@ -40,7 +38,7 @@ class BankAccountHandler
             //upload du nouveau fichier (rib)
             $newFilename = $this->fileUploader->upload($file);
             // mise en mémoire de l'ancien fichier (rib)
-            $oldBankAccountFile = $bankAccount->getBankAccountFile();
+            $oldBankAccountFile = $user->getBankAccountFile();
 
             // suppression de l'ancien RIB (bankAccountFile) dans la Database et le repertoire Upload
             if ($oldBankAccountFile) {
@@ -52,7 +50,7 @@ class BankAccountHandler
             // Création de l'entité BankAccountFile
             $newBankAccountFile = BankAccountFileFactory::makeBankAccountFile($newFilename);
             // Mise à jour du nom du fichier
-            $bankAccount->setBankAccountFile($newBankAccountFile);
+            $user->setBankAccountFile($newBankAccountFile);
         } else {
             throw new \LogicException();
         }

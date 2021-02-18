@@ -4,6 +4,13 @@ namespace App\Controller\Admin;
 
 use App\Entity\Wallet;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TimezoneField;
 
 class WalletCrudController extends AbstractCrudController
 {
@@ -12,14 +19,16 @@ class WalletCrudController extends AbstractCrudController
         return Wallet::class;
     }
 
-    /*
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('id', 'ID')->onlyOnIndex(),
+            TextField::new('fullName')->setLabel('User Name')->onlyOnIndex(),
+            NumberField::new('balance'),
+            NumberField::new('limitAmountPerWeek'),
+            BooleanField::new('realMoney'),
+
         ];
     }
-    */
 }

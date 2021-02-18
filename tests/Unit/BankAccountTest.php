@@ -17,7 +17,6 @@ class BankAccountTest extends KernelTestCase
         $this->assertClassHasAttribute('id', BankAccount::class);
         $this->assertClassHasAttribute('ibanCode', BankAccount::class);
         $this->assertClassHasAttribute('bicCode', BankAccount::class);
-        $this->assertClassHasAttribute('bankAccountFile', BankAccount::class);
     }
 
 
@@ -76,18 +75,5 @@ class BankAccountTest extends KernelTestCase
             [BankAccount::build(null, 'F0rmatB1CInval1d3'), ['bicCode'], 1],
             [BankAccount::build('F0rmat1B4NInval1d3', null), ['ibanCode'], 1]
         ];
-    }
-
-
-    public function testValidBankAccountFile(): void
-    {
-        $bankAccountFile = new BankAccountFile();
-        $bankAccountFile->setName('RibBancaire.jpeg');
-        $bankAccountFile->setValid(true);
-
-        $bankAccount = new BankAccount();
-        $bankAccount->setBankAccountFile($bankAccountFile);
-        $this->assertInstanceOf(BankAccountFile::class, $bankAccount->getBankAccountFile());
-        $this->assertSame(0, $this->numberOfViolations($bankAccount, ['bankAccountFile']));
     }
 }

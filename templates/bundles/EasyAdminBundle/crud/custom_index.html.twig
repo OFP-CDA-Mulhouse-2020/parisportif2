@@ -38,9 +38,8 @@
     {% endblock %}
     #}
 {% endblock content_header %}
-<h1>HELLO</h1>
+
 {% block main %}
-    Hello
     {# sort can be multiple; let's consider the sorting field the first one #}
     {% set sort_field_name = app.request.get('sort')|keys|first %}
     {% set sort_order = app.request.get('sort')|first %}
@@ -108,6 +107,7 @@
     {% endif %}
 
     <div class="content-panel">
+
         <div class="content-panel-body with-rounded-top with-min-h-250 without-padding {{ not has_footer ? 'without-footer' }}">
             <table class="table datagrid with-rounded-top {{ not has_footer ? 'with-rounded-bottom' }}">
                 <thead>
@@ -215,16 +215,36 @@
     {% block delete_form %}
         {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', with_context = false) }}
     {% endblock delete_form %}
-
-    {% if filters|length > 0 %}
-        {{ include('@EasyAdmin/crud/includes/_filters_modal.html.twig') }}
-    {% endif %}
 {% endblock main %}
 
 {% block body_javascript %}
     {{ parent() }}
 
+    {% if filters|length > 0 %}
+        {{ include('@EasyAdmin/crud/includes/_filters_modal.html.twig') }}
+    {% endif %}
+
     <script type="text/javascript">
+        //custom function for css
+        function displayBadge(){
+            const customBadges = document.querySelectorAll('.custom-badge')
+            customBadges.forEach(item => {
+               if(item.innerHTML.includes('yes')){
+                   item.innerHTML = '<span class="badge badge-success">yes</span>';
+               }else if(item.innerHTML.includes('open') ){
+                    item.innerHTML = '<span class="badge badge-success">open</span>';
+
+                }else if(item.innerHTML.includes('closed') ){
+                    item.innerHTML = '<span class="badge badge-danger">closed</span>';
+
+                }
+               else {
+                   item.innerHTML = '<span class="badge badge-danger">no</span>';
+               }
+            })
+        }
+        displayBadge();
+
         $(function() {
             const customSwitches = document.querySelectorAll('td.field-boolean .custom-control.custom-switch input[type="checkbox"]');
             for (i = 0; i < customSwitches.length; i++) {

@@ -1,7 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {AsideLeft} from "./AsideLeft";
 import {Middle} from "./Middle";
 import {AsideRight} from "./AsideRight";
+import {Carousel} from "./Carousel";
+import Cart from "../cart/components/Cart";
+import BetBoard from "../betBoard/components/BetBoard";
 
 class App extends Component{
     constructor(props){
@@ -167,7 +170,54 @@ class App extends Component{
             );
         }else{
             return (
-                <div>2 {( Date.now()) }</div>
+<div style={{opacity: 0.4}}>
+            <section className="container-fluid" id="page-content">
+                <div className="row">
+                    <div className="col-sm-12 col-md-3">
+                        <AsideLeft/>
+                    </div>
+                    <div className="col-sm-12 col-md-6">
+                        <section className="central">
+                            <div className="container-fluid p-0">
+                                <div className="row mt-4">
+                                    <Carousel />
+                                    <div className="col-sm-12 mt-4 bet-board card p-2" id="betBoard">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div className="col-sm-12 col-md-3">
+                        <aside className="container-fluid aside-right">
+                            <div className="row card mt-4 p-2">
+
+                            </div>
+                            <div className="row card mt-4 p-2">
+                                <section className="col-sm-12 bet-search">
+                                    <form className="row g-3">
+                                        <div className="col-12">
+                                            <label htmlFor="inputBetSearch" className="form-label">
+                                                <h6>Chercher un pari</h6>
+                                            </label>
+                                            <input type="text" className="form-control" id="inputBetSearch" placeholder="placeholder" />
+                                        </div>
+                                        <div className="col-12 d-flex justify-content-center">
+                                            <button type="submit" className="btn btn-danger btn-sm">Rechercher</button>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
+                            <div className="card row mt-4">
+                                <section className="col-sm-12 mt-3 advertising-insert-2" style={{height:'200px' }}>
+                                    Espace Publicitaire 2
+                                </section>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+</div>
             );
         }
     }

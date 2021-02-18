@@ -33,16 +33,16 @@ class UserProfileControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/profile');
         $this->assertResponseStatusCodeSame(200);
 
-        $this->assertEquals(1, $crawler->filter('div.left-side-menu')->count());
-        $this->assertEquals(12, $crawler->filter('div.left-side-menu a')->count());
+        $this->assertEquals(1, $crawler->filter('div.nav-user-left')->count());
+        $this->assertEquals(12, $crawler->filter('div.nav-user-left a')->count());
 
         $this->assertSelectorTextContains('', 'Mon profil');
         $this->assertSelectorTextContains('', 'Mon portefeuille');
         $this->assertSelectorTextContains('', 'Aide');
         $this->assertSelectorTextContains('', 'Nous contacter');
 
-        $this->assertEquals(1, $crawler->filter('div.right-side-menu')->count());
-        $this->assertEquals(2, $crawler->filter('div.right-side-menu a')->count());
+        $this->assertEquals(1, $crawler->filter('div.nav-user-right')->count());
+        $this->assertEquals(2, $crawler->filter('div.nav-user-right a')->count());
 
         $this->assertSelectorTextContains('', 'Mes tickets');
         $this->assertSelectorTextContains('', 'Mes favoris');

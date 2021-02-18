@@ -4,15 +4,18 @@ namespace App\Controller\Admin;
 
 use App\Admin\Field\MapField;
 use App\Dto\BetDto;
+use App\Dto\GenerateBetPaymentDto;
 use App\Dto\ResultDto;
 use App\Entity\Bet;
 use App\Form\BetType;
+use App\Form\ResultEventType;
 use App\Form\ResultType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -21,16 +24,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class BetCrudController extends AbstractCrudController
 {
+    private GenerateBetPaymentDto $generateBetPaymentDto;
+
+    public function __construct(GenerateBetPaymentDto $generateBetPaymentDto)
+    {
+        $this->generateBetPaymentDto = $generateBetPaymentDto;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Bet::class;
@@ -39,24 +46,76 @@ class BetCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         // this action executes the 'renderInvoice()' method of the current CRUD controller
-        $viewInvoice = Action::new('viewValidateBetPayment', 'Validate Bet Payment', 'fa fa-file-invoice')
-            ->linkToCrudAction('renderValidateBetPayment');
+        $setInvoice = Action::new('validateBetPayment', 'Validate Bet Payment', 'fa fa-file-invoice')
+            ->displayIf(static function ($entity) {
+                if (!$entity->isBetOpened() && count($entity->getBetResult()) > 0) {
+                    return true;
+                }
+                return false;
+            })
+         //   ->linkToCrudAction('validateBetPayment')
+                ->linkToRoute('app_cart_bet_payment', function (Bet $bet): array {
+                    return ['id' => $bet->getId()];
+                })
+        ;
 
-        $new = Action::new('test', 'Edition', '')
-            ->linkToCrudAction('test');
+        $setResult = Action::new('setResult', 'Set Result', 'fas fa-trophy')
+            ->displayIf(static function ($entity) {
+                if (!$entity->isBetOpened()) {
+                    return true;
+                }
+                return false;
+            })
+            ->linkToCrudAction('setResult');
 
         return $actions
-            ->add(Crud::PAGE_EDIT, $viewInvoice);
+            ->add(Crud::PAGE_INDEX, $setInvoice)
+            ->add(Crud::PAGE_INDEX, $setResult);
     }
-
-    public function renderValidateBetPayment(
-        AdminContext $context
-    ): Response {
-
+/*
+    public function validateBetPayment(AdminContext $context): Response
+    {
         $id = $context->getEntity()->getInstance()->getId();
 
-        return  $this->redirectToRoute('app_cart_bet_payment', ['id' => $id]);
+         //   $this->generateBetPaymentDto->validateBetToPayment($context);
     }
+
+*/
+    public function setResult(AdminContext $context): Response
+    {
+
+        $entityInstance = $context->getEntity()->getInstance();
+        $resultEventForm =  $this->createForm(ResultEventType::class, $entityInstance);
+        $resultEventForm->handleRequest($context->getRequest());
+
+        if ($resultEventForm->isSubmitted() && $resultEventForm->isValid()) {
+            $results = $context->getRequest()->request->get('result_event');
+               $betResult = [];
+            foreach ($results as $key => $result) {
+                if ($result === "1") {
+                    $betResult[] = $key;
+                }
+            }
+            $entityInstance->setBetResult($betResult);
+            $entityManager =  $this->getDoctrine()->getManager();
+            $entityManager->persist($entityInstance);
+            $entityManager->flush();
+            $this->addFlash('success', 'Les résultats ont été enregistrés');
+
+                return $this->redirect($context->getReferrer());
+        }
+
+
+        return  $this->render(
+            'bundles/EasyAdminBundle/crud/custom_form_bet_result.html.twig',
+            [
+                'bet' => $entityInstance,
+                'resultEventForm' => $resultEventForm->createView(),
+            ]
+        );
+    }
+
+
 
     public function createEditForm(
         EntityDto $entityDto,
@@ -93,21 +152,23 @@ class BetCrudController extends AbstractCrudController
         $oddsList = CollectionField::new('oddsList')->setEntryType(BetType::class);
 
         $betOpened = MapField::new('betOpened')
-            ->formatValue(function ($value, $entity) {
-                if ($value) {
-                    return 'open';
-                }
-                return 'closed';
-            });
+            ->addCssClass('custom-badge')
+                ->formatValue(function ($value, $entity) {
+                    if ($value) {
+                        return 'open';
+                    }
+                    return 'closed';
+                });
+
 
         $betOpened2 = BooleanField::new('betOpened');
-        $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
+      //  $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
 
 
         if (Crud::PAGE_INDEX === $pageName) {
             return [$id, $event, $typeOfBet, $betLimitTime, $listOfOdds, $betOpened];
         } else {
-            return [ $event, $typeOfBet, $betLimitTime, $oddsList, $betOpened2, $betResult];
+            return [ $event, $typeOfBet, $betLimitTime, $oddsList, $betOpened2];
         }
     }
 
@@ -115,6 +176,7 @@ class BetCrudController extends AbstractCrudController
     {
         return $crud->setPageTitle(Crud::PAGE_INDEX, 'Liste des paris')
             ->overrideTemplate('crud/edit', 'bundles/EasyAdminBundle/crud/custom_edit.html.twig')
+            ->overrideTemplate('crud/index', 'bundles/EasyAdminBundle/crud/custom_index.html.twig')
             ;
     }
 
@@ -150,11 +212,11 @@ class BetCrudController extends AbstractCrudController
         for ($i = 0; $i < count($oddsList); $i++) {
             $list[$i] = [$oddsList[$i]->getName(), $oddsList[$i]->getOdds()];
         }
-
+/*
         if (!$entityInstance->isBetOpened()) {
             $resultList = $entityInstance->getResultList();
             $entityInstance->setBetResult(array_keys($resultList));
-        }
+        }*/
         $entityInstance->setListOfOdds($list);
 
         return $entityInstance;
