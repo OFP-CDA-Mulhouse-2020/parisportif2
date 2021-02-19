@@ -1,13 +1,8 @@
 import React from 'react';
 
-export const AsideLeft = () => {
+export const NavLeft = () => {
     return (
-    <aside className="container-fluid aside-left">
-        <div className="row card mt-4">
-            <div className="container-fluid col-sm-12 advertising-insert-1" style={{height:'20vw', minHeight: '280px'}}>
-                Espace Publicitaire 1
-            </div>
-        </div>
+
         <div className="row card mt-4">
             <div className="container-fluid col-sm-12 nav-bet">
                 <div
@@ -76,6 +71,6 @@ export const AsideLeft = () => {
                 </div>
             </div>
         </div>
-    </aside>
+
     );
 }

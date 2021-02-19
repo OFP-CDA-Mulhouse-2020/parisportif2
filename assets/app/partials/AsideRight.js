@@ -1,5 +1,5 @@
 import React from 'react';
-import Cart from "../cart/components/Cart";
+import Cart from "../cart/Cart";
 
 export const AsideRight = (props) => {
 

@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import EventList from "./EventList";
 import Filter from "./Filter";
 
- class BetBoard extends Component{
+ class HomeBetBoard extends Component{
      constructor(props){
          super(props);
          this.state = {
@@ -57,4 +57,4 @@ import Filter from "./Filter";
  }
 
 
-export default BetBoard;
+export default HomeBetBoard;
