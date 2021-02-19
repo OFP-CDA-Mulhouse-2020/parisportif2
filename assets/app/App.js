@@ -1,10 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {AsideLeft} from "./AsideLeft";
 import {Middle} from "./Middle";
 import {AsideRight} from "./AsideRight";
 import {Carousel} from "./Carousel";
-import Cart from "../cart/components/Cart";
-import BetBoard from "../betBoard/components/BetBoard";
 
 class App extends Component{
     constructor(props){
@@ -12,35 +10,20 @@ class App extends Component{
         this.state = {
             loadingCart: false,
             loadingBetBoard: false,
-            cartData: [],
-            eventData: [],
-            buttonStatus: []
+            cartData: null,
+            eventData: null,
+            buttonStatus: [],
+            loading:false,
         }
     }
 
     componentDidMount() {
-        this.fetchCart();
-        this.fetchBetBoard();
 
+        this.fetchBetAndCart();
     }
 
-    fetchCart() {
-        this.setState({loadingCart: false});
-        const url = `/api/cart`;
-        fetch(url, {method: 'get'})
-            .then(function (response) {
-                return response.json();
-            })
-            .then(json => {
-                this.setState({cartData: json});
-               // this.calculateAmount();
-                this.displayItemFromCart();
-
-            });
-    }
-
-    fetchBetBoard() {
-        this.setState({loadingBetBoard: false});
+    fetchBetAndCart() {
+        this.setState({loading: false});
         const url = `/api/home`;
 
         fetch(url, {method: 'get'})
@@ -48,30 +31,33 @@ class App extends Component{
                 return response.json();
             })
             .then(json => {
-                this.setState({eventData: json, loadingBetBoard: true});
+                this.setState({
+                    eventData: json["listOfBet"],
+                    cartData: json["cart"]
+                });
+                this.displayItemFromCart();
+
             });
     }
 
-
     displayItemFromCart = () => {
-        if(this.state.cartData && this.state.loadingCart === false){
-            console.log('this.state.cartData', this.state.cartData)
+        if(this.state.cartData && this.state.loading === false){
 
             let buttonStatus = [];
             this.state.cartData.items.forEach(item => {
                 buttonStatus.push([item.bet.id, item.expectedBetResult, item.id]);
             })
 
-            this.setState({buttonStatus : buttonStatus,  loadingCart: true});
-            console.log("display button", this.state)
+            this.setState({buttonStatus : buttonStatus,  loading: true});
         }else{
-            this.setState({buttonStatus: [], loadingCart:true})
+            this.setState({buttonStatus: [], loading:true})
         }
+        console.log("display button", this.state)
+
     }
 
 
     addOddsToCart = (props) => {
-        console.log('addOddsToCart', props)
         const url = `/api/cart/add/` + props[0] + `/` + props[1];
         fetch(url, {method: 'get'})
             .then(function (response) {
@@ -79,13 +65,12 @@ class App extends Component{
                 return response.json();
             })
             .then(json => {
-                this.setState({cartData: json, loadingCart: false});
+                this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
             });
     }
 
     removeOddsFromBetBoard = (props) => {
-        console.log('removeOddsFromBetBoard', props)
         const url = `/api/cart/remove/` + props;
         fetch(url, {method: 'get'})
             .then(function (response) {
@@ -93,15 +78,13 @@ class App extends Component{
                 return response.json();
             })
             .then(json => {
-                this.setState({cartData: json, loadingCart: false});
+                this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
         });
     }
 
 
     editOddsFromCart = (props) => {
-        console.log('editOddsFromCart', props)
-
         const url = `/api/cart/changeBetAmount/` + props[0].id;
         fetch(url, {
             method: 'post', body: props[1]
@@ -111,13 +94,12 @@ class App extends Component{
             return response.json();
         })
             .then(json => {
-                this.setState({cartData: json, loadingCart: false});
+                this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
             });
     }
 
     removeOddsFromCart = (props) => {
-        console.log('removeOddsFromCart', props)
         const url = `/api/cart/remove/` + props[0].id;
         fetch(url, {method: 'get'})
             .then(function (response) {
@@ -125,7 +107,7 @@ class App extends Component{
                 return response.json();
             })
             .then(json => {
-                this.setState({cartData: json, loadingCart: false});
+                this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
             });
 
@@ -139,8 +121,7 @@ class App extends Component{
 
 
     render() {
-        if(this.state.loadingBetBoard && this.state.loadingCart){
-            console.log('render App')
+        if(this.state.loading){
             return (
         <section className="container-fluid" id="page-content">
             <div className="row">

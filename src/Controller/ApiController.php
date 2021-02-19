@@ -24,7 +24,14 @@ class ApiController extends AbstractController
     {
         $listOfBet = $betRepository->findAllSimpleBet();
 
-        return $this->json($listOfBet);
+
+        $user = $this->getUser();
+        assert($user instanceof User);
+
+        /** @var Cart|null $cart */
+        $cart = $user->getCart();
+
+        return $this->json(["listOfBet" => $listOfBet, "cart" => $cart]);
     }
 
     /**

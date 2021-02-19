@@ -22,7 +22,7 @@ class Cart extends Component {
 
     componentDidUpdate(props) {
         // Utilisation classique (pensez bien à comparer les props) :
-       // this.setState({cartData:this.props.cartData});
+
         if(this.state.loading !== true)
         {
             this.calculateAmount();
@@ -34,7 +34,6 @@ class Cart extends Component {
     }
 
     calculateAmount = () => {
-
         let sum = 0;
         let expectedSum = 0;
         if(this.props.cartData){
@@ -49,7 +48,6 @@ class Cart extends Component {
             sum: sum,
             expectedSum: Math.round(expectedSum * 100) / 100,
         });
-        console.log('amount', this.state)
     }
 
 

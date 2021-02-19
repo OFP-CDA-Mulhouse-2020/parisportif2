@@ -4,6 +4,7 @@ import OddsList from "./OddsList";
 class EventList extends Component{
 
         render() {
+
             return (
                 this.props.eventData[0].map( (row, index)  => (
                 <tr key={index}>
@@ -20,7 +21,8 @@ class EventList extends Component{
                     </td>
                    <OddsList oddsListData={[row, this.props.eventData[1]]}
                              addOddsToCart = {this.props.addOddsToCart}
-                             removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}               />
+                             removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
+                   />
                 </tr>
             ))
             );
