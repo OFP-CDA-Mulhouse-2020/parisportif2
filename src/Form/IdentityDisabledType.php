@@ -23,16 +23,19 @@ class IdentityDisabledType extends AbstractType
     {
         $builder
             ->add('lastName', TextType::class, [
+                'label' => 'Nom',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
             ])
             ->add('firstName', TextType::class, [
+                'label' => 'Prénom',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
             ])
             ->add('birthDate', BirthdayType::class, [
+                'label' => 'Date de naissance',
                 'widget' => 'single_text',
                 'attr' => [
                     'disabled' => 'disabled',
