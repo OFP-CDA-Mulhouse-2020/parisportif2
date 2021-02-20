@@ -1,23 +1,26 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
 {% block main %}
-    <h4>Description</h4>
-    <p>
-        Deux types d'auto-exclusion s'offrent à vous : l'auto-exclusion temporaire et l'auto-exclusion définitive.    </p>
-    <ul>
-        <li>
-            L'auto-exclusion temporaire : vous nous pouvez plus vous connecter à l'application et au site jusqu'à la date que vous fixez. (durée minimum : une semaine)
+    <div class="mb-5">
 
-        </li>
-        <li>
-            L'auto-exclusion définitive : votre compte sera fermé, et vos fonds seront transférés sur votre compte en banque.<br>
-            Vous ne pourrez plus vous réinscrire avant une période de 3 ans.
-        </li>
-    </ul>
+        <h4 class="mb-3">Description</h4>
+        <p>
+            Deux types d'auto-exclusion s'offrent à vous : l'auto-exclusion temporaire et l'auto-exclusion définitive.    </p>
+        <ul>
+            <li>
+                L'auto-exclusion temporaire : vous nous pouvez plus vous connecter à l'application et au site jusqu'à la date que vous fixez. (durée minimum : une semaine)
 
-    <br>
+            </li>
+            <li>
+                L'auto-exclusion définitive : votre compte sera fermé, et vos fonds seront transférés sur votre compte en banque.<br>
+                Vous ne pourrez plus vous réinscrire avant une période de 3 ans.
+            </li>
+        </ul>
+    </div>
 
-    <h4>Quel type d'auto exclusion souhaitez vous ?</h4>
+
+
+    <h4 class="mb-3">Quel type d'auto exclusion souhaitez vous ?</h4>
 
 {#    <form action="/app/profile/suspend/process" method="post">#}
 {#        <label for="suspendType"></label>#}

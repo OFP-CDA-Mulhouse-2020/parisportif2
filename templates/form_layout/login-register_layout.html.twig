@@ -9,12 +9,6 @@
         </div>
 
         <div>
-            <span style="color:darkred;">
-                {{ form_errors(form) }}
-            </span>
-        </div>
-
-        <div>
             <span>
                 {{ form_widget(form) }}
             </span>
@@ -23,16 +17,18 @@
     </div>
 {% endblock %}
 
-{% block submit_widget %}
-    <div class="mt-4 mb-4">
-        {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
+{# CHECKBOX #}
+{% block checkbox_widget %}
+    <div class="mt-5">
         {{- parent() -}}
     </div>
 
 {% endblock %}
 
-{% block checkbox_widget %}
-    <div class="mt-5">
+{# SUBMIT #}
+{% block submit_widget %}
+    <div class="mt-4 mb-4">
+        {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
         {{- parent() -}}
     </div>
 

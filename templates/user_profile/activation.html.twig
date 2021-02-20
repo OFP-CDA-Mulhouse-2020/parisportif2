@@ -1,25 +1,32 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
+
 {% block main %}
-    <h4>Activation du compte</h4>
 
-    {% if user.active %}
-        Votre compte est activé depuis le {{ user.activeAt|date("d/m/Y")}}
+    <div class="mb-5">
+        <h4 class="mb-3">Activation du compte</h4>
 
-    {% else %}
-        Votre compte n'est pas encore activé.
+        {% if user.active %}
+            Votre compte est activé depuis le {{ user.activeAt|date("d/m/Y")}}
 
-        <a href="edit/identity" class="btn btn-primary">
-            Activer mon compte
-        </a>
+        {% else %}
+            Votre compte n'est pas encore activé.
 
-    {% endif %}
-    <br><br>
-    <h4>Fermeture du compte</h4>
-    Vous pouvez à tout moment décider de fermer votre compte. Cette décision est irréversible.
+            <a href="edit/identity" class="btn btn-primary">
+                Activer mon compte
+            </a>
+
+        {% endif %}
+    </div>
+
+
+    <h4 class="mb-3">Fermeture du compte</h4>
+    <p>
+        Vous pouvez à tout moment décider de fermer votre compte. Cette décision est irréversible.
+    </p>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Fermer mon compte
     </button>
 

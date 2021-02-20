@@ -16,21 +16,25 @@ class AddressDisabledType extends AbstractType
     {
         $builder
             ->add('addressNumberAndStreet', TextType::class, [
+                'label' => 'Adresse',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
             ])
             ->add('zipCode', IntegerType::class, [
+                'label' => 'Code Postal',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
             ])
             ->add('city', TextType::class, [
+                'label' => 'Ville',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
             ])
             ->add('country', TextType::class, [
+                'label' => 'Pays',
                 'attr' => [
                     'disabled' => 'disabled',
                 ]
