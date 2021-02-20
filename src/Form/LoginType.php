@@ -29,7 +29,7 @@ class LoginType extends AbstractType
             ])
             ->add('Valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-lg btn-primary w-100 loginForm_submit'
+                    'class' => 'btn btn-md btn-primary w-100 loginForm_submit'
                 ]
             ]);
     }

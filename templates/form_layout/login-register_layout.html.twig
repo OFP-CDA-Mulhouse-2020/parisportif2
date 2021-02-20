@@ -19,7 +19,7 @@
 
 {# CHECKBOX #}
 {% block checkbox_widget %}
-    <div class="mt-5">
+    <div class="pt-4">
         {{- parent() -}}
     </div>
 
@@ -27,7 +27,7 @@
 
 {# SUBMIT #}
 {% block submit_widget %}
-    <div class="mt-4 mb-4">
+    <div class="pt-4 mb-4">
         {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
         {{- parent() -}}
     </div>

@@ -8,16 +8,13 @@
         </div>
     {% endfor %}
 
-    <h3>Faire un retrait</h3>
+    <h3 class="mb-5">Faire un retrait</h3>
 
-    <h4>Solde actuel: {{ wallet.balance }} EUR</h4>
-
-    <br>
+    <p class="mb-5 fs-4 text-center">Solde actuel : {{ wallet.balance }} EUR</p>
 
 {{ form(withdrawMoneyForm) }}
-
     <br>
-    <h4>Versement par virement bancaire sur votre compte</h4>
+    <h4 class="mb-4">Versement par virement bancaire sur votre compte</h4>
     <p>Ref IBAN : XXXXXXXXXXXXXXXX</p>
 
 

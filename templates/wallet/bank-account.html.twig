@@ -8,11 +8,11 @@
         </div>
     {% endfor %}
 
-    <h3>Modifier les coordonnées bancaires</h3>
+    <h3 class="mb-5">Modifier les coordonnées bancaires</h3>
 
-    <h4>Mes coordonnées bancaires</h4>
+    <h4 class="mb-4">Mes coordonnées bancaires</h4>
 
-   <p>Titulaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
+   <p class ="fs-5">Titulaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
         {% if editBankAccount %}
             {{ form(bankAccountForm) }}
             <a href="/app/wallet/bank-account" class="btn btn-danger">
@@ -26,7 +26,7 @@
             {{ form_row(bankAccountForm.bicCode, { 'attr':{'disabled':'disabled'} }) }}
             </form>
 
-            <a href="/app/wallet/bank-account/edit" class="btn btn-primary">
+            <a href="/app/wallet/bank-account/edit" class="btn btn-primary mt-4">
                 <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
         {% endif %}

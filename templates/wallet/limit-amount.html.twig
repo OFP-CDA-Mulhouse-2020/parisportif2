@@ -8,9 +8,9 @@
         </div>
     {% endfor %}
 
-    <h3>Définir ma limite de jeu</h3>
+    <h3 class="mb-5">Définir ma limite de jeu</h3>
 
-    <h4>Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine. </h4>
+    <p class="mb-5 fs-4 text-center">Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine. </p>
 
         {% if editLimitAmount %}
             {{ form(walletForm) }}
@@ -25,13 +25,9 @@
             {{ form_row(walletForm.limitAmountPerWeek, { 'attr':{'disabled':'disabled'} }) }}
             </form>
 
-            <a href="/app/wallet/limit-amount/edit" class="btn btn-primary">
+            <a href="/app/wallet/limit-amount/edit" class="btn btn-primary mt-3">
                 <i class="fa fa-edit" aria-hidden="true"></i>
             </a>
         {% endif %}
-        <br><br>
-
-
-
 
 {% endblock %}
