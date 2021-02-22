@@ -4,18 +4,15 @@ namespace App\Controller\Admin;
 
 use App\Admin\Field\MapField;
 use App\Dto\BetDto;
-use App\Dto\GenerateBetPaymentDto;
-use App\Dto\ResultDto;
 use App\Entity\Bet;
 use App\Form\BetType;
 use App\Form\ResultEventType;
-use App\Form\ResultType;
+use App\Service\GenerateBetPaymentService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -24,18 +21,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class BetCrudController extends AbstractCrudController
 {
-    private GenerateBetPaymentDto $generateBetPaymentDto;
+    private GenerateBetPaymentService $generateBetPaymentService;
 
-    public function __construct(GenerateBetPaymentDto $generateBetPaymentDto)
+    public function __construct(GenerateBetPaymentService $generateBetPaymentService)
     {
-        $this->generateBetPaymentDto = $generateBetPaymentDto;
+        $this->generateBetPaymentService = $generateBetPaymentService;
     }
 
     public static function getEntityFqcn(): string
@@ -53,10 +48,7 @@ class BetCrudController extends AbstractCrudController
                 }
                 return false;
             })
-         //   ->linkToCrudAction('validateBetPayment')
-                ->linkToRoute('app_cart_bet_payment', function (Bet $bet): array {
-                    return ['id' => $bet->getId()];
-                })
+            ->linkToCrudAction('validateBetPayment')
         ;
 
         $setResult = Action::new('setResult', 'Set Result', 'fas fa-trophy')
@@ -72,15 +64,19 @@ class BetCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $setInvoice)
             ->add(Crud::PAGE_INDEX, $setResult);
     }
-/*
+
     public function validateBetPayment(AdminContext $context): Response
     {
-        $id = $context->getEntity()->getInstance()->getId();
+        $entityInstance = $context->getEntity()->getInstance();
+        if ($entityInstance->isBetOpened()) {
+            return $this->redirect($context->getReferrer());
+        }
+        $this->generateBetPaymentService->validateBetToPayment($entityInstance);
 
-         //   $this->generateBetPaymentDto->validateBetToPayment($context);
+        return $this->redirect($context->getReferrer());
     }
 
-*/
+
     public function setResult(AdminContext $context): Response
     {
 
@@ -124,19 +120,13 @@ class BetCrudController extends AbstractCrudController
     ): FormInterface {
         $instance = $entityDto->getInstance();
         $listOfOdds = $instance->getListOfOdds();
-        $resultBetDto = [];
         $listOfBetDto = [];
 
         foreach ($listOfOdds as $key => $odd) {
             $betDto = BetDto::build([$odd[0],$odd[1]]);
             $listOfBetDto[] = $betDto;
-            $resultDto = new ResultDto();
-            $resultDto->setName($key . '-' . $odd[0]);
-            $resultBetDto[] = $resultDto;
         }
-        $instance->setResultList($resultBetDto);
         $instance->setOddsList($listOfBetDto);
-       // dd($instance->getEvent());
 
         return $this->createEditFormBuilder($entityDto, $formOptions, $context)->getForm();
     }
@@ -162,8 +152,6 @@ class BetCrudController extends AbstractCrudController
 
 
         $betOpened2 = BooleanField::new('betOpened');
-      //  $betResult = CollectionField::new('resultList')->setEntryType(ResultType::class);
-
 
         if (Crud::PAGE_INDEX === $pageName) {
             return [$id, $event, $typeOfBet, $betLimitTime, $listOfOdds, $betOpened];
@@ -212,11 +200,7 @@ class BetCrudController extends AbstractCrudController
         for ($i = 0; $i < count($oddsList); $i++) {
             $list[$i] = [$oddsList[$i]->getName(), $oddsList[$i]->getOdds()];
         }
-/*
-        if (!$entityInstance->isBetOpened()) {
-            $resultList = $entityInstance->getResultList();
-            $entityInstance->setBetResult(array_keys($resultList));
-        }*/
+
         $entityInstance->setListOfOdds($list);
 
         return $entityInstance;

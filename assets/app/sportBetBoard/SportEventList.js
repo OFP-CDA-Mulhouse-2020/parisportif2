@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import OddsList from "./OddsList";
+import SportOddsList from "./SportOddsList";
 
-class EventList extends Component{
+class SportEventList extends Component{
 
         render() {
+
             return (
                 this.props.eventData[0].map( (row, index)  => (
                 <tr key={index}>
@@ -13,14 +14,16 @@ class EventList extends Component{
                             {row.event.teams[1].name} <br/>
                             {row.event.date} <br/>
                             {row.event.name} - {row.event.competition.name}<br/>
-                            <a href={`/app/sport/${row.event.sport.name}/event/${row.id}`}>
+                            <a href={`/app/event/${row.event.sport.name}/${row.event.id}`}>
                                 + de paris
                             </a>
                     </p>
+
                     </td>
-                   <OddsList oddsListData={[row, this.props.eventData[1]]}
-                             addOddsToCart = {this.props.addOddsToCart}
-                             removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}               />
+                   <SportOddsList oddsListData={[row, this.props.eventData[1]]}
+                                  addOddsToCart = {this.props.addOddsToCart}
+                                  removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
+                   />
                 </tr>
             ))
             );
@@ -30,4 +33,4 @@ class EventList extends Component{
 
 
 
-export default EventList;
+export default SportEventList;

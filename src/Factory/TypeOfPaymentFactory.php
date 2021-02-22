@@ -7,5 +7,4 @@ use App\Repository\TypeOfPaymentRepository;
 
 class TypeOfPaymentFactory
 {
-    private TypeOfPaymentRepository $typeOfPaymentRepository;
 }

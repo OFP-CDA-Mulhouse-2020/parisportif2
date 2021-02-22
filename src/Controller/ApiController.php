@@ -7,7 +7,10 @@ use App\Entity\Cart;
 use App\Entity\Item;
 use App\Entity\User;
 use App\Repository\BetRepository;
+use App\Repository\CompetitionRepository;
+use App\Repository\EventRepository;
 use App\Repository\ItemRepository;
+use App\Repository\SportRepository;
 use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,13 +27,11 @@ class ApiController extends AbstractController
     {
         $listOfBet = $betRepository->findAllSimpleBet();
 
-        return $this->json($listOfBet);
+        return $this->json(["listOfBet" => $listOfBet, "cart" => $this->showCart()]);
     }
 
-    /**
-     * @Route("/api/cart", name="api_cart")
-     */
-    public function showCart(): Response
+
+    private function showCart(): ?Cart
     {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -38,7 +39,53 @@ class ApiController extends AbstractController
         /** @var Cart|null $cart */
         $cart = $user->getCart();
 
-        return $this->json($cart);
+        return $cart;
+    }
+
+    /**
+     * @Route("/api/sport/{typeOfSport}", name="api_sport")
+     */
+    public function showBetsBySport(
+        string $typeOfSport,
+        BetRepository $betRepository,
+        CompetitionRepository $competitionRepository,
+        SportRepository $sportRepository
+    ): Response {
+
+        $listOfBet = $betRepository->findSimpleBetBySport($typeOfSport);
+        $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
+        $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
+
+        return $this->json([
+            "listOfBet" => $listOfBet,
+            "sport" => $sport,
+            "cart" => $this->showCart()
+        ]);
+    }
+
+    /**
+     * @Route("/api/event/{typeOfSport}/{eventId}", name="api_event")
+     */
+    public function showBetsByEvent(
+        string $typeOfSport,
+        int $eventId,
+        EventRepository $eventRepository,
+        BetRepository $betRepository,
+        SportRepository $sportRepository,
+        CompetitionRepository $competitionRepository
+    ): Response {
+
+        $event = $eventRepository->find($eventId);
+        $listOfBet = $betRepository->findBy(['event' => $eventId]);
+        $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
+        $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
+
+        return $this->json([
+            "listOfBet" => $listOfBet,
+            "event" => $event,
+            "sport" => $sport,
+            "cart" => $this->showCart()
+        ]);
     }
 
 
@@ -79,7 +126,7 @@ class ApiController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->showCart();
+        return $this->json($this->showCart());
     }
 
     /**
@@ -110,7 +157,7 @@ class ApiController extends AbstractController
         }
         $entityManager->flush();
 
-        return $this->showCart();
+        return $this->json($this->showCart());
     }
 
     /**
@@ -144,6 +191,6 @@ class ApiController extends AbstractController
         //Enregistrement en base de données
         $databaseService->saveToDatabase($cart);
 
-        return $this->showCart();
+        return $this->json($this->showCart());
     }
 }

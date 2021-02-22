@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     /**
-     * @Route("/app/sport/{typeOfSport}/event/{eventId}", name="app_event")
+     * @Route("/app/event/{typeOfSport}/{eventId}", name="app_event")
      */
     public function showBetsByEvent(
         string $typeOfSport,

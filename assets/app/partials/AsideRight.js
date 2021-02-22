@@ -1,6 +1,5 @@
 import React from 'react';
-import Cart from "../cart/components/Cart";
-import BetBoard from "../betBoard/components/BetBoard";
+import Cart from "../cart/Cart";
 
 export const AsideRight = (props) => {
 
