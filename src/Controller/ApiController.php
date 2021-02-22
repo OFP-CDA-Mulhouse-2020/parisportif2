@@ -31,7 +31,7 @@ class ApiController extends AbstractController
     }
 
 
-    private function showCart(): Cart
+    private function showCart(): ?Cart
     {
         $user = $this->getUser();
         assert($user instanceof User);

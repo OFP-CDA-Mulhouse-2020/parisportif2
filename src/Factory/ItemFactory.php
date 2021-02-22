@@ -7,7 +7,7 @@ use App\Entity\Item;
 
 class ItemFactory
 {
-    public static function makeItem(Bet $bet, int $expectedResult):Item
+    public static function makeItem(Bet $bet, int $expectedResult): Item
     {
 
         $odds = $bet->getListOfOdds()[$expectedResult];
