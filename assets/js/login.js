@@ -38,7 +38,16 @@ export default function login()
     })
 
     /* 3eme Form */
+    passwordForm.classList.add('d-none');
     btn_form_password.addEventListener('click', (e) => {
         console.log('click')
+        passwordForm.classList.add("d-none");
+        edit_password_disable.classList.remove('d-none');
+    })
+    /* 4eme FORM */
+    btn_edit_password_disable.addEventListener('click', (e) => {
+        console.log('click')
+        edit_password_disable.classList.add('d-none');
+        passwordForm.classList.remove('d-none')
     })
 }

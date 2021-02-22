@@ -4,7 +4,7 @@
     <h3>Mes identifiants</h3>
 
     <!-- premier form -->
-    {#<div class="edit_email">
+    <div class="edit_email">
         {{ form_start(emailForm) }}
             {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
             {{ form_widget(emailForm)}}
@@ -13,15 +13,15 @@
         <button class="btn btn-danger button_edit_email">
             <i class="fa fa-times" aria-hidden="true"></i>
         </button>
-    </div>#}
+    </div>
 
     <!-- 2eme form -->
-   {# <div class="edit_email_disable">
+   <div class="edit_email_disable">
         {{ form(emailFormDisable) }}
         <button class="btn btn-primary button_edit_email_disable">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </button>
-    </div>#}
+    </div>
 
 
     <!-- 3eme form -->
