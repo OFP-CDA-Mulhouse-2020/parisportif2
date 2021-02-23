@@ -151,12 +151,12 @@ class Home extends Component{
             return (
 <Fragment>
                 <div className="loader">
-                    <div className="loader-circle c1"></div>
-                    <div className="loader-circle c2"></div>
-                    <div className="loader-circle c3"></div>
-                    <div className="loader-circle c4"></div>
-                    <div className="loader-circle c5"></div>
-                    <div className="loader-circle c6"></div>
+                    <div className="loader-circle c1"/>
+                    <div className="loader-circle c2"/>
+                    <div className="loader-circle c3"/>
+                    <div className="loader-circle c4"/>
+                    <div className="loader-circle c5"/>
+                    <div className="loader-circle c6"/>
                 </div>
 
         <div className="loader-block">
@@ -218,19 +218,3 @@ class Home extends Component{
 export default Home;
 
 
-
-const Loader = () => {
-
-    return (
-        <div className="loader">
-            <div className="loader-circle c1"></div>
-            <div className="loader-circle c2"></div>
-            <div className="loader-circle c3"></div>
-            <div className="loader-circle c4"></div>
-            <div className="loader-circle c5"></div>
-            <div className="loader-circle c6"></div>
-        </div>
-
-
-    )
-}

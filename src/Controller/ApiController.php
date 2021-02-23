@@ -76,7 +76,7 @@ class ApiController extends AbstractController
     ): Response {
 
         $event = $eventRepository->find($eventId);
-        $listOfBet = $betRepository->findBy(['event' => $eventId]);
+        $listOfBet = $betRepository->findBy(['event' => $eventId, 'betOpened' => true]);
         $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
         $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
 
