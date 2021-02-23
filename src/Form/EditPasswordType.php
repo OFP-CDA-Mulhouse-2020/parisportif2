@@ -35,9 +35,9 @@ class EditPasswordType extends AbstractType
                 'second_options' => ['label' => 'Confirmer mot de passe'],
             ])
 
-            ->add('Valider', SubmitType::class, [
+            ->add('valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success btn-block'
+                    'class' => 'btn btn-danger btn-block'
                 ]
             ])
 

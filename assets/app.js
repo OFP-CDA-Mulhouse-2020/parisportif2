@@ -12,23 +12,8 @@ import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./app/App";
-import login from "./js/login";
-import customBadge from "./js/badge";
-import profileInformation from './js/profileInformation';
+import displayForm from './js/displayForm';
 
-/*
-function App() {
-    return (
-        <Cart/>
-    )
-}
-
-function App2() {
-    return (
-        <BetBoard/>
-    )
-}
-*/
 
 
 if(document.querySelector('#page-content')){
@@ -40,6 +25,4 @@ if(document.querySelector('#page-content')){
 ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
 
 
-login();
-customBadge();
-profileInformation();
+displayForm();
