@@ -25,11 +25,36 @@
 
 {% endblock %}
 
-{# SUBMIT #}
-{% block submit_widget %}
-    <div class="pt-4 mb-4">
-        {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
-        {{- parent() -}}
+{# RANGE #}
+{% block range_widget %}
+<div class="pt-4 range">
+    <div class="sliderValue">
+        <span>100</span>
     </div>
 
-{% endblock %}
+    <div class="field">
+        <div class="value left">
+            0
+        </div>
+        {#        {%- if type is defined and (type == 'range') %}#}
+        {#            #}{# Attribute "required" is not supported #}
+        {#            {%- set required = false -%}#}
+        {#        {% endif %}#}
+        {{- parent() -}}
+        <div class="value right">
+            200
+        </div>
+
+
+    </div>
+
+    {% endblock %}
+
+    {# SUBMIT #}
+    {% block submit_widget %}
+        <div class="pt-4 mb-4">
+            {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
+            {{- parent() -}}
+        </div>
+
+    {% endblock %}
