@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditEmailDisableType;
 use App\Form\EditEmailType;
 use App\Form\LoginType;
 use App\Form\EditPasswordType;
@@ -31,23 +32,87 @@ class UserProfileLoginController extends AbstractController
 
     /**
      * @Route("/login", name="_login")
+     * @param Request $request
+     * @param EditEmailHandler $editEmailHandler
+     * @param MailerService $mailerService
+     * @param EditPasswordHandler $editedPasswordHandler
+     * @return Response
      */
-    public function getUserLogin(UserInterface $user): Response
-    {
+    public function getUserLogin(
+        Request $request,
+        EditEmailHandler $editEmailHandler,
+        MailerService $mailerService,
+        EditPasswordHandler $editedPasswordHandler
+    ): Response {
+        $user = $this->getUser();
         $loginForm = $this->createForm(LoginType::class, $user);
 
-        return $this->render('user_profile/login.html.twig', [
-            'user' => $user,
-            'loginForm' => $loginForm->createView(),
-            'editedEmail' => false,
-            'editedPassword' => false,
-        ]);
+        $passwordForm = $this->createForm(EditPasswordType::class, $user);
+        $passwordForm->handleRequest($request);
+
+
+        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            try {
+                $editedPasswordHandler->process($passwordForm, $user);
+                $this->addFlash('success', 'Votre mot de passe a bien été changé !');
+                return $this->redirectToRoute('app_profile_login');
+            } catch (\LogicException $e) {
+                $passwordForm->addError(new FormError('Ancien mot de passe incorrect'));
+            }
+        }
+
+        //
+        $emailForm = $this->createForm(EditEmailType::class);
+        $emailFormDisable = $this->createForm(EditEmailDisableType::class, $user);
+        $emailForm->handleRequest($request);
+
+        if ($emailForm->isSubmitted() && $emailForm->isValid()) {
+            $editEmailHandler->process($emailForm, $user);
+
+
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'registration_confirmation_route',
+                (string)$user->getId(),
+                (string)$user->getEmail()
+            );
+
+            $email = $mailerService->generateEmail($user);
+
+            $email->subject('Votre demande de modification d\'email chez Paris Sportifs')
+                ->htmlTemplate('email/edit_email_confirmation_email.html.twig');
+            $email->context(
+                [
+                    'user' => $user,
+                    'signedUrl' => $signatureComponents->getSignedUrl(),
+                    'expiresAt' => $signatureComponents->getExpiresAt()
+                ]
+            );
+
+            $mailerService->sendEmail($email);
+
+            $this->addFlash('notice', 'Votre email a bien été changé, un email de confirmation vous a été envoyé !');
+            return $this->redirectToRoute('app_profile_login');
+        }
+
+
+        return $this->render(
+            'user_profile/login.html.twig',
+            [
+                'user' => $user,
+                'loginForm' => $loginForm->createView(),
+                'editedEmail' => true,
+                'editedPassword' => true,
+                'emailForm' => $emailForm->createView(),
+                'passwordForm' => $passwordForm->createView(),
+                'emailFormDisable' => $emailFormDisable->createView(),
+            ]
+        );
     }
 
     /**
      * @Route("/edit/email", name="_edit_email")
      */
-    public function editUserMail(
+    /*public function editUserMail(
         Request $request,
         EditEmailHandler $editEmailHandler,
         MailerService $mailerService
@@ -91,12 +156,12 @@ class UserProfileLoginController extends AbstractController
             'editedEmail' => true,
             'editedPassword' => false,
         ]);
-    }
+    }*/
 
     /**
      * @Route("/edit/password", name="_edit_password")
      */
-    public function editUserPassword(
+    /*public function editUserPassword(
         Request $request,
         EditPasswordHandler $editedPasswordHandler
     ): Response {
@@ -123,5 +188,5 @@ class UserProfileLoginController extends AbstractController
             'editedEmail' => false,
             'editedPassword' => true,
         ]);
-    }
+    }*/
 }
