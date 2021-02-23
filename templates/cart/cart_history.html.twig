@@ -1,0 +1,74 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+    <h3>Mes derniers tickets</h3>
+    <br>
+
+    <h4>Rechercher un ticket</h4>
+    <form action="">
+        <br><br>
+        <label for="startAt">Entre :</label>
+        <input type="date" id="startAt" name="startAt">
+        <br><br>
+
+        <label for="endAt">Et le :</label>
+        <input type="date" id="endAt" name="endAt">
+        <br><br>
+
+        <button type="submit" class="btn btn-danger">Rechercher</button>
+    </form>
+
+    <div>
+        <h4>Historique des tickets</h4>
+        <table class="table table-hover fw-bold">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Intitulé</th>
+                <th scope="col">Status</th>
+                <th scope="col">Mise</th>
+                <th scope="col">Gains</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in listOfItems %}
+                <tr>
+                    <th scope="row">{{ item.payment.datePayment|date("d/m/Y") }}</th>
+                    <th scope="row">{{ item.bet.event.competition.name }} : {{ item.bet.event.name }} -{{ item.bet.event.eventDateTime|date("d/m/Y")}}<br>
+                        {{ item.bet.event.teams[0] }} - {{ item.bet.event.teams[1] }} <br>
+                        {{ item.bet.typeOfBet.betType }} - {{ item.bet.listOfOdds[item.expectedBetResult][0] }} -{{ item.bet.listOfOdds[item.expectedBetResult][1] }}
+                    </th>
+
+                    {% if item.itemStatusId == 0 %}
+                        <td class="text-warning">Panier</td>
+                    {% elseif item.itemStatusId == 1 %}
+                        <td class="text-info">Payé</td>
+                    {% elseif item.itemStatusId == 2 %}
+                        <td class="text-success">Gagné</td>
+                    {% elseif item.itemStatusId == 3 %}
+                        <td class="text-danger">Perdu</td>
+                    {% elseif item.itemStatusId == 4 %}
+                        <td class="text-warning">Remboursé</td>
+                    {% endif %}
+
+                    <th scope="row">{{ item.amount }}</th>
+
+                    {% if item.itemStatusId == 0 %}
+                        <td class="text-warning">-</td>
+                    {% elseif item.itemStatusId == 1 %}
+                        <td class="text-info">En attente</td>
+                    {% elseif item.itemStatusId == 2 %}
+                        <td class="text-success">{{ item.amount * item.recordedOdds }}</td>
+                    {% elseif item.itemStatusId == 3 %}
+                        <td class="text-danger">0</td>
+                    {% elseif item.itemStatusId == 4 %}
+                        <td class="text-warning">{{ item.amount }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

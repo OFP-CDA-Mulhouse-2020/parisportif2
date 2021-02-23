@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\Wallet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,4 +48,16 @@ class ItemRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function findAllItemsByUserWallet(Wallet $wallet): array
+    {
+        return $this->createQueryBuilder('item')
+            ->leftJoin('item.payment', 'payment')
+            ->leftJoin('payment.wallet', 'wallet')
+            ->where('wallet = :wallet')
+            ->setParameter('wallet', $wallet)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -33,8 +33,8 @@ class UserProfileLoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/profile/login');
 
         $this->assertSelectorTextContains('div.main h3', 'Mes identifiants');
-        $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="edit_email[oldEmail]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="login[plainPassword]"]'));
     }
 
     public function testEditUserEmail(): void
@@ -48,14 +48,6 @@ class UserProfileLoginControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
-
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
 
         $this->assertSelectorTextContains('div.main h3', 'Mes identifiants');
         $this->assertCount(1, $crawler->filter('form input[name*="edit_email[oldEmail]"]'));
@@ -72,7 +64,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/email');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -97,7 +89,7 @@ class UserProfileLoginControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/email');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
@@ -125,14 +117,6 @@ class UserProfileLoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(1)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
-
         $this->assertSelectorTextContains('div.main h3', 'Mes identifiants');
         $this->assertCount(1, $crawler->filter('form input[name*="edit_password[oldPassword]"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="edit_password[plainPassword][first]"]'));
@@ -150,19 +134,19 @@ class UserProfileLoginControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
             ->filter('form')
-            ->eq(1)
+            ->eq(2)
             ->form();
 
         $form['edit_password[oldPassword]'] = 'M1cdacda8';
         $form['edit_password[plainPassword][first]'] = 'M1cdacda8';
         $form['edit_password[plainPassword][second]'] = 'M1cdacda8';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertResponseRedirects('/app/profile/login');
     }
@@ -176,12 +160,12 @@ class UserProfileLoginControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
             ->filter('form')
-            ->eq(1)
+            ->eq(2)
             ->form();
 
         $form['edit_password[oldPassword]'] = 'M1cdacda10';
@@ -202,12 +186,12 @@ class UserProfileLoginControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-        $crawler = $client->request('GET', '/app/profile/edit/password');
+        $crawler = $client->request('GET', '/app/profile/login');
         $this->assertResponseStatusCodeSame(200);
 
         $form = $crawler
             ->filter('form')
-            ->eq(1)
+            ->eq(2)
             ->form();
 
         $form['edit_password[oldPassword]'] = 'M1cdacda8';

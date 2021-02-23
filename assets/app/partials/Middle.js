@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Carousel} from "./Carousel";
-import BetBoard from "../betBoard/components/BetBoard";
+import HomeBetBoard from "../homeBetBoard/HomeBetBoard";
 
 export class Middle extends Component {
 
@@ -9,9 +9,9 @@ export class Middle extends Component {
             <Fragment>
                 <Carousel />
                 <div className="col-sm-12 mt-4 bet-board card p-2" id="betBoard">
-                    <BetBoard  addOddsToCart = {this.props.addOddsToCart}
-                               removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
-                               eventData = {this.props.eventData}/>
+                    <HomeBetBoard addOddsToCart = {this.props.addOddsToCart}
+                                  removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
+                                  eventData = {this.props.eventData}/>
                 </div>
             </Fragment>
 

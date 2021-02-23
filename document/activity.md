@@ -149,4 +149,16 @@ User Profile et Home Page
 12/02 reactJs liste des paris (daniel), symfony et reactjs (ladji), easyAdmin partie User (mohamed)
 
 ---
-15/02 
+15/02 reactJs liste des paris et panier (daniel), js sur formulaire information (ladji), js sur formulaire identifiant (mohamed)
+
+16/02 easyadmin (daniel), js sur formulaire information (ladji), js sur formulaire identifiant (mohamed)
+
+17/02 easyadmin (daniel), js sur formulaire information (ladji), js sur formulaire identifiant (mohamed)
+
+18/02 page Ticket et refactorisation de certaines méthodes (daniel), template pour les pages login et register (ladji), js sur formulaire identifiant (mohamed)
+
+19/02 reactRouter pour les autres pages (daniel), template pour les pages login et register (ladji), js sur formulaire identifiant (mohamed)
+
+
+---
+22/02 
