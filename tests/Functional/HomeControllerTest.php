@@ -46,7 +46,7 @@ class HomeControllerTest extends WebTestCase
 
         // MAIN NAV
         $this->assertSelectorExists('nav.nav-main');
-        $this->assertEquals(4, $crawler->filter('nav.nav-main li.nav-item>a[class~="nav-link"]')->count());
+        $this->assertEquals(5, $crawler->filter('nav.nav-main li.nav-item>a[class~="nav-link"]')->count());
 
         // SECONDARY NAV
         $this->assertSelectorExists('nav.nav-secondary');

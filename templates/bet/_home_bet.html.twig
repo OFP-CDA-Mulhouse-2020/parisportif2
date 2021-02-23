@@ -20,7 +20,7 @@
                         {{ bet.event.teams[1] }}<br>
                         {{ bet.event.eventDateTime|date("l d F - H:i")}}<br>
                          {{ bet.event.name }} - {{ bet.event.competition.name }}<br>
-                        <a href="/app/sport/{{ bet.event.sport.name|lower }}/event/{{ bet.event.id }}/">+ de paris</a></p>
+                        <a href="/app/event/{{ bet.event.sport.name|lower }}/{{ bet.event.id }}/">+ de paris</a></p>
                     </td>
             {% for odds in bet.listOfOdds %}
                 <td class="text-center"><a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="/app/cart/add/{{ bet.id }}/{{ loop.index0 }}">{{ odds[1] }}</a></td>

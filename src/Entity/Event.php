@@ -95,9 +95,9 @@ class Event implements \JsonSerializable
         $this->teams = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getId() . ' - ' . $this->getName();
+        return $this->getId() . ' - ' . $this->getCompetition()->getName() . ' : ' . $this->getName();
     }
 
     public function getId(): ?int
@@ -278,7 +278,8 @@ class Event implements \JsonSerializable
             'id' => $this->getId(),
             'name' => $this->getName(),
             'location' => $this->getLocation(),
-            'date' => $this->getEventDateTime()->format('d/m/Y'),
+            'date' => $this->getEventDateTime()->format('d/m/Y à H:i'),
+            'timezone' => $this->getEventTimeZone(),
             'teams' => $this->getTeams(),
             'sport' => $this->getSport(),
             'competition' => $this->getCompetition(),

@@ -4,6 +4,7 @@ namespace App\Tests\Unit;
 
 use App\Entity\Address;
 use App\Entity\BankAccount;
+use App\Entity\BankAccountFile;
 use App\Entity\CardIdFile;
 use App\Entity\Cart;
 use App\Entity\User;
@@ -39,6 +40,7 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('wallet', User::class);
         $this->assertClassHasAttribute('bankAccount', User::class);
         $this->assertClassHasAttribute('cardIdFile', User::class);
+        $this->assertClassHasAttribute('bankAccountFile', User::class);
     }
 
     public function getKernel(): KernelInterface
@@ -198,7 +200,7 @@ class UserTest extends KernelTestCase
     ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedSuspendedValue, $user->isSuspended());
-        $this->assertGreaterThanOrEqual($expectedsuspendedAtValue, $user->getSuspendedAt());
+        $this->assertGreaterThanOrEqual($expectedsuspendedAtValue, $user->getEndSuspendedAt());
     }
 
     public function suspendProvider(): array
@@ -321,5 +323,17 @@ class UserTest extends KernelTestCase
         $user->setCardIdFile($cardId);
         $this->assertInstanceOf(CardIdFile::class, $user->getCardIdFile());
         $this->assertSame(0, $this->getViolationsCount($user, ['cardIdFile']));
+    }
+
+    public function testValidBankAccountFile(): void
+    {
+        $bankAccountFile = new BankAccountFile();
+        $bankAccountFile->setName('RibBancaire.jpeg');
+        $bankAccountFile->setValid(true);
+
+        $user = new User();
+        $user->setBankAccountFile($bankAccountFile);
+        $this->assertInstanceOf(BankAccountFile::class, $user->getBankAccountFile());
+        $this->assertSame(0, $this->getViolationsCount($user, ['bankAccountFile']));
     }
 }

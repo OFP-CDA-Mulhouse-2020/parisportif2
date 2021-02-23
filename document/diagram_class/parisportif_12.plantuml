@@ -170,7 +170,7 @@ User "1" *-right- "1" Wallet
 User "1" *-left- "1..*" Cart
 User "1" *-- "1" BankAccount
 User "1" *-- "1" CardIdFile
-BankAccount "1" *-- "1" BankAccountFile
+User "1" *-- "1" BankAccountFile
 
 
 Payment "1..*" -down-* "1..*" Wallet

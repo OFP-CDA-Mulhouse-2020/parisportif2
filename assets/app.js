@@ -12,8 +12,10 @@ import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./app/App";
-import display from "./js/display";
 import login from "./js/login";
+import customBadge from "./js/badge";
+import profileInformation from './js/profileInformation';
+
 /*
 function App() {
     return (
@@ -37,5 +39,7 @@ if(document.querySelector('#page-content')){
 /*
 ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
 
-display();
+
 login();
+customBadge();
+profileInformation();

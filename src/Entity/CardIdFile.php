@@ -16,7 +16,7 @@ class CardIdFile
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,6 +42,15 @@ class CardIdFile
      */
     private bool $valid = false;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="cardIdFile", cascade={"persist", "remove"})
+     */
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
 
 
     public function getId(): ?int
@@ -69,6 +78,24 @@ class CardIdFile
     public function setValid(bool $valid): self
     {
         $this->valid = $valid;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newCardIdFile = null === $user ? null : $this;
+        if ($user->getCardIdFile() !== $newCardIdFile) {
+            $user->setCardIdFile($newCardIdFile);
+        }
 
         return $this;
     }

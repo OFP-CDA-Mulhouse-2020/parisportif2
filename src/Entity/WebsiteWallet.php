@@ -18,7 +18,7 @@ class WebsiteWallet
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -53,7 +53,7 @@ class WebsiteWallet
 
     public function initializeWallet(): void
     {
-        $this->balance = 100000 * 100;
+        $this->balance = 500000 * 100;
     }
 
     /******************************** balance ****************************** */

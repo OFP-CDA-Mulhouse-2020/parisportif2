@@ -16,7 +16,7 @@ class BankAccount
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -43,10 +43,14 @@ class BankAccount
     private string $bicCode;
 
     /**
-     * @ORM\OneToOne(targetEntity=BankAccountFile::class, cascade={"persist", "remove"})
-     * @Assert\Valid(groups={"bankAccountFile" , "bankAccount"})
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="bankAccount", cascade={"persist", "remove"})
      */
-    private ?BankAccountFile $bankAccountFile;
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
 
     public function getId(): ?int
     {
@@ -96,14 +100,20 @@ class BankAccount
         return $bankAccount;
     }
 
-    public function getBankAccountFile(): ?BankAccountFile
+    public function getUser(): ?User
     {
-        return $this->bankAccountFile;
+        return $this->user;
     }
 
-    public function setBankAccountFile(?BankAccountFile $bankAccountFile): self
+    public function setUser(?User $user): self
     {
-        $this->bankAccountFile = $bankAccountFile;
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBankAccount = null === $user ? null : $this;
+        if ($user->getBankAccount() !== $newBankAccount) {
+            $user->setBankAccount($newBankAccount);
+        }
 
         return $this;
     }

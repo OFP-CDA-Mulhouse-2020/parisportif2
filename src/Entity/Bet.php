@@ -79,11 +79,6 @@ class Bet implements \JsonSerializable
      */
     private array $oddsList;
 
-    /**
-     * @Assert\Valid
-     */
-    private array $resultList;
-
 
     public function getId(): ?int
     {
@@ -210,22 +205,6 @@ class Bet implements \JsonSerializable
     public function setOddsList(array $oddsList): void
     {
         $this->oddsList = $oddsList;
-    }
-
-    /**
-     * @return array
-     */
-    public function getResultList(): array
-    {
-        return $this->resultList;
-    }
-
-    /**
-     * @param array $resultList
-     */
-    public function setResultList(array $resultList): void
-    {
-        $this->resultList = $resultList;
     }
 
     public function jsonSerialize()
