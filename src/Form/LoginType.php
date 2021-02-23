@@ -16,18 +16,20 @@ class LoginType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
+                'label' => 'Identifiant',
                 'attr' => [
                     'placeholder' => 'Entrez votre email',
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
+                'label' => 'Mot de passe',
                 'attr' => [
                     'placeholder' => 'Entrez votre mot de passe',
                 ]
             ])
             ->add('Valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-lg btn-primary loginForm_submit'
+                    'class' => 'btn btn-md btn-primary w-100 loginForm_submit'
                 ]
             ]);
     }

@@ -19,9 +19,9 @@ class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/login');
         // $this->assertCount(1, $crawler->filter('h1#titre-principal'));
-        $this->assertSelectorTextContains('h1#titre-principal', 'Titre principal');
+        $this->assertSelectorTextContains('h1#titre-principal', 'CONNEXION');
         // $this->assertGreaterThan(0, $crawler->filter('h2')->count(), 'Entrez vos paramètres de connexion :');
-        $this->assertSelectorTextContains('h2', 'Entrez vos paramètres de connexion :');
+//        $this->assertSelectorTextContains('h2', 'Entrez vos paramètres de connexion :');
     }
 
 

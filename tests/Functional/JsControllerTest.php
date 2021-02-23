@@ -10,7 +10,7 @@ class JsControllerTest extends PantherTestCase
     {
         $client = static::createPantherClient();
         $crawler = $client->request('GET', '/login');
-        $this->assertSelectorTextContains('h1', 'Titre principal');
+        $this->assertSelectorTextContains('h1', 'CONNEXION');
 
         $form = $crawler->filter('form')->form();
         $form['email'] = 'ladji.cda@test.com';

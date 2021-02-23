@@ -1,16 +1,16 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
 {% block main %}
-    <h3>Mes identifiants</h3>
 
+    <h3>Mes identifiants</h3>
     <!-- premier form -->
-    <div class="edit_email">
+    <div class="edit_email mb-5">
         {{ form_start(emailForm) }}
             {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
             {{ form_widget(emailForm)}}
         {{ form_end(emailForm) }}
 
-        <button class="btn btn-danger button_edit_email">
+        <button class="btn btn-danger button_edit_email mb-4">
             <i class="fa fa-times" aria-hidden="true"></i>
         </button>
     </div>
@@ -18,7 +18,7 @@
     <!-- 2eme form -->
    <div class="edit_email_disable">
         {{ form(emailFormDisable) }}
-        <button class="btn btn-primary button_edit_email_disable">
+        <button class="btn btn-primary button_edit_email_disable mb-4">
             <i class="fa fa-edit" aria-hidden="true"></i>
         </button>
     </div>
@@ -28,6 +28,7 @@
     <div class="edit_password">
      {{ form(passwordForm) }}
         <button class="btn btn-danger btn_form_password">
+
             <i class="fa fa-times" aria-hidden="true"></i>
         </button>
     </div>

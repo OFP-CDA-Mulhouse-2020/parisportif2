@@ -1,57 +1,60 @@
 {% extends 'user_profile/user_profile.html.twig' %}
 
 {% block main %}
-    <h3>Solde du compte</h3>
+    <h3 class="mb-5">Solde du compte</h3>
 
-    <h4>Solde actuel: {{ wallet.balance }} EUR</h4>
+    <p class="mb-5 fs-4 text-center">Votre solde est de : {{ wallet.balance }} EUR</p>
 
-    <br>
+    <div class="mb-5">
+        <h4>Rechercher une opération</h4>
+        <form action="">
+            <br>
+            <div class="form-group mb-3">
+                <label for="startAt">Entre :</label>
+                <input type="date" id="startAt" name="startAt" class="form-control w-50">
+            </div>
 
-    <h4>Rechercher une opération</h4>
-    <form action="">
-        <br><br>
-        <label for="startAt">Entre :</label>
-        <input type="date" id="startAt" name="startAt">
-        <br><br>
+            <div class="form-group mb-4">
+                <label for="endAt">Et le :</label>
+                <input type="date" id="endAt" name="endAt" class="form-control w-50">
+            </div>
 
-        <label for="endAt">Et le :</label>
-        <input type="date" id="endAt" name="endAt">
-        <br><br>
+            <button type="submit"  class="btn btn-danger">Rechercher</button>
+        </form>
+    </div>
 
-        <button type="submit"  class="btn btn-danger">Rechercher</button>
-    </form>
 
-<div>
-    <h4>Historique du compte</h4>
-    <table class="table table-hover fw-bold">
-        <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Intitulé</th>
-            <th class="text-end" scope="col">Montant</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for payment in payments %}
+    <div>
+        <h4 class="mb-4" >Historique du compte</h4>
+        <table class="table table-hover fw-bold">
+            <thead>
             <tr>
-                <th scope="row">{{ payment.datePayment|date("d/m/Y") }}</th>
-                {% if payment.typeOfPayment.typeOfPayment == "External Transfer Add Money To Wallet" or
-                    payment.typeOfPayment.typeOfPayment == "Internal Transfer Bet Earning"%}
-                    <td class="text-success">{{ payment.paymentName }}</td>
-                    <td class="text-success text-end"> +{{ payment.sum }}</td>
-                {% else %}
-                    <td class="text-danger">{{ payment.paymentName }}</td>
-                    <td class="text-danger text-end"> -{{ payment.sum }}</td>
-                {% endif %}
+                <th scope="col">Date</th>
+                <th scope="col">Intitulé</th>
+                <th class="text-end" scope="col">Montant</th>
             </tr>
-        {% endfor %}
+            </thead>
+            <tbody>
+            {% for payment in payments %}
+                <tr>
+                    <th scope="row">{{ payment.datePayment|date("d/m/Y") }}</th>
+                    {% if payment.typeOfPayment.typeOfPayment == "External Transfer Add Money To Wallet" or
+                        payment.typeOfPayment.typeOfPayment == "Internal Transfer Bet Earning"%}
+                        <td class="text-success">{{ payment.paymentName }}</td>
+                        <td class="text-success text-end"> +{{ payment.sum }}</td>
+                    {% else %}
+                        <td class="text-danger">{{ payment.paymentName }}</td>
+                        <td class="text-danger text-end"> -{{ payment.sum }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
 
-        <tr class="table-secondary">
-            <th scope="row">{{ "now"|date("d/m/Y") }}</th>
-            <td>Solde Actuel au {{ "now"|date("d/m/Y") }} :</td>
-            <td class="text-end"> {{ wallet.balance }}</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+            <tr class="table-secondary">
+                <th scope="row">{{ "now"|date("d/m/Y") }}</th>
+                <td>Solde Actuel au {{ "now"|date("d/m/Y") }} :</td>
+                <td class="text-end"> {{ wallet.balance }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

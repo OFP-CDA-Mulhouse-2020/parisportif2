@@ -1,0 +1,35 @@
+{% use 'bootstrap_4_layout.html.twig' %}
+
+{% block form_row %}
+    <div class="mb-3">
+        <div class="mb-2">
+            <span style="color:mediumblue; font-style:italic; font-weight:500;" class="fs-6">
+                {{ form_label(form) }}
+            </span>
+        </div>
+
+        <div>
+            <span>
+                {{ form_widget(form) }}
+            </span>
+        </div>
+
+    </div>
+{% endblock %}
+
+{# CHECKBOX #}
+{% block checkbox_widget %}
+    <div class="pt-4">
+        {{- parent() -}}
+    </div>
+
+{% endblock %}
+
+{# SUBMIT #}
+{% block submit_widget %}
+    <div class="pt-4 mb-4">
+        {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
+        {{- parent() -}}
+    </div>
+
+{% endblock %}
