@@ -20,7 +20,7 @@ class SportEventList extends Component{
                     </p>
 
                     </td>
-                   <SportOddsList oddsListData={[row, this.props.eventData[1]]}
+                   <SportOddsList oddsListData={[row, this.props.eventData[1], this.props.eventData[2]]}
                                   addOddsToCart = {this.props.addOddsToCart}
                                   removeOddsFromBetBoard = {this.props.removeOddsFromBetBoard}
                    />

@@ -14,28 +14,11 @@ class HomeController extends AbstractController
 {
     /**
      * @Route("/app", name="app")
+     * @Route("/app/event/{typeOfSport}/{eventId}", name="app_event")
+     * @Route("/app/sport/{typeOfSport}", name="app_sport")
      */
-    public function homePage(BetRepository $betRepository): Response
+    public function homePage(): Response
     {
-        $listOfBet = $betRepository->findAllSimpleBet();
-
-        $user = $this->getUser();
-        assert($user instanceof User);
-
-        /** @var Cart|null $cart */
-        $cart = $user->getCart();
-
-        if ($cart) {
-            $items = $cart->getItems();
-        } else {
-            $items = null;
-        }
-
-        return $this->render('home/home.html.twig', [
-            'listOfBet' => $listOfBet,
-            'cart' => $cart,
-            'items' => $items,
-
-        ]);
+        return $this->render('home/home.html.twig', []);
     }
 }

@@ -29,11 +29,11 @@ class EditEmailType extends AbstractType
 
             ])
 
-            ->add('Valider', SubmitType::class, [
+            ->add('valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success btn-block'
+                    'class' => 'btn btn-danger btn-block'
                 ]
-            ])
+            ]);
         ;
     }
 

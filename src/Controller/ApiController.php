@@ -6,6 +6,7 @@ use App\Entity\Bet;
 use App\Entity\Cart;
 use App\Entity\Item;
 use App\Entity\User;
+use App\Factory\ItemFactory;
 use App\Repository\BetRepository;
 use App\Repository\CompetitionRepository;
 use App\Repository\EventRepository;
@@ -76,7 +77,7 @@ class ApiController extends AbstractController
     ): Response {
 
         $event = $eventRepository->find($eventId);
-        $listOfBet = $betRepository->findBy(['event' => $eventId]);
+        $listOfBet = $betRepository->findBy(['event' => $eventId, 'betOpened' => true]);
         $sport = $sportRepository->findOneBy(['name' => $typeOfSport]);
         $listOfCompetition = $competitionRepository->findCompetitionBySport($typeOfSport);
 
@@ -92,9 +93,12 @@ class ApiController extends AbstractController
     /**
      * @Route("api/cart/add/{betId}/{expectedResult}", name="api_cart_add_item")
      */
-    public function addItemToCart(int $betId, int $expectedResult, BetRepository $betRepository): Response
-    {
-
+    public function addItemToCart(
+        int $betId,
+        int $expectedResult,
+        BetRepository $betRepository,
+        DatabaseService $databaseService
+    ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
 
@@ -109,22 +113,13 @@ class ApiController extends AbstractController
         $bet = $betRepository->find($betId);
         assert($bet instanceof Bet);
 
-        $odds = $bet->getListOfOdds()[$expectedResult];
-
-        $item = new Item($bet);
-        $item->setExpectedBetResult($expectedResult);
-        $item->isModifiedRecordedOdds($odds[1]);
-        $item->isModifiedAmount(5);
+        $item = ItemFactory::makeItem($bet, $expectedResult);
 
         $cart->addItem($item);
         $cart->setSum();
 
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($item);
-        $entityManager->persist($cart);
-        $entityManager->flush();
-
+        $databaseService->saveToDatabase($item);
+        $databaseService->saveToDatabase($cart);
 
         return $this->json($this->showCart());
     }

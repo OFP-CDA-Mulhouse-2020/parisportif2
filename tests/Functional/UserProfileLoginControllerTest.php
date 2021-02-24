@@ -33,8 +33,8 @@ class UserProfileLoginControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/profile/login');
 
         $this->assertSelectorTextContains('div.main h3', 'Mes identifiants');
-        $this->assertCount(1, $crawler->filter('form input[name*="edit_email[oldEmail]"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="login[plainPassword]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="edit_email_disabled[email]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="edit_password_disabled[plainPassword]"]'));
     }
 
     public function testEditUserEmail(): void

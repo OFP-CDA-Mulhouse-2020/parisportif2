@@ -35,8 +35,8 @@ class BankAccountControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/app/wallet/bank-account');
 
         $this->assertSelectorTextContains('div.main h3', 'Modifier les coordonnées bancaires');
-        $this->assertCount(1, $crawler->filter('form input[name*="ibanCode"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="bicCode"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account_disabled[ibanCode]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account_disabled[bicCode]"]'));
     }
 
     public function testSetBankAccountInformationsSuccess(): void
@@ -49,15 +49,9 @@ class BankAccountControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/bank-account');
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
 
-        $crawler = $client->click($link);
-        $this->assertCount(1, $crawler->filter('form input[name*="ibanCode"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="bicCode"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account[ibanCode]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account[bicCode]"]'));
         $this->assertSelectorExists('form button[type="submit"]');
 
         $form = $crawler
@@ -88,17 +82,10 @@ class BankAccountControllerTest extends WebTestCase
         assert($testUser instanceof User);
         $client->loginUser($testUser);
 
-
         $crawler = $client->request('GET', '/app/wallet/bank-account');
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
 
-        $crawler = $client->click($link);
-        $this->assertCount(1, $crawler->filter('form input[name*="ibanCode"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="bicCode"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account[ibanCode]"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="bank_account[bicCode]"]'));
         $this->assertSelectorExists('form button[type="submit"]');
 
         $form = $crawler
@@ -113,67 +100,5 @@ class BankAccountControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('', 'Cet IBAN n\'est pas valide.');
         $this->assertSelectorTextContains('', 'Ce code BIC n\'est pas valide.');
-    }
-
-    public function testBankAccountEditSuccess(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        assert($userRepository instanceof UserRepository);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        assert($testUser instanceof User);
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/wallet/bank-account/edit');
-        $this->assertResponseStatusCodeSame(200);
-
-        $form = $crawler
-            ->filter('form')
-            ->eq(0)
-            ->form();
-
-        $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
-        $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
-
-        $fileField = $form['bank_account[ribJustificatif]'];
-        assert($fileField instanceof FileFormField);
-        $fileField->upload('tests/Data/rib.jpg');
-
-        /** @param Form  $form */
-        $client->submit($form);
-
-        $this->assertResponseRedirects('/app/wallet/bank-account');
-    }
-
-
-    public function testBankAccountEditFail(): void
-    {
-        $client = static::createClient();
-        $userRepository = static::$container->get(UserRepository::class);
-        assert($userRepository instanceof UserRepository);
-        $testUser = $userRepository->findOneByEmail('ladji.cda@test.com');
-        assert($testUser instanceof User);
-        $client->loginUser($testUser);
-
-        $crawler = $client->request('GET', '/app/wallet/bank-account/edit');
-        $this->assertResponseStatusCodeSame(200);
-
-        $form = $crawler
-            ->filter('form')
-            ->eq(0)
-            ->form();
-
-        $form['bank_account[ibanCode]'] = 'FR7630006000011234567890189';
-        $form['bank_account[bicCode]'] = 'BNPAFRPPTAS';
-
-        $fileField = $form['bank_account[ribJustificatif]'];
-        assert($fileField instanceof FileFormField);
-
-        $fileField->upload('');
-
-        /** @param Form  $form */
-        $client->submit($form);
-
-        $this->assertSelectorTextContains('', 'Vous devez fournir une pièce-jointe');
     }
 }

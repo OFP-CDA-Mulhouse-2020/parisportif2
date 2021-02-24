@@ -3,17 +3,6 @@ body {
 }
 
 
-.form_identity,
-.form_address {
-    display:none;
-}
-
-.form_identity.active,
-.form_address.active {
-    display:block;
-}
-
-
 /*********************waiting overlay*************************/
 .loader-block {
         opacity: 0.4

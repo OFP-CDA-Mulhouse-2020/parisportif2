@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {AsideRight} from "./partials/AsideRight";
 import {NavLeft} from "./partials/NavLeft";
 import EventBetBoard from "./eventBetBoard/EventBetBoard";
@@ -114,7 +114,10 @@ class SelectedEvent extends Component{
     }
 
     render() {
+
         if(this.state.loading){
+            console.log(this.state.eventData ,this.state.buttonStatus);
+
             return (
         <section className="container-fluid" id="page-content">
             <div className="row">
@@ -149,7 +152,18 @@ class SelectedEvent extends Component{
             );
         }else{
             return (
-<div style={{opacity: 0.4}}>
+                <Fragment>
+
+    <div className="loader">
+        <div className="loader-circle c1"/>
+        <div className="loader-circle c2"/>
+        <div className="loader-circle c3"/>
+        <div className="loader-circle c4"/>
+        <div className="loader-circle c5"/>
+        <div className="loader-circle c6"/>
+    </div>
+
+    <div className="loader-block">
             <section className="container-fluid" id="page-content">
                 <div className="row">
                     <div className="col-sm-12 col-md-3">
@@ -198,7 +212,9 @@ class SelectedEvent extends Component{
                     </div>
                 </div>
             </section>
-</div>
+    </div>
+
+                </Fragment>
             );
         }
     }
@@ -206,3 +222,4 @@ class SelectedEvent extends Component{
 
 
 export default SelectedEvent;
+

@@ -73,7 +73,7 @@ class HomeControllerTest extends WebTestCase
 
 
     // SECTION#PAGE-CONTENT
-    public function testContentSectionStructure(): void
+  /*  public function testContentSectionStructure(): void
     {
         $client = static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
@@ -220,7 +220,7 @@ class HomeControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Chercher un pari');
         $this->assertSelectorExists('section.bet-search input[type="text"]');
         $this->assertSelectorExists('section.bet-search button[type="submit"]');
-    }
+    }*/
 
     //FOOTER
     public function testFooterStructure(): void

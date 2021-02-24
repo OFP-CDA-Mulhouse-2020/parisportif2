@@ -24,7 +24,7 @@ class UserProfileInformationController extends AbstractController
     /**
      * @Route("/information", name="_information")
      */
-    public function getUserInformation(
+    public function setUserInformation(
         Request $request,
         EditIdentityHandler $editedIdentityHandler,
         DatabaseService $databaseService

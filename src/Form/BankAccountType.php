@@ -16,8 +16,14 @@ class BankAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('ibanCode', TextType::class)
-            ->add('bicCode', TextType::class)
+            ->add('ibanCode', TextType::class, [
+                'label' => 'IBAN',
+
+            ])
+            ->add('bicCode', TextType::class, [
+                'label' => 'BIC',
+
+            ])
             ->add('ribJustificatif', FileType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -35,12 +41,11 @@ class BankAccountType extends AbstractType
                 ],
             ])
 
-            ->add('Valider', SubmitType::class, [
+            ->add('valider', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-success btn-block'
+                    'class' => 'btn btn-danger btn-block'
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
