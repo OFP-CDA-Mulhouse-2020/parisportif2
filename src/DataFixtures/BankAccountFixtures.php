@@ -10,6 +10,7 @@ class BankAccountFixtures extends Fixture
 {
     public const BANK_ACCOUNT_1 = 'bankAccount_1';
     public const BANK_ACCOUNT_2 = 'bankAccount_2';
+    public const BANK_ACCOUNT_3 = 'bankAccount_3';
 
     public function load(ObjectManager $manager): void
     {
@@ -25,9 +26,15 @@ class BankAccountFixtures extends Fixture
         $bankAccount2->setBicCode('BNPAFRPPTAS');
         $manager->persist($bankAccount2);
 
+        $bankAccount3 = new BankAccount();
+        $bankAccount3->setIbanCode('FR7630006000011234567890189');
+        $bankAccount3->setBicCode('BNPAFRPPTAS');
+        $manager->persist($bankAccount3);
+
         $manager->flush();
 
         $this->addReference(self::BANK_ACCOUNT_1, $bankAccount1);
         $this->addReference(self::BANK_ACCOUNT_2, $bankAccount2);
+        $this->addReference(self::BANK_ACCOUNT_3, $bankAccount3);
     }
 }

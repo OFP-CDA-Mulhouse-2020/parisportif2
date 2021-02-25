@@ -27,17 +27,28 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         // $manager->persist($product);
 
         $address1 = $this->getReference(AddressFixtures::ADDRESS_1);
-        $wallet1 = $this->getReference(WalletFixtures::WALLET_1);
-        $bankAccount1 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_1);
         $address2 = $this->getReference(AddressFixtures::ADDRESS_2);
+        $address3 = $this->getReference(AddressFixtures::ADDRESS_3);
+
+        $wallet1 = $this->getReference(WalletFixtures::WALLET_1);
         $wallet2 = $this->getReference(WalletFixtures::WALLET_2);
+        $wallet3 = $this->getReference(WalletFixtures::WALLET_3);
+
+        $bankAccount1 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_1);
         $bankAccount2 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_2);
+        $bankAccount3 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_3);
+
         assert($address1 instanceof Address);
-        assert($wallet1 instanceof Wallet);
-        assert($bankAccount1 instanceof BankAccount);
         assert($address2 instanceof Address);
+        assert($address3 instanceof Address);
+
+        assert($wallet1 instanceof Wallet);
         assert($wallet2 instanceof Wallet);
+        assert($wallet3 instanceof Wallet);
+
+        assert($bankAccount1 instanceof BankAccount);
         assert($bankAccount2 instanceof BankAccount);
+        assert($bankAccount3 instanceof BankAccount);
 
         $user1 = new User();
         $user1->setFirstName('ladji')
@@ -50,7 +61,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
             ->setCreateAt(new DateTime())
             ->activate()
-            ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
+            ->setRoles(['ROLE_USER','ROLE_SUPER_ADMIN'])
             ->setWallet($wallet1)
             ->setBankAccount($bankAccount1)
             ->setAddress($address1);
@@ -70,7 +81,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
             ->setCreateAt(new DateTime())
             ->activate()
-            ->setRoles(['ROLE_USER'])
+            ->setRoles(["ROLE_USER"])
             ->setWallet($wallet2)
             ->setBankAccount($bankAccount2)
             ->setAddress($address2);
@@ -78,20 +89,38 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($user2);
 
 
-
         $user3 = new User();
-        $user3->setFirstName('daniel')
+        $user3->setFirstName('mathieu')
             ->setLastName('cda')
-            ->setEmail('daniel.cda@test.com')
+            ->setEmail('mathieu.test@cda.com')
             ->setPassword($this->passwordEncoder->encodePassword(
                 $user3,
                 'M1cdacda8'
             ))
             ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
             ->setCreateAt(new DateTime())
-            ->setRoles(['ROLE_USER']);
+            ->activate()
+            ->setRoles(["ROLE_USER","ROLE_ADMIN"])
+            ->setWallet($wallet3)
+            ->setBankAccount($bankAccount3)
+            ->setAddress($address3);
 
         $manager->persist($user3);
+
+
+        $user4 = new User();
+        $user4->setFirstName('daniel')
+            ->setLastName('cda')
+            ->setEmail('daniel.cda@test.com')
+            ->setPassword($this->passwordEncoder->encodePassword(
+                $user4,
+                'M1cdacda8'
+            ))
+            ->setBirthDate(DateTime::createFromFormat('Y-m-d', '1995-12-12'))
+            ->setCreateAt(new DateTime())
+            ->setRoles(['ROLE_USER']);
+
+        $manager->persist($user4);
 
         $manager->flush();
     }

@@ -10,6 +10,7 @@ class WalletFixtures extends Fixture
 {
     public const WALLET_1 = 'wallet_1';
     public const WALLET_2 = 'wallet_2';
+    public const WALLET_3 = 'wallet_3';
 
     public function load(ObjectManager $manager): void
     {
@@ -27,9 +28,16 @@ class WalletFixtures extends Fixture
         $wallet2->addMoney(50);
         $manager->persist($wallet2);
 
+        $wallet3 = new Wallet();
+        $wallet3->initializeWallet(true);
+        $wallet3->setLimitAmountPerWeek(20);
+        $wallet3->addMoney(50);
+        $manager->persist($wallet3);
+
         $manager->flush();
 
         $this->addReference(self::WALLET_1, $wallet1);
         $this->addReference(self::WALLET_2, $wallet2);
+        $this->addReference(self::WALLET_3, $wallet3);
     }
 }

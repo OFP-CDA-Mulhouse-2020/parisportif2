@@ -15,6 +15,9 @@ class App extends Component{
         return (
         <Router>
                 <Switch>
+{/*                    <Route exact path="/">
+                        <Redirect to="/app" /> exact component={Home} />
+                    </Route>*/}
                         <Route path="/app" exact component={Home}/>
                         <Route path="/app/sport/:sportName" exact component={SelectedSport} />
                         <Route path="/app/event/:sportName/:eventId" exact component={SelectedEvent} />

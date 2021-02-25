@@ -61,8 +61,9 @@ class BetCrudController extends AbstractCrudController
             ->linkToCrudAction('setResult');
 
         return $actions
+            ->add(Crud::PAGE_INDEX, $setResult)
             ->add(Crud::PAGE_INDEX, $setInvoice)
-            ->add(Crud::PAGE_INDEX, $setResult);
+            ->setPermission("validateBetPayment", 'ROLE_VALIDATE_PAYMENT');
     }
 
     public function validateBetPayment(AdminContext $context): Response

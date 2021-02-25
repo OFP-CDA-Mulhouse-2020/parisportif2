@@ -2,17 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Bet;
-use App\Entity\Cart;
-use App\Entity\Item;
 use App\Entity\User;
 use App\Entity\Wallet;
-use App\Factory\ItemFactory;
-use App\Repository\BetRepository;
 use App\Repository\ItemRepository;
-use App\Service\DatabaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

@@ -10,6 +10,7 @@ class AddressFixtures extends Fixture
 {
     public const ADDRESS_1 = 'address_1';
     public const ADDRESS_2 = 'address_2';
+    public const ADDRESS_3 = 'address_3';
 
     public function load(ObjectManager $manager): void
     {
@@ -29,10 +30,17 @@ class AddressFixtures extends Fixture
             ->setCountry('France');
         $manager->persist($address2);
 
+        $address3 = new Address();
+        $address3->setAddressNumberAndStreet('12 rue des champs')
+            ->setZipCode(75000)
+            ->setCity('Paris')
+            ->setCountry('France');
+        $manager->persist($address3);
 
         $manager->flush();
 
         $this->addReference(self::ADDRESS_1, $address1);
         $this->addReference(self::ADDRESS_2, $address2);
+        $this->addReference(self::ADDRESS_3, $address3);
     }
 }
