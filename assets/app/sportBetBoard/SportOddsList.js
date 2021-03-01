@@ -3,7 +3,6 @@ import React, {Component, Fragment} from 'react';
 class SportOddsList extends Component {
 
     render() {
-        console.log(this.props)
             return (
                 this.props.oddsListData[0].listOfOdds.map((row, index) => (
                     <Odds row={[this.props.oddsListData[0].id, index, row, this.props.oddsListData[1], this.props.oddsListData[2]]} key={index}

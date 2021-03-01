@@ -137,20 +137,24 @@ class ApiController extends AbstractController
         $item = $itemRepository->find($itemId);
         assert($item instanceof Item);
 
-        $cart->removeItem($item);
+        $entityManager = $this->getDoctrine()->getManager();
+        //$cart->removeItem($item); //a supprimer sinon bug
+        $entityManager->remove($item);
+        $entityManager->flush();
+
         $cart->setSum();
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($item);
 
         if (count($cart->getItems()) === 0) {
             $user->setCart(null);
+
             $entityManager->remove($cart);
             $entityManager->persist($user);
+            $entityManager->flush();
         } else {
             $entityManager->persist($cart);
+            $entityManager->flush();
         }
-        $entityManager->flush();
 
         return $this->json($this->showCart());
     }

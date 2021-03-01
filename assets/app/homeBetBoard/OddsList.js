@@ -1,23 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 class OddsList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: false,
-        };
-    }
-
-    componentDidMount() {
-        if (this.props) {
-            this.setState({loading:true});
-            console.log("componentDidMount",this.props)
-        }
-    }
 
     render() {
-        console.log("OddsList", this.props)
-        if (this.state.loading) {
 
             return (
                 this.props.oddsListData[0].listOfOdds.map((row, index) => (
@@ -28,16 +13,9 @@ class OddsList extends Component {
                 ))
             );
 
-        } else {
-            return (
-                <td className="text-center">
-
-                </td>
-            )
         }
-
-    }
 }
+
 
 class Odds extends Component {
     constructor(props) {
@@ -54,6 +32,9 @@ class Odds extends Component {
             oddsIndex: this.props.row[1],
             loading: false,
         };
+
+        this.initialize = this.state;
+
     }
 
     componentDidMount() {
@@ -67,7 +48,6 @@ class Odds extends Component {
         if (this.props.row[3].length > 0) {
             this.props.row[3].forEach(item => {
                 if (this.props.row[0] === item[0] && this.props.row[1] === item[1]) {
-                    console.log('button green', this.props.row, item)
                     this.setState({
                         selected: true,
                         buttonColor: "btn-custom success",
@@ -80,6 +60,27 @@ class Odds extends Component {
         }
 
         this.setState({loading: true})
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+
+        if(prevProps.row[0] !== this.props.row[0] || prevProps.row[1] !== this.props.row[1])
+        {
+            this.setState({
+                selected: false,
+                buttonColor: "btn-custom",
+                iconDisplay: "hide fa fa",
+                oddsDisplay: null,
+                textDisplay: "hide",
+                text: "",
+                itemId: null,
+                betId: this.props.row[0],
+                oddsIndex: this.props.row[1],
+                loading: false,
+            });
+            this.displayButtonGreen();
+        }
+
     }
 
     selectedOdds = () => {
@@ -108,19 +109,6 @@ class Odds extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
-        //   console.log('updateOddds', this.props, this.state)
-        if (
-            this.props.row[0] !== this.state.betId || this.props.row[1] !== this.state.oddsIndex) {
-            console.log('yes')
-            // this.setState({loading : false})
-            //   this.displayButtonGreen()
-        }
-
-    }
-
-
     render() {
         if (this.state.loading) {
             return (
@@ -144,9 +132,9 @@ class Odds extends Component {
 
         } else {
             return (
-                <td className="text-center">
+                <Fragment>
 
-                </td>
+                </Fragment>
             )
         }
 

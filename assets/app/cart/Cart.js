@@ -16,8 +16,6 @@ class Cart extends Component {
     componentDidMount() {
         this.setState({cartData:this.props.cartData, loading:true});
         this.calculateAmount();
-        console.log('cart', this.props);
-
     }
 
     componentDidUpdate(props) {
@@ -26,10 +24,8 @@ class Cart extends Component {
         if(this.state.loading !== true)
         {
             this.calculateAmount();
-            console.log('calculateAmount', this.state)
 
         }
-        console.log('cartUpdate', this.state)
 
     }
 
