@@ -13,7 +13,7 @@ import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./app/App";
-// import login from "./js/login";
+import login from "./js/login";
 import customBadge from "./js/badge";
 import profileInformation from "./js/profileInformation";
 import walletLimitAmount from './js/walletLimitAmount';
@@ -42,7 +42,7 @@ if(document.querySelector('#page-content')){
 ReactDOM.render(<BetBoard/>, document.querySelector('#betBoard'));*/
 
 
-// login();
+login();
 customBadge();
 profileInformation();
 walletLimitAmount();
