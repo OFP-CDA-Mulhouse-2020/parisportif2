@@ -48,13 +48,22 @@ class Item extends Component{
                                 {this.state.itemData.bet.event.teams[1].name}<br/>
                                 {this.state.itemData.bet.event.date}<br/>
                                 {this.state.itemData.bet.event.name} - {this.state.itemData.bet.event.competition.name}<br/>
-                                {this.state.itemData.bet.typeOfBet.betType}<br/>
-                                @{this.state.itemData.recordedOdds}<br/>
+                                {this.state.itemData.bet.typeOfBet.name} - {this.state.itemData.bet.listOfOdds[this.state.itemData.expectedBetResult][0]}<br/>
+
                             </p>
-                            <form action="" method="post">
+                            <form action="" method="post" className="mb-2">
+                                <div className="form-group">
                                 <label htmlFor="change_amount"> Mise :</label>
-                                <input type="number" value={`${this.state.itemAmount}`} name="change_amount"
+                                    <div className="input-group">
+
+                                    <input className="form-control" type="number" value={`${this.state.itemAmount}`} name="change_amount"
                                        onChange={this.editItemAmount}/>
+                                        <div className="input-group-append">
+                                            <span className="input-group-text"> @{this.state.itemData.recordedOdds}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
 
                             </form>
 

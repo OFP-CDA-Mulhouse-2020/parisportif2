@@ -16,8 +16,6 @@ class Cart extends Component {
     componentDidMount() {
         this.setState({cartData:this.props.cartData, loading:true});
         this.calculateAmount();
-        console.log('cart', this.props);
-
     }
 
     componentDidUpdate(props) {
@@ -26,10 +24,8 @@ class Cart extends Component {
         if(this.state.loading !== true)
         {
             this.calculateAmount();
-            console.log('calculateAmount', this.state)
 
         }
-        console.log('cartUpdate', this.state)
 
     }
 
@@ -55,7 +51,7 @@ class Cart extends Component {
         if (this.state.cartData) {
 
             return (
-                    <Fragment>
+                    <section className="bet-ticket">
                         <h6>Ticket de paris :</h6>
                         <hr/>
 
@@ -77,18 +73,18 @@ class Cart extends Component {
                         <div className="col-12 d-flex justify-content-center">
                             <a type="button" className="btn btn-danger btn-sm" href="/app/cart/payment">Pariez !</a>
                         </div>
-                    </Fragment>
+                    </section>
             );
         } else {
             return (
-                <Fragment>
+                <section className="bet-ticket">
                     <h6>Ticket de paris :</h6>
                     <hr/>
                     <p>Ajouter des paris</p>
                     <div className="col-12 d-flex justify-content-center">
                         <button type="button" className="btn btn-secondary btn-sm" disabled>Pariez !</button>
                     </div>
-                </Fragment>
+                </section>
 
             );
         }

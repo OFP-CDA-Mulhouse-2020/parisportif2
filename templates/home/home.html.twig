@@ -24,22 +24,22 @@
 	{% endfor %}
 
 	<section class="container-fluid" id="page-content">
-		<div class="row">
-			{# ASIDE LEFT #}
+		{#<div class="row">
+			#}{# ASIDE LEFT #}{#
 			<div class="col-sm-12 col-md-3">
 			{% include "partials/_aside_left.html.twig" %}
 			</div>
 
-			{# SECTION CENTRAL #}
+			#}{# SECTION CENTRAL #}{#
 			<div class="col-sm-12 col-md-6">
 				<section class="central">
 					<div class="container-fluid p-0">
 						<div class="row mt-4">
-							{# CAROUSEL #}
+							#}{# CAROUSEL #}{#
 							{% include "partials/_carousel.html.twig" %}
 
 
-							{########### BET BOARD CONTENT ###########}
+							#}{########### BET BOARD CONTENT ###########}{#
 							{% include "bet/_home_bet.html.twig" %}
 
 						</div>
@@ -47,11 +47,11 @@
 				</section>
 			</div>
 
-			{# ASIDE RIGHT #}
+			#}{# ASIDE RIGHT #}{#
 			<div class="col-sm-12 col-md-3">
 				{% include "partials/_aside_right.html.twig" %}
 			</div>
-		</div>
+		</div>#}
 	</section>
 
 	{# FOOTER #}

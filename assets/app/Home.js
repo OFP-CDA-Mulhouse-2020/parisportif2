@@ -54,10 +54,8 @@ class Home extends Component{
 
     addOddsToCart = (props) => {
         const url = `/api/cart/add/` + props[0] + `/` + props[1];
-        console.log(url)
         fetch(url, {method: 'get'})
             .then(function (response) {
-                console.log(response);
                 return response.json();
             })
             .then(json => {
@@ -68,11 +66,8 @@ class Home extends Component{
 
     removeOddsFromBetBoard = (props) => {
         const url = `/api/cart/remove/` + props;
-        console.log(url)
-
           fetch(url, {method: 'get'})
               .then(function (response) {
-                  console.log(response);
                   return response.json();
               })
               .then(json => {
@@ -88,7 +83,6 @@ class Home extends Component{
             method: 'post', body: props[1]
         })
             .then(function (response) {
-            console.log(response);
             return response.json();
         })
             .then(json => {
@@ -101,22 +95,13 @@ class Home extends Component{
         const url = `/api/cart/remove/` + props[0].id;
         fetch(url, {method: 'get'})
             .then(function (response) {
-                console.log(response);
                 return response.json();
             })
             .then(json => {
                 this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
             });
-
     }
-
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
-        console.log('udapte App')
-}
-
 
     render() {
         if(this.state.loading){
@@ -151,12 +136,12 @@ class Home extends Component{
             return (
 <Fragment>
                 <div className="loader">
-                    <div className="loader-circle c1"></div>
-                    <div className="loader-circle c2"></div>
-                    <div className="loader-circle c3"></div>
-                    <div className="loader-circle c4"></div>
-                    <div className="loader-circle c5"></div>
-                    <div className="loader-circle c6"></div>
+                    <div className="loader-circle c1"/>
+                    <div className="loader-circle c2"/>
+                    <div className="loader-circle c3"/>
+                    <div className="loader-circle c4"/>
+                    <div className="loader-circle c5"/>
+                    <div className="loader-circle c6"/>
                 </div>
 
         <div className="loader-block">
@@ -218,19 +203,3 @@ class Home extends Component{
 export default Home;
 
 
-
-const Loader = () => {
-
-    return (
-        <div className="loader">
-            <div className="loader-circle c1"></div>
-            <div className="loader-circle c2"></div>
-            <div className="loader-circle c3"></div>
-            <div className="loader-circle c4"></div>
-            <div className="loader-circle c5"></div>
-            <div className="loader-circle c6"></div>
-        </div>
-
-
-    )
-}

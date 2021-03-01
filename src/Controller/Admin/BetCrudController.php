@@ -7,7 +7,7 @@ use App\Dto\BetDto;
 use App\Entity\Bet;
 use App\Form\BetType;
 use App\Form\ResultEventType;
-use App\Service\GenerateBetPaymentService;
+use App\Service\GenerateEarningBetPaymentService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -26,11 +26,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BetCrudController extends AbstractCrudController
 {
-    private GenerateBetPaymentService $generateBetPaymentService;
+    private GenerateEarningBetPaymentService $generateEarningBetPaymentService;
 
-    public function __construct(GenerateBetPaymentService $generateBetPaymentService)
+    public function __construct(GenerateEarningBetPaymentService $generateEarningBetPaymentService)
     {
-        $this->generateBetPaymentService = $generateBetPaymentService;
+        $this->generateEarningBetPaymentService = $generateEarningBetPaymentService;
     }
 
     public static function getEntityFqcn(): string
@@ -61,8 +61,9 @@ class BetCrudController extends AbstractCrudController
             ->linkToCrudAction('setResult');
 
         return $actions
+            ->add(Crud::PAGE_INDEX, $setResult)
             ->add(Crud::PAGE_INDEX, $setInvoice)
-            ->add(Crud::PAGE_INDEX, $setResult);
+            ->setPermission("validateBetPayment", 'ROLE_VALIDATE_PAYMENT');
     }
 
     public function validateBetPayment(AdminContext $context): Response
@@ -71,7 +72,7 @@ class BetCrudController extends AbstractCrudController
         if ($entityInstance->isBetOpened()) {
             return $this->redirect($context->getReferrer());
         }
-        $this->generateBetPaymentService->validateBetToPayment($entityInstance);
+        $this->generateEarningBetPaymentService->validateBetToPayment($entityInstance);
 
         return $this->redirect($context->getReferrer());
     }

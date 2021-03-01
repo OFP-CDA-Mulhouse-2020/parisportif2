@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BankAccount;
 use App\Entity\User;
+use App\Form\BankAccountDisabledType;
 use App\Form\BankAccountType;
 use App\FormHandler\BankAccountHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,25 +20,6 @@ class BankAccountController extends AbstractController
      * @Route("/app/wallet/bank-account", name="app_wallet_bank-account")
      * @return Response
      */
-    public function getBankAccountInformations(): Response
-    {
-        $user = $this->getUser();
-        assert($user instanceof User);
-        $bankAccount = $user->getBankAccount();
-        assert($bankAccount instanceof BankAccount);
-
-        $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
-
-        return $this->render('wallet/bank-account.html.twig', [
-            'user' => $user,
-            'editBankAccount' => false,
-            'bankAccountForm' => $bankAccountForm->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/app/wallet/bank-account/edit", name="app_wallet_bank-account_edit")
-     */
     public function setBankAccountInformations(
         Request $request,
         BankAccountHandler $bankAccountHandler
@@ -46,8 +28,9 @@ class BankAccountController extends AbstractController
         assert($user instanceof User);
         $bankAccount = $user->getBankAccount();
         assert($bankAccount instanceof BankAccount);
-
         $bankAccountForm = $this->createForm(BankAccountType::class, $bankAccount);
+        $bankAccountDisabledForm = $this->createForm(BankAccountDisabledType::class, $bankAccount);
+
         $bankAccountForm->handleRequest($request);
 
         if ($bankAccountForm->isSubmitted() && $bankAccountForm->isValid()) {
@@ -64,8 +47,8 @@ class BankAccountController extends AbstractController
 
         return $this->render('wallet/bank-account.html.twig', [
             'user' => $user,
-            'editBankAccount' => true,
-            'bankAccountForm' => $bankAccountForm->createView()
+            'bankAccountForm' => $bankAccountForm->createView(),
+            'bankAccountDisabledForm' => $bankAccountDisabledForm->createView(),
         ]);
     }
 }

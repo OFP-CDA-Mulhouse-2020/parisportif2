@@ -15,52 +15,85 @@ class PaymentFixtures extends Fixture implements DependentFixtureInterface
     {
         // $product = new Product();
         // $manager->persist($product);
-        $wallet = $this->getReference(WalletFixtures::WALLET_USER_2);
+        $wallet1 = $this->getReference(WalletFixtures::WALLET_1);
+        $wallet2 = $this->getReference(WalletFixtures::WALLET_2);
         $typeOfPayment1 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_1);
         $typeOfPayment2 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_2);
         $typeOfPayment3 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_3);
         $typeOfPayment4 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_4);
-        assert($wallet instanceof Wallet);
+        assert($wallet1 instanceof Wallet);
+        assert($wallet2 instanceof Wallet);
         assert($typeOfPayment1 instanceof TypeOfPayment);
         assert($typeOfPayment2 instanceof TypeOfPayment);
         assert($typeOfPayment3 instanceof TypeOfPayment);
         assert($typeOfPayment4 instanceof TypeOfPayment);
 
-        $payment = new Payment(50);
-        $payment->setPaymentName('Ajout de fonds')
+        $payment1 = new Payment(50);
+        $payment1->setPaymentName('Ajout de fonds')
                 ->setTypeOfPayment($typeOfPayment1)
-                ->setWallet($wallet)
+                ->setWallet($wallet1)
                 ->acceptPayment()
         ;
+        $manager->persist($payment1);
 
-        $manager->persist($payment);
-
-        $payment = new Payment(5);
-        $payment->setPaymentName('Ticket de pari n°2525')
+        $payment2 = new Payment(5);
+        $payment2->setPaymentName('Ticket de pari n°2525')
             ->setTypeOfPayment($typeOfPayment3)
-            ->setWallet($wallet)
+            ->setWallet($wallet1)
             ->acceptPayment()
         ;
+        $manager->persist($payment2);
 
-        $manager->persist($payment);
-
-        $payment = new Payment(10);
-        $payment->setPaymentName('Gain sur ticket de pari n°2525')
+        $payment3 = new Payment(10);
+        $payment3->setPaymentName('Gain sur ticket de pari n°2525')
             ->setTypeOfPayment($typeOfPayment4)
-            ->setWallet($wallet)
+            ->setWallet($wallet1)
             ->acceptPayment()
         ;
+        $manager->persist($payment3);
 
-        $manager->persist($payment);
-
-        $payment = new Payment(20);
-        $payment->setPaymentName('Retrait de fonds')
+        $payment4 = new Payment(20);
+        $payment4->setPaymentName('Retrait de fonds')
             ->setTypeOfPayment($typeOfPayment2)
-            ->setWallet($wallet)
+            ->setWallet($wallet1)
             ->acceptPayment()
         ;
 
-        $manager->persist($payment);
+        $manager->persist($payment4);
+
+
+        $payment5 = new Payment(50);
+        $payment5->setPaymentName('Ajout de fonds')
+            ->setTypeOfPayment($typeOfPayment1)
+            ->setWallet($wallet2)
+            ->acceptPayment()
+        ;
+        $manager->persist($payment5);
+
+        $payment6 = new Payment(5);
+        $payment6->setPaymentName('Ticket de pari n°2525')
+            ->setTypeOfPayment($typeOfPayment3)
+            ->setWallet($wallet2)
+            ->acceptPayment()
+        ;
+        $manager->persist($payment6);
+
+        $payment7 = new Payment(10);
+        $payment7->setPaymentName('Gain sur ticket de pari n°2525')
+            ->setTypeOfPayment($typeOfPayment4)
+            ->setWallet($wallet2)
+            ->acceptPayment()
+        ;
+        $manager->persist($payment3);
+
+        $payment8 = new Payment(20);
+        $payment8->setPaymentName('Retrait de fonds')
+            ->setTypeOfPayment($typeOfPayment2)
+            ->setWallet($wallet2)
+            ->acceptPayment()
+        ;
+        $manager->persist($payment8);
+
         $manager->flush();
     }
 

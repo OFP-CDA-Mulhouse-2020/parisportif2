@@ -2,34 +2,29 @@
 
 {% block main %}
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-
     <h3 class="mb-5">Modifier les coordonnées bancaires</h3>
 
     <h4 class="mb-4">Mes coordonnées bancaires</h4>
 
    <p class ="fs-5">Titulaire du compte : {{ user.lastName }} - {{ user.firstName }}</p>
-        {% if editBankAccount %}
-            {{ form(bankAccountForm) }}
-            <a href="/app/wallet/bank-account" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
 
-        {% else %}
-            <form class="" action="">
+<div class="form1 enabled d-none">
 
-            {{ form_row(bankAccountForm.ibanCode, { 'attr':{'disabled':'disabled'} }) }}
-            {{ form_row(bankAccountForm.bicCode, { 'attr':{'disabled':'disabled'} }) }}
-            </form>
+{{ form(bankAccountForm) }}
+    <button class="btn btn-danger cancel-btn1">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+</div>
 
-            <a href="/app/wallet/bank-account/edit" class="btn btn-primary mt-4">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-        {% endif %}
+
+                <div class="form1 disabled">
+
+            {{ form(bankAccountDisabledForm) }}
+
+                    <button class="btn btn-primary edit-btn1">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </div>
 
 
 

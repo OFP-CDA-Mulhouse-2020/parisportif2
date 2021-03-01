@@ -19,6 +19,8 @@ use App\Repository\BetRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use App\Repository\WebsiteWalletRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -82,6 +84,16 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle('Online Bet');
+    }
+
+    public function configureActions(): Actions
+    {
+        return parent::configureActions()
+            ->set(Crud::PAGE_INDEX, Action::DELETE)
+            ->setPermission(Action::DELETE, 'ROLE_ALLOWED_DELETE')
+            ->set(Crud::PAGE_INDEX, Action::EDIT)
+
+            ;
     }
 
     public function configureMenuItems(): iterable

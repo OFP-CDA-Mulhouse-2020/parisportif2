@@ -1,20 +1,19 @@
 import React, {Component, Fragment} from 'react';
 
-class SportOddsList extends Component {
+class EventOddsList extends Component {
 
     render() {
             return (
                 this.props.oddsListData[0].listOfOdds.map((row, index) => (
-                    <Odds row={[this.props.oddsListData[0].id, index, row, this.props.oddsListData[1], this.props.oddsListData[2]]} key={index}
+                    <Odds row={[this.props.oddsListData[0].id, index, row, this.props.oddsListData[1], this.props.oddsListData[0].typeOfBet.name]} key={index}
                           addOddsToCart={this.props.addOddsToCart}
                           removeOddsFromBetBoard={this.props.removeOddsFromBetBoard}
                     />
                 ))
             );
+
     }
 }
-
-
 
 class Odds extends Component {
     constructor(props) {
@@ -85,15 +84,73 @@ class Odds extends Component {
         }
     }
 
+
     render() {
-        if (this.state.loading && this.props.row[4] === 'football') {
+            if( (this.state.loading && this.props.row[4] === '1N2')  || (this.state.loading && this.props.row[4] === '1-2')){
+                return (
+                    <td className="text-center" style={{width: "20%"}}>
+                        <button className={this.state.buttonColor} role="button" aria-pressed="true"
+                                onClick={this.selectedOdds}>
+                            <i className={this.state.iconDisplay}/>
+                            <em className={this.state.oddsDisplay}>
+                                {this.props.row[2][1]}
+                            </em>
+                            <div className={this.state.textDisplay}>
+                                <div className="divText" data-textadded="Ajouté"
+                                     data-textremoved="Supprimé">{this.state.text}</div>
+
+                            </div>
+
+                        </button>
+                    </td>
+                );
+            }
+            if(this.state.loading && this.props.row[4] === 'over-under'){
+                return (
+                    <div className="col-6" style={{marginTop :'5px' }}>
+                    <button className={this.state.buttonColor} role="button" aria-pressed="true"
+                                onClick={this.selectedOdds}>
+                            <i className={this.state.iconDisplay}/>
+                            <em className={this.state.oddsDisplay}>
+                                {this.props.row[2][0]} - {this.props.row[2][1]}
+                            </em>
+                            <div className={this.state.textDisplay}>
+                                <div className="divText" data-textadded="Ajouté"
+                                     data-textremoved="Supprimé">{this.state.text}</div>
+
+                            </div>
+
+                        </button>
+                    </div>
+                );
+            }
+        if(this.state.loading && this.props.row[4] === 'score exact'){
+                    return (
+                        <div className="col-4" style={{marginTop :'5px' }}>
+                            <button className={this.state.buttonColor} role="button" aria-pressed="true"
+                                    onClick={this.selectedOdds}>
+                                <i className={this.state.iconDisplay}/>
+                                <em className={this.state.oddsDisplay}>
+                                    {this.props.row[2][0]} - {this.props.row[2][1]}
+                                </em>
+                                <div className={this.state.textDisplay}>
+                                    <div className="divText" data-textadded="Ajouté"
+                                         data-textremoved="Supprimé">{this.state.text}</div>
+
+                                </div>
+
+                            </button>
+                        </div>
+                    );
+                }
+        if(this.state.loading && this.props.row[4] === 'mi-temps fin de match'){
             return (
-                <td className="text-center" style={{width: "20%"}}>
+                <div className="col-12" style={{marginTop :'5px' }}>
                     <button className={this.state.buttonColor} role="button" aria-pressed="true"
                             onClick={this.selectedOdds}>
                         <i className={this.state.iconDisplay}/>
                         <em className={this.state.oddsDisplay}>
-                            {this.props.row[2][1]}
+                            {this.props.row[2][0]} - {this.props.row[2][1]}
                         </em>
                         <div className={this.state.textDisplay}>
                             <div className="divText" data-textadded="Ajouté"
@@ -102,30 +159,10 @@ class Odds extends Component {
                         </div>
 
                     </button>
-                </td>
+                </div>
             );
         }
-        if (this.state.loading && this.props.row[4] === 'basketball') {
-            return (
-                <td className="text-center" style={{width: "30%"}}>
-                    <button className={this.state.buttonColor} role="button" aria-pressed="true"
-                            onClick={this.selectedOdds}>
-                        <i className={this.state.iconDisplay}/>
-                        <em className={this.state.oddsDisplay}>
-                            {this.props.row[2][1]}
-                        </em>
-                        <div className={this.state.textDisplay}>
-                            <div className="divText" data-textadded="Ajouté"
-                                 data-textremoved="Supprimé">{this.state.text}</div>
 
-                        </div>
-
-                    </button>
-                </td>
-            );
-
-
-        }
         else {
             return (
                 <Fragment>
@@ -138,4 +175,4 @@ class Odds extends Component {
     }
 }
 
-export default SportOddsList;
+export default EventOddsList;
