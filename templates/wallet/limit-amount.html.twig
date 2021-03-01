@@ -10,24 +10,15 @@
 
     <h3 class="mb-5">Définir ma limite de jeu</h3>
 
-    <p class="mb-5 fs-4 text-center">Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine. </p>
+    <p class="mb-5 fs-4 text-left">Ma limite de mise actuelle est de {{ wallet.limitAmountPerWeek }} euros par semaine.
+    </p>
+    {#    {{ form_start(walletForm) }}#}
+    {{ form(walletForm) }}
 
-        {% if editLimitAmount %}
-            {{ form(walletForm) }}
+    {#    {{ form_end(walletForm) }}#}
 
-            <a href="/app/wallet/limit-amount" class="btn btn-danger">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-
-        {% else %}
-            <form class="" action="">
-
-            {{ form_row(walletForm.limitAmountPerWeek, { 'attr':{'disabled':'disabled'} }) }}
-            </form>
-
-            <a href="/app/wallet/limit-amount/edit" class="btn btn-primary mt-3">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-        {% endif %}
+    {#    {{ dump(walletForm.limitAmountPerWeek) }}#}
+    {#    {{ walletForm.limitAmountPerWeek.vars.attr.min }}#}
+    {#    {{ walletForm.limitAmountPerWeek.vars.attr.max }}#}
 
 {% endblock %}

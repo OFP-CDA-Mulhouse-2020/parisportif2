@@ -25,11 +25,42 @@
 
 {% endblock %}
 
-{# SUBMIT #}
-{% block submit_widget %}
-    <div class="pt-4 mb-4">
-        {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
-        {{- parent() -}}
+{# RANGE #}
+{% block range_widget %}
+    <div class="container-fluid pt-4 px-0">
+        <div class="row d-flex align-items-center">
+            <div class="col-sm-1 px-0 d-flex justify-content-center">
+                {{ form.vars.attr.min }}
+            </div>
+            <div class="col-sm-10 px-0">
+                <div class="slider">
+                    {{- parent() -}}
+                </div>
+            </div>
+            <div class="col-sm-1 px-0 d-flex justify-content-center">
+                {{ form.vars.attr.max }}
+            </div>
+        </div>
+        <input
+                id="rangeValue"
+                class="mt-3"
+                type="number"
+                autocomplete="off"
+                min={{ form.vars.attr.min }}
+                max={{ form.vars.attr.max }}
+                value={{ form.vars.value }}
+        >
+        {#        <output id="rangeValue">{{ form.vars.value }}</output>#}
+
     </div>
 
 {% endblock %}
+
+    {# SUBMIT #}
+    {% block submit_widget %}
+        <div class="pt-4 mb-4">
+            {%- set attr = attr|merge({class: (attr.class|default('btn btn-md btn-primary w-100'))|trim}) -%}
+            {{- parent() -}}
+        </div>
+
+    {% endblock %}
