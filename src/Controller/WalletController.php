@@ -102,27 +102,11 @@ class WalletController extends AbstractController
 
     /**
      * @Route("/app/wallet/limit-amount", name="app_wallet_limit-amount")
+     * @param Request $request
+     * @param LimitAmountWalletHandler $limitAmountWalletHandler
+     * @return Response
      */
-    public function getLimitAmountPerWeekOfWallet(): Response
-    {
-        $user = $this->getUser();
-        assert($user instanceof User);
-        $wallet = $user->getWallet();
-        assert($wallet instanceof Wallet);
-
-        $walletForm = $this->createForm(WalletType::class, $wallet);
-
-        return $this->render('wallet/limit-amount.html.twig', [
-            'wallet' => $wallet,
-            'editLimitAmount' => false,
-            'walletForm' => $walletForm->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/app/wallet/limit-amount/edit", name="app_wallet_limit-amount_edit")
-     */
-    public function setLimitAmountPerWeekOfWallet(
+    public function getLimitAmountPerWeekOfWallet(
         Request $request,
         LimitAmountWalletHandler $limitAmountWalletHandler
     ): Response {
@@ -130,19 +114,15 @@ class WalletController extends AbstractController
         assert($user instanceof User);
         $wallet = $user->getWallet();
         assert($wallet instanceof Wallet);
-
         $walletForm = $this->createForm(WalletType::class, $wallet);
         $walletForm->handleRequest($request);
-
         if ($walletForm->isSubmitted() && $walletForm->isValid()) {
             $limitAmountWalletHandler->process($walletForm);
             $this->addFlash('success', 'Votre limite de jeu a bien été changé !');
-
             return $this->redirectToRoute('app_wallet_limit-amount');
         }
         return $this->render('wallet/limit-amount.html.twig', [
             'wallet' => $wallet,
-            'editLimitAmount' => true,
             'walletForm' => $walletForm->createView()
         ]);
     }

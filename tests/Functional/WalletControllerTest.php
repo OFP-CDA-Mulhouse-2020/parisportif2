@@ -214,15 +214,15 @@ class WalletControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/limit-amount');
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
-        $this->assertCount(1, $crawler->filter('form input[name*="limitAmountPerWeek"]'));
-        $this->assertSelectorExists('form button[type="submit"]');
+//        $link = $crawler
+//            ->filter('div.main a')
+//            ->eq(0)
+//            ->link()
+//        ;
+//
+//        $crawler = $client->click($link);
+//        $this->assertCount(1, $crawler->filter('form input[name*="limitAmountPerWeek"]'));
+//        $this->assertSelectorExists('form button[type="submit"]');
 
         $form = $crawler
             ->filter('form')
@@ -245,20 +245,26 @@ class WalletControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         $crawler = $client->request('GET', '/app/wallet/limit-amount');
-        $link = $crawler
-            ->filter('div.main a')
-            ->eq(0)
-            ->link()
-        ;
-
-        $crawler = $client->click($link);
-        $this->assertCount(1, $crawler->filter('form input[name*="limitAmountPerWeek"]'));
-        $this->assertSelectorExists('form button[type="submit"]');
+//        $link = $crawler
+//            ->filter('div.main a')
+//            ->eq(0)
+//            ->link()
+//        ;
+//
+//        $crawler = $client->click($link);
+//        $this->assertCount(1, $crawler->filter('form input[name*="limitAmountPerWeek"]'));
+//        $this->assertSelectorExists('form button[type="submit"]');
+//
+//        $form = $crawler
+//            ->filter('form')
+//            ->eq(0)
+//            ->form();
 
         $form = $crawler
             ->filter('form')
             ->eq(0)
             ->form();
+
 
         $form['wallet[limitAmountPerWeek]'] = '-50';
 
