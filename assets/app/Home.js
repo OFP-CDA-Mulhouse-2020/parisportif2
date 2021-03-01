@@ -54,10 +54,8 @@ class Home extends Component{
 
     addOddsToCart = (props) => {
         const url = `/api/cart/add/` + props[0] + `/` + props[1];
-        console.log(url)
         fetch(url, {method: 'get'})
             .then(function (response) {
-                console.log(response);
                 return response.json();
             })
             .then(json => {
@@ -68,11 +66,8 @@ class Home extends Component{
 
     removeOddsFromBetBoard = (props) => {
         const url = `/api/cart/remove/` + props;
-        console.log(url)
-
           fetch(url, {method: 'get'})
               .then(function (response) {
-                  console.log(response);
                   return response.json();
               })
               .then(json => {
@@ -88,7 +83,6 @@ class Home extends Component{
             method: 'post', body: props[1]
         })
             .then(function (response) {
-            console.log(response);
             return response.json();
         })
             .then(json => {
@@ -101,22 +95,13 @@ class Home extends Component{
         const url = `/api/cart/remove/` + props[0].id;
         fetch(url, {method: 'get'})
             .then(function (response) {
-                console.log(response);
                 return response.json();
             })
             .then(json => {
                 this.setState({cartData: json, loading: false});
                 this.displayItemFromCart();
             });
-
     }
-
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
-        console.log('udapte App')
-}
-
 
     render() {
         if(this.state.loading){

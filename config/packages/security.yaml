@@ -44,10 +44,15 @@ security:
 
     access_control:
         # allow unauthenticated users to access the login form
-        - { path: ^/login, roles: PUBLIC_ACCESS }
+        #- { path: ^/login, roles: PUBLIC_ACCESS }
 
         # but require authentication for all other admin routes
         - { path: ^/app, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_VALIDATE_PAYMENT, ROLE_ALLOWED_DELETE]
 
 
 

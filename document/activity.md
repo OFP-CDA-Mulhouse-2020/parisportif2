@@ -161,4 +161,15 @@ User Profile et Home Page
 
 
 ---
-22/02 
+22/02 fin du js sur login et travail sur presentation HttpClient (mohamed), travail sur les pages login et register (ladji), mise en place historique ticket et refactorisation et mise en place de service (daniel)
+
+23/02 travail sur presentation HttpClient (mohamed), travail sur les formulaires (ladji), travail sur harmonisation des fonctions js (daniel)
+
+24/02 analyse partie security (mohamed), suppression des anciens fichiers et correction tests (daniel), travail sur les formulaires (ladji)
+
+25/02 mise en place security sur la partie admin (daniel) , démarrage projet java (tous)
+
+26/02 java (tous)
+
+---
+01/03 correction du panier en react (daniel), formulaire limite de jeu terminé (ladji)
