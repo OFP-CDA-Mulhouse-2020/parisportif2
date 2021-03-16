@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Cart;
 use App\Entity\Payment;
 use App\Entity\TypeOfPayment;
 use App\Entity\Wallet;
@@ -11,6 +12,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class PaymentFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const PAYMENT_9 = 'payment_9';
+
     public function load(ObjectManager $manager): void
     {
         // $product = new Product();
@@ -21,12 +24,16 @@ class PaymentFixtures extends Fixture implements DependentFixtureInterface
         $typeOfPayment2 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_2);
         $typeOfPayment3 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_3);
         $typeOfPayment4 = $this->getReference(TypeOfPaymentFixtures::TYPE_OF_PAYMENT_4);
+
+
         assert($wallet1 instanceof Wallet);
         assert($wallet2 instanceof Wallet);
         assert($typeOfPayment1 instanceof TypeOfPayment);
         assert($typeOfPayment2 instanceof TypeOfPayment);
         assert($typeOfPayment3 instanceof TypeOfPayment);
         assert($typeOfPayment4 instanceof TypeOfPayment);
+
+
 
         $payment1 = new Payment(50);
         $payment1->setPaymentName('Ajout de fonds')
@@ -84,7 +91,7 @@ class PaymentFixtures extends Fixture implements DependentFixtureInterface
             ->setWallet($wallet2)
             ->acceptPayment()
         ;
-        $manager->persist($payment3);
+        $manager->persist($payment7);
 
         $payment8 = new Payment(20);
         $payment8->setPaymentName('Retrait de fonds')
@@ -94,7 +101,18 @@ class PaymentFixtures extends Fixture implements DependentFixtureInterface
         ;
         $manager->persist($payment8);
 
+
+        $payment9 = new Payment(10);
+        $payment9->setPaymentName('Ticket de pari n°4545')
+            ->setTypeOfPayment($typeOfPayment3)
+            ->setWallet($wallet1)
+            ->acceptPayment()
+        ;
+        $manager->persist($payment9);
+
         $manager->flush();
+
+        $this->addReference(self::PAYMENT_9, $payment9);
     }
 
     public function getDependencies(): array

@@ -13,6 +13,11 @@ use Doctrine\Persistence\ObjectManager;
 
 class BetFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const BET_1 = 'bet_1';
+    public const BET_2 = 'bet_2';
+    public const BET_3 = 'bet_3';
+    public const BET_4 = 'bet_4';
+
     public function load(ObjectManager $manager): void
     {
         // $product = new Product();
@@ -233,6 +238,11 @@ class BetFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($bet8);
 
         $manager->flush();
+
+        $this->addReference(self::BET_1, $bet1);
+        $this->addReference(self::BET_2, $bet2);
+        $this->addReference(self::BET_3, $bet3);
+        $this->addReference(self::BET_4, $bet4);
     }
 
     public function getDependencies(): array

@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Address;
 use App\Entity\BankAccount;
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
 use DateTime;
@@ -38,6 +39,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $bankAccount2 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_2);
         $bankAccount3 = $this->getReference(BankAccountFixtures::BANK_ACCOUNT_3);
 
+        $cart1 = $this->getReference(CartFixtures::CART_1);
+
         assert($address1 instanceof Address);
         assert($address2 instanceof Address);
         assert($address3 instanceof Address);
@@ -49,6 +52,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         assert($bankAccount1 instanceof BankAccount);
         assert($bankAccount2 instanceof BankAccount);
         assert($bankAccount3 instanceof BankAccount);
+
+        assert($cart1 instanceof Cart);
 
         $user1 = new User();
         $user1->setFirstName('ladji')
@@ -64,7 +69,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setRoles(['ROLE_USER','ROLE_SUPER_ADMIN'])
             ->setWallet($wallet1)
             ->setBankAccount($bankAccount1)
-            ->setAddress($address1);
+            ->setAddress($address1)
+            ->setCart($cart1)
+        ;
 
         $manager->persist($user1);
 
@@ -131,7 +138,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             WalletFixtures::class,
             BankAccountFixtures::class,
             AddressFixtures::class,
-
+            CartFixtures::class,
         ];
     }
 }
