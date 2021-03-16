@@ -3,7 +3,7 @@
 {% block form_row %}
     <div class="mb-3">
         <div class="mb-2">
-            <span style="color:mediumblue; font-style:italic; font-weight:500;" class="fs-6">
+            <span style="color:lightslategrey; font-style:italic; font-weight:500;" class="fs-6">
                 {{ form_label(form) }}
             </span>
         </div>
@@ -24,6 +24,22 @@
     </div>
 
 {% endblock %}
+
+{# CHOICE #}
+{% block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="d-flex flex-column w-100">
+            {%- for child in form %}
+                {{- form_widget(child, {
+                    parent_label_class: label_attr.class|default(''),
+                    translation_domain: choice_translation_domain,
+                    valid: valid,
+                }) -}}
+            {% endfor -%}
+        </div>
+    </div>
+{%- endblock choice_widget_expanded %}
+
 
 {# RANGE #}
 {% block range_widget %}
