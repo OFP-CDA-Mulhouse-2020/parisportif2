@@ -1,10 +1,25 @@
-<h2>Bonjour {{user.firstName}} {{user.lastname}} !</h2>
-<h4>Votre demande de changement de mot de passe chez Paris Sportifs</h4>
+{% extends 'base.html.twig' %}
 
-<p>Pour changer votre mot de passe, veuillez cliquer sur le lien suivant : </p>
+{% block title %}Email de changement de mot de passe envoyé{% endblock %}
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+{% block body %}
+	{# HEADER #}
+	{% include "partials/_header_band_logo.html.twig" %}
 
-<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} heure(s).</p>
+	<div class="container">
+		<div class="row d-flex justify-content-center">
+			<div class="col-sm-9">
+				<h2>Bonjour {{user.firstName}} {{user.lastname}} !</h2>
+				<h4>Votre demande de changement de mot de passe chez Paris Sportifs</h4>
 
-<p>L'équipe Paris Sportifs :)</p>
+				<p>Pour changer votre mot de passe, veuillez cliquer sur le lien suivant : </p>
+
+				<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+				<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} heure(s).</p>
+
+				<p>L'équipe Paris Sportifs :)</p>
+			</div>
+		</div>
+	</div>
+{% endblock %}

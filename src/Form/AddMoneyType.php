@@ -23,12 +23,15 @@ class AddMoneyType extends AbstractType
             ->add('meansOfPayment', ChoiceType::class, [
                     'label' => 'Moyen de paiement : ',
                     'choices' => [
-                    'Carte Bancaire' => '1',
+                    'Carte Bancaire' => null,
                     'Paypal' => '2',
                     'Virement Bancaire' => '3',
                     ],
                     'multiple' => false,
-                    'expanded' => true
+                    'expanded' => true,
+//                    'attr' => [
+//                    'style' => 'display:flex; flex-direction:column; width:200px;'
+//                    ]
             ])
 
             ->add('Valider', SubmitType::class, [
