@@ -19,7 +19,8 @@ class PantherHomeControllerTest extends PantherTestCase
         $client->submit($form);
 
         $crawler = $client->clickLink('Accueil');
-        $this->assertSelectorTextContains('a', 'LOGO');
+//        $this->assertSelectorTextContains('a', 'LOGO');
+        $this->assertSelectorWillExist('div#logo>a>img');
 
         $client->waitFor('#betBoard'); // wait for element to be attached to the DOM
 

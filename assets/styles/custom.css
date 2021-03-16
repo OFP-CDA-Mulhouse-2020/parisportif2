@@ -1,3 +1,17 @@
+/* Background */
+
+.bg-radial-black {
+    margin: 0;
+    color: white;
+    padding-bottom: 30px;
+    min-height: 100vh;
+
+    background: -webkit-radial-gradient(#444, #111);
+    background: radial-gradient(#444, #111);
+}
+
+
+/* Range Type*/
 input[type="range"].form-control {
     padding: 0;
 }

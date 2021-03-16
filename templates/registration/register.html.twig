@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
+
 {% form_theme registrationForm 'form_layout/login-register_layout.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-
+<div class="bg-radial-black">
     {# HEADER #}
     {% include "partials/_header_logo.html.twig" %}
 
@@ -61,5 +62,5 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
