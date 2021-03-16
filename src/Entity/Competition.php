@@ -11,16 +11,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=CompetitionRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\CompetitionRepository", repositoryClass=CompetitionRepository::class)
  */
-class Competition
+class Competition implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -72,10 +72,19 @@ class Competition
      */
     private ?Collection $event;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="competitions")
+     */
+    private ?Sport $sport;
 
     public function __construct()
     {
         $this->event = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId() . ' - ' . $this->getName();
     }
 
     public function getId(): ?int
@@ -168,5 +177,25 @@ class Competition
         }
 
         return $this;
+    }
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): self
+    {
+        $this->sport = $sport;
+
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }

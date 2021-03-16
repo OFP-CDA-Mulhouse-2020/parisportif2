@@ -25,7 +25,7 @@ class Address
      * )
      * @Assert\Regex(
      *  pattern ="/^[0-9]{1,3}[a-zA-Z\s,-]+$/",
-     *  message="Adresse : {{value}} incorrect",
+     *  message="Adresse incorrect",
      *  groups={"addressNumberAndStreet", "address"}
      * )
      *
@@ -39,7 +39,7 @@ class Address
      * )
      * @Assert\Regex(
      *  pattern ="/^[0-9]{5}$/",
-     *  message="Code postal : {{ value}} incorrect",
+     *  message="Code postal incorrect",
      *  groups={"zipCode", "address"}
      * )
      *
@@ -53,7 +53,7 @@ class Address
      * )
      * @Assert\Regex(
      *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,40}$/",
-     *  message="Ville : {{ value}} incorrect",
+     *  message="Ville incorrect",
      *  groups={"city","address"}
      * )
      *
@@ -67,7 +67,7 @@ class Address
      * )
      * @Assert\Regex(
      *  pattern ="/^[a-zA-ZÀ-ÿ '-]{1,40}$/",
-     *  message="Pays : {{ value}} incorrect",
+     *  message="Pays incorrect",
      *  groups={"country", "address"}
      * )
      *

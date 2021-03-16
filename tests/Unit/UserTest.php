@@ -4,6 +4,8 @@ namespace App\Tests\Unit;
 
 use App\Entity\Address;
 use App\Entity\BankAccount;
+use App\Entity\BankAccountFile;
+use App\Entity\CardIdFile;
 use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Wallet;
@@ -11,6 +13,7 @@ use DateInterval;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserTest extends KernelTestCase
 {
@@ -23,18 +26,21 @@ class UserTest extends KernelTestCase
         $this->assertClassHasAttribute('lastName', User::class);
         $this->assertClassHasAttribute('firstName', User::class);
         $this->assertClassHasAttribute('email', User::class);
+        $this->assertClassHasAttribute('plainPassword', User::class);
         $this->assertClassHasAttribute('password', User::class);
         $this->assertClassHasAttribute('birthDate', User::class);
         $this->assertClassHasAttribute('createAt', User::class);
         $this->assertClassHasAttribute('active', User::class);
         $this->assertClassHasAttribute('activeAt', User::class);
         $this->assertClassHasAttribute('suspended', User::class);
-        $this->assertClassHasAttribute('suspendedAt', User::class);
+        $this->assertClassHasAttribute('endSuspendAt', User::class);
         $this->assertClassHasAttribute('deleted', User::class);
         $this->assertClassHasAttribute('deletedAt', User::class);
         $this->assertClassHasAttribute('address', User::class);
         $this->assertClassHasAttribute('wallet', User::class);
         $this->assertClassHasAttribute('bankAccount', User::class);
+        $this->assertClassHasAttribute('cardIdFile', User::class);
+        $this->assertClassHasAttribute('bankAccountFile', User::class);
     }
 
     public function getKernel(): KernelInterface
@@ -50,6 +56,7 @@ class UserTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($user, null, $groups);
         //var_dump($violationList);
         return count($violationList);
@@ -193,13 +200,19 @@ class UserTest extends KernelTestCase
     ): void {
         $this->assertSame($expectedViolationsCount, $this->getViolationsCount($user, $groups));
         $this->assertSame($expectedSuspendedValue, $user->isSuspended());
-        $this->assertEqualsWithDelta($expectedsuspendedAtValue, $user->getSuspendedAt(), 1);
+        $this->assertGreaterThanOrEqual($expectedsuspendedAtValue, $user->getEndSuspendedAt());
     }
 
     public function suspendProvider(): array
     {
         return [
-            [(new User())->suspend(), ['suspend'], 0, true, new DateTime()],
+            [(new User())
+                ->endSuspend(DateTime::createFromFormat('Y-m-d', '2022-12-12')),
+                ['suspend'],
+                0,
+                true,
+                (new DateTime())->add(new DateInterval('P7D'))
+            ],
             [(new User())->unsuspended(), ['suspend'], 0, false, null],
         ];
     }
@@ -298,5 +311,29 @@ class UserTest extends KernelTestCase
         $user->setCart($cart);
         $this->assertInstanceOf(Cart::class, $user->getCart());
         $this->assertSame(0, $this->getViolationsCount($user, ['cart']));
+    }
+
+    public function testValidCardId(): void
+    {
+        $cardId = new CardIdFile();
+        $cardId->setName('Carteidentite.jpeg');
+        $cardId->setValid(true);
+
+        $user = new User();
+        $user->setCardIdFile($cardId);
+        $this->assertInstanceOf(CardIdFile::class, $user->getCardIdFile());
+        $this->assertSame(0, $this->getViolationsCount($user, ['cardIdFile']));
+    }
+
+    public function testValidBankAccountFile(): void
+    {
+        $bankAccountFile = new BankAccountFile();
+        $bankAccountFile->setName('RibBancaire.jpeg');
+        $bankAccountFile->setValid(true);
+
+        $user = new User();
+        $user->setBankAccountFile($bankAccountFile);
+        $this->assertInstanceOf(BankAccountFile::class, $user->getBankAccountFile());
+        $this->assertSame(0, $this->getViolationsCount($user, ['bankAccountFile']));
     }
 }

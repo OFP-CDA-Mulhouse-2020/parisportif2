@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
+        "easycorp/easyadmin-bundle": "^3.2",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.6",
         "squizlabs/php_codesniffer": "*",
@@ -21,12 +22,14 @@
         "symfony/flex": "^1.3.1",
         "symfony/form": "5.1.*",
         "symfony/framework-bundle": "5.1.*",
-        "symfony/http-client": "5.1.*",
+        "symfony/http-client": "5.2.*",
         "symfony/intl": "5.1.*",
         "symfony/mailer": "5.1.*",
         "symfony/mime": "5.1.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "5.1.*",
+        "symfony/panther": "^1.0",
+        "symfony/phpunit-bridge": "^5.2",
         "symfony/process": "5.1.*",
         "symfony/property-access": "5.1.*",
         "symfony/property-info": "5.1.*",
@@ -34,10 +37,13 @@
         "symfony/serializer": "5.1.*",
         "symfony/string": "5.1.*",
         "symfony/translation": "5.1.*",
-        "symfony/twig-bundle": "^5.1",
+        "symfony/twig-bundle": "5.1.*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
+        "symfony/webpack-encore-bundle": "^1.9",
         "symfony/yaml": "5.1.*",
+        "symfonycasts/reset-password-bundle": "^1.3",
+        "symfonycasts/verify-email-bundle": "^1.1",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -51,7 +57,6 @@
         "symfony/css-selector": "5.1.*",
         "symfony/debug-bundle": "^5.1",
         "symfony/maker-bundle": "1.23.0",
-        "symfony/phpunit-bridge": "^5.2",
         "symfony/stopwatch": "^5.1",
         "symfony/var-dumper": "^5.1",
         "symfony/web-profiler-bundle": "^5.1"
@@ -88,10 +93,15 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "bash githook/setup.sh"
+            "@auto-scripts",
+            "@setup-hooks"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "setup-hooks": [
+            "bash githook/setup.sh",
+            "sh githook/setup.sh"
         ]
     },
     "conflict": {

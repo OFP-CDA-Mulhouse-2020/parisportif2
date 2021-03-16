@@ -5,6 +5,7 @@ namespace App\Tests\Unit;
 use App\Entity\Address;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AddressTest extends KernelTestCase
 {
@@ -35,6 +36,7 @@ class AddressTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($address, null, $groups);
 
         return count($violationList);

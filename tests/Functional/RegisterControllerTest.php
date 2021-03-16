@@ -11,7 +11,7 @@ class RegisterControllerTest extends WebTestCase
     public function testRegisterResponse200(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $client->request('GET', '/register');
         $this->assertResponseStatusCodeSame(200);
     }
 
@@ -23,7 +23,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('form input[name*="firstName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="lastName"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="email"]'));
-        $this->assertCount(1, $crawler->filter('form input[name*="password"]'));
+        $this->assertCount(1, $crawler->filter('form input[name*="plainPassword"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="birthDate"]'));
         $this->assertCount(1, $crawler->filter('form input[name*="agreeTerms"]'));
         $this->assertSelectorExists('form button[type=submit]');
@@ -36,19 +36,20 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $form['registration_form[lastName]'] = 'cda';
-        $form['registration_form[firstName]'] = 'daniel';
-        $form['registration_form[email]'] = 'daniel.cda@phpunit15.com';
-        $form['registration_form[password]'] = 'M1cdacda8';
-        $form['registration_form[birthDate]'] = '2000-10-02';
-        $form['registration_form[agreeTerms]'] = "1";
+        $form['registration[lastName]'] = 'cda';
+        $form['registration[firstName]'] = 'daniel';
+        $form['registration[email]'] = 'daniel.cda@phpunit15.com';
+        $form['registration[plainPassword]'] = 'M1cdacda8';
+        $form['registration[birthDate]'] = '2000-10-02';
+        $form['registration[agreeTerms]'] = "1";
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
+        $this->assertEmailCount(1);
 
         $this->assertResponseRedirects('/app');
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
-        $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
+        $this->assertSelectorTextContains('', 'Accueil');
     }
 
     public function testInvalidRegisterSubmit(): void
@@ -58,7 +59,7 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertSelectorTextContains('', 'Nom vide');
         $this->assertSelectorTextContains('', 'Prénom vide');
@@ -68,31 +69,30 @@ class RegisterControllerTest extends WebTestCase
         $this->assertSelectorTextContains('', 'Vous devez accepter les termes du contrat');
     }
 
-    public function testInvalidRegisterSubmitwithEmailAlreadyUse(): void
+    public function testInvalidRegisterSubmitWithEmailAlreadyUse(): void
     {
         $client = static::createClient();
         $crawler = $client->request('GET', '/register');
 
         $form = $crawler->filter('form')->form();
-        $form['registration_form[lastName]'] = 'cda';
-        $form['registration_form[firstName]'] = 'daniel';
-        $form['registration_form[email]'] = 'daniel.cda@test.com';
-        $form['registration_form[password]'] = 'M1cdacda8';
-        $form['registration_form[birthDate]'] = '2000-10-02';
-        $form['registration_form[agreeTerms]'] = "1";
+        $form['registration[lastName]'] = 'cda';
+        $form['registration[firstName]'] = 'daniel';
+        $form['registration[email]'] = 'daniel.cda@test.com';
+        $form['registration[plainPassword]'] = 'M1cdacda8';
+        $form['registration[birthDate]'] = '2000-10-02';
+        $form['registration[agreeTerms]'] = "1";
 
-        $crawler = $client->submit($form);
-
+        $client->submit($form);
         $this->assertSelectorTextContains('', 'Il y a déjà un compte avec cet email');
     }
 
 
     public function testUserSetOnDb(): void
     {
-        $client = static::createClient();
+        static::createClient();
         $userRepository = static::$container->get(UserRepository::class);
-
-        $user = $userRepository->findOneBy(['email' => 'daniel.cda@test.com']);
+        assert($userRepository instanceof UserRepository);
+        $user = $userRepository->findOneByEmail('daniel.cda@test.com');
 
         $this->assertInstanceOf(User::class, $user);
     }

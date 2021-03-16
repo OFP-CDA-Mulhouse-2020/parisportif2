@@ -1,0 +1,45 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+
+    <h3>Mes identifiants</h3>
+    <!-- premier form -->
+    <div class="form1 enabled d-none">
+        {{ form_start(emailForm) }}
+            {{ form_row(emailForm.oldEmail, { 'value' : user.email })}}
+            {{ form_widget(emailForm)}}
+        {{ form_end(emailForm) }}
+
+        <button class="btn btn-danger cancel-btn1">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- 2eme form -->
+    <div class="form1 disabled">
+        {{ form(emailFormDisabled) }}
+        <button class="btn btn-primary edit-btn1">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </button>
+    </div>
+
+
+    <!-- 3eme form -->
+    <div class="form2 enabled d-none">
+     {{ form(passwordForm) }}
+        <button class="btn btn-danger cancel-btn2">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- 4eme form -->
+    <div class="form2 disabled">
+        <form action="">
+            {{ form_row(passwordFormDisabled.plainPassword, { 'value':'123456789' }) }}
+            <button class="btn btn-primary edit-btn2">
+                <i class="fa fa-edit" aria-hidden="true"></i>
+            </button>
+        </form>
+    </div>
+
+{% endblock %}

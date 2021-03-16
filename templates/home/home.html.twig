@@ -1,10 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}
+	Paris Sportif - Home
+{% endblock %}
 
 {% block body %}
 
-<h1>Le Formulaire a été validé</h1>
+	{# HEADER #}
+	{% include "partials/_header.html.twig" %}
 
+	{# HOMEPAGE CONTENT #}
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	<section class="container-fluid" id="page-content">
+		{#<div class="row">
+			#}{# ASIDE LEFT #}{#
+			<div class="col-sm-12 col-md-3">
+			{% include "partials/_aside_left.html.twig" %}
+			</div>
+
+			#}{# SECTION CENTRAL #}{#
+			<div class="col-sm-12 col-md-6">
+				<section class="central">
+					<div class="container-fluid p-0">
+						<div class="row mt-4">
+							#}{# CAROUSEL #}{#
+							{% include "partials/_carousel.html.twig" %}
+
+
+							#}{########### BET BOARD CONTENT ###########}{#
+							{% include "bet/_home_bet.html.twig" %}
+
+						</div>
+					</div>
+				</section>
+			</div>
+
+			#}{# ASIDE RIGHT #}{#
+			<div class="col-sm-12 col-md-3">
+				{% include "partials/_aside_right.html.twig" %}
+			</div>
+		</div>#}
+	</section>
+
+	{# FOOTER #}
+	{% include "partials/_footer.html.twig" %}
 
 {% endblock %}

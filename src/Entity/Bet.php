@@ -6,19 +6,21 @@ use App\Repository\BetRepository;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BetRepository::class)
  */
-class Bet
+class Bet implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -39,6 +41,7 @@ class Bet
      *      message="Liste vide",
      *      groups={"bet"}
      * )
+     * @Assert\Valid
      */
     private array $listOfOdds = [];
 
@@ -65,6 +68,16 @@ class Bet
      * @ORM\ManyToOne(targetEntity=Event::class)
      */
     private ?Event $event;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private array $betResult = [];
+
+    /**
+     * @Assert\Valid
+     */
+    private array $oddsList;
 
 
     public function getId(): ?int
@@ -96,7 +109,7 @@ class Bet
         return $this;
     }
 
-    public function isOpen(): ?bool
+    public function isBetOpened(): ?bool
     {
         return $this->betOpened;
     }
@@ -156,5 +169,51 @@ class Bet
         $this->event = $event;
 
         return $this;
+    }
+
+    public function getBetResult(): ?array
+    {
+        return $this->betResult;
+    }
+
+    public function setBetResult(array $betResult): self
+    {
+        $this->betResult = $betResult;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $betOpened
+     */
+    public function setBetOpened(bool $betOpened): void
+    {
+        $this->betOpened = $betOpened;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOddsList(): array
+    {
+        return $this->oddsList;
+    }
+
+    /**
+     * @param array $oddsList
+     */
+    public function setOddsList(array $oddsList): void
+    {
+        $this->oddsList = $oddsList;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'listOfOdds' => $this->getListOfOdds(),
+            'typeOfBet' => $this->getTypeOfBet(),
+            'event' => $this->getEvent(),
+        ];
     }
 }

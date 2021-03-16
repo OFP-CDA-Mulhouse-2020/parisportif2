@@ -47,4 +47,31 @@ class BetRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllSimpleBet(): array
+    {
+        return $this->createQueryBuilder('bet')
+            ->leftJoin('bet.typeOfBet', 'typeOfBet')
+            ->leftJoin('bet.event', 'event')
+            ->where('bet.betOpened = true')
+            ->andwhere('typeOfBet.betType = :type1 OR typeOfBet.betType = :type2')
+            ->setParameters(['type1' => '1N2', 'type2' => '1-2'])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSimpleBetBySport(string $sports): array
+    {
+        return $this->createQueryBuilder('bet')
+            ->leftJoin('bet.typeOfBet', 'typeOfBet')
+            ->leftJoin('bet.event', 'event')
+            ->leftJoin('event.sport', 'sport')
+            ->where('bet.betOpened = true')
+            ->andwhere('typeOfBet.betType = :type1 OR typeOfBet.betType = :type2')
+            ->andwhere('event.sport = sport')
+            ->andwhere('sport.name = :sportName')
+            ->setParameters(['sportName' => $sports, 'type1' => '1N2', 'type2' => '1-2'])
+            ->getQuery()
+            ->getResult();
+    }
 }

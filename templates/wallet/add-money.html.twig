@@ -1,0 +1,15 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+
+
+    <h3>Ajouter des fonds à mon portefeuille</h3>
+
+    <h4>Solde actuel: {{ wallet.balance }} EUR</h4>
+
+    <br><br>
+    {{ form(addMoneyForm) }}
+
+
+
+{% endblock %}

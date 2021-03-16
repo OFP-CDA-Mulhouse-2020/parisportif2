@@ -1,0 +1,27 @@
+{# ASIDE RIGHT #}
+<aside class="container-fluid aside-right">
+	<div class="row card mt-4 p-2">
+		{% include "cart/_cart.html.twig" %}
+
+	</div>
+	<div class="row card mt-4 p-2">
+		<section class="col-sm-12 bet-search">
+			<form class="row g-3">
+				<div class="col-12">
+					<label for="inputBetSearch" class="form-label">
+						<h6>Chercher un pari</h6>
+					</label>
+					<input type="text" class="form-control" id="inputBetSearch" placeholder="placeholder">
+				</div>
+				<div class="col-12 d-flex justify-content-center">
+					<button type="submit" class="btn btn-danger btn-sm">Rechercher</button>
+				</div>
+			</form>
+		</section>
+	</div>
+	<div class="card row mt-4">
+		<section class="col-sm-12 mt-3 advertising-insert-2" style="height:200px;">
+			Espace Publicitaire 2
+		</section>
+	</div>
+</aside>

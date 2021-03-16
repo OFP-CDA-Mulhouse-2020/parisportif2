@@ -1,15 +1,66 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme registrationForm 'form_layout/login-register_layout.html.twig' %}
+
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+<div class="bg-radial-black">
+    {# HEADER #}
+    {% include "partials/_header_logo.html.twig" %}
 
-    <h1>Register</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 p-5">
+                <div class="row">
+                    <div class="col-sm-12 mb-4">
+							<span>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad beatae est
+								facilis harum magnam molestiae nobis nulla odio omnis.
+							</span>
+                    </div>
+                </div>
 
-    {{ form_start(registrationForm, { attr: {novalidate: 'novalidate'} }) }}
-            {{ form_widget(registrationForm) }}
-    {{ form_end(registrationForm) }}
+                <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://placehold.it/1600x1200/adadad/eaeaea?text=Formule 1" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.it/1600x1200/e3e3e3/adadad?text=Football" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://placehold.it/1600x1200/a3a3a3/cbcbcb?text=Tennis" class="d-block w-100" alt="...">
+                        </div>
+                    </div>
+                    {#                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"  data-bs-slide="prev">#}
+                    {#                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>#}
+                    {#                        <span class="visually-hidden">Previous</span>#}
+                    {#                    </button>#}
+                    {#                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"  data-bs-slide="next">#}
+                    {#                        <span class="carousel-control-next-icon" aria-hidden="true"></span>#}
+                    {#                        <span class="visually-hidden">Next</span>#}
+                    {#                    </button>#}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 p-5">
+
+                {% for flashError in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
+
+                <h1  class="h3 mb-4 font-weight-normal">CRÉER UN COMPTE</h1>
+
+                {{ form_start(registrationForm, { attr: {novalidate: 'novalidate'} }) }}
+                {{ form_widget(registrationForm) }}
+                {{ form_end(registrationForm) }}
+
+                <p class="text-end mt-5">Vous possédez déjà un compte :  <a href="/login" class="btn btn-secondary
+                btn-md" >Me
+                        connecter</a></p>
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

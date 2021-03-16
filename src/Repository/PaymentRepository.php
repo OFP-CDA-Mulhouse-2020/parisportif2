@@ -47,4 +47,21 @@ class PaymentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAmountOfLastWeek(int $walletId, int $typeOfPaymentId): ?array
+    {
+        return $this->createQueryBuilder('payment')
+            ->select("SUM(payment.sum)/100 AS amountOfLastWeek")
+            ->where('payment.wallet = :walletId')
+            ->andWhere('payment.typeOfPayment = :typeOfPaymentId')
+            ->andWhere('payment.datePayment BETWEEN :last7Days AND :today')
+            ->setParameters(['walletId' => $walletId,
+                'typeOfPaymentId' => $typeOfPaymentId,
+                'last7Days' => date('Y-m-d h:i:s', strtotime("-7 days")),
+                'today' => date('Y-m-d h:i:s')
+            ])
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

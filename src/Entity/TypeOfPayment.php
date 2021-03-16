@@ -16,7 +16,7 @@ class TypeOfPayment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
 
     /**

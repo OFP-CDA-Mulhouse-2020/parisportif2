@@ -9,14 +9,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TypeOfBetRepository::class)
  */
-class TypeOfBet
+class TypeOfBet implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -34,6 +34,11 @@ class TypeOfBet
      */
     private string $betType;
 
+    public function __toString()
+    {
+        return $this->getId() . ' - ' . $this->getBetType();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,10 +49,18 @@ class TypeOfBet
         return $this->betType;
     }
 
-    public function setTypeOfBet(string $betType): self
+    public function setBetType(string $betType): self
     {
         $this->betType = $betType;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getBetType(),
+        ];
     }
 }

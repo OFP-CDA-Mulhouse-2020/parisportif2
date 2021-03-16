@@ -1,0 +1,72 @@
+<section class="col-sm-12 bet-ticket" id="cart" >
+    <h6>Ticket de paris :</h6>
+    <hr>
+    {% if items %}
+
+        {% for item in items %}
+
+            <div class="row">
+                <div class="col-10">
+
+                    <p>
+                        {{ item.bet.event.teams[0] }}<br>
+                        {{ item.bet.event.teams[1] }}<br>
+                        {{ item.bet.event.eventDateTime|date("l d F - H:i")}}<br>
+                        {{ item.bet.event.name }} - {{ item.bet.event.competition.name }}<br>
+                        {{ item.bet.typeOfBet.betType }}<br>
+                        @{{ item.recordedOdds }}<br>
+                    </p>
+
+                    <form action="app/cart/changeBetAmount/{{ item.id }}" method="post">
+                        <label for ="change_amount"> Mise :</label>
+                        <input type="number" value="{{ item.amount }}" name="change_amount"/>
+
+                        <button type="submit" class="btn btn-primary">Valider</button>
+
+                    </form>
+                </div>
+
+                <div class="col-2">
+                    <a href="/app/cart/remove/{{ item.id }}" class="btn btn-danger">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-6">
+                Total des mises : {{ cart.sum }} EUR
+            </div>
+
+            <div class="col-6">
+                Gains potentiels :
+                {% set sum = 0 %}
+                {% for item in items %}
+                    {% set sum = sum + (item.recordedOdds * item.amount) %}
+                {% endfor %}
+                {{ sum }}
+                EUR
+            </div>
+        </div>
+
+
+
+        <div class="col-12 d-flex justify-content-center">
+            <a type="button" class="btn btn-danger btn-sm" href="/app/cart/payment">Pariez !</a>
+        </div>
+
+    {% else %}
+        <p>Ajouter des paris</p>
+        <div class="col-12 d-flex justify-content-center">
+            <button type="button" class="btn btn-secondary btn-sm"  disabled>Pariez !</button>
+        </div>
+    {% endif %}
+
+</section>
+
+
+
+
+

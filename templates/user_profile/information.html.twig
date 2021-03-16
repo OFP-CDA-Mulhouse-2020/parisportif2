@@ -1,0 +1,48 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+	<h3 class="mb-5">Mes informations</h3>
+	<h4 class="mb-3">Mon identité</h4>
+
+	{# IDENTITY FORM #}
+	<div class="form1 disabled">
+		{{ form(identityDisabledForm) }}
+		<button class="btn btn-primary edit-btn1">
+			<i class="fa fa-edit" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	{# Edited identity Form #}
+	<div class="form1 enabled d-none">
+		{{form_start(identityForm, {"multipart":"true"})}}
+		{{ form_widget(identityForm) }}
+		{{form_end(identityForm)}}
+		<button class="btn btn-danger cancel-btn1">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	<br><br>
+
+	{# ADDRESS FORM #}
+	<h4 class="mb-3">Mon adresse</h4>
+
+	{# Address Form #}
+	<div class="form2 disabled">
+		{{ form(addressDisabledForm) }}
+		<button class="btn btn-primary edit-btn2">
+			<i class="fa fa-edit" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	{#	 Edited adress Form #}
+	<div class="form2 enabled d-none">
+		{{ form(addressForm) }}
+		<button class="btn btn-danger cancel-btn2">
+			<i class="fa fa-times" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	<br><br>
+
+{% endblock %}

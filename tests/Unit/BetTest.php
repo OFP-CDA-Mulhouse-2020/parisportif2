@@ -7,6 +7,7 @@ use App\Entity\TypeOfBet;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BetTest extends KernelTestCase
 {
@@ -19,6 +20,7 @@ class BetTest extends KernelTestCase
         $this->assertClassHasAttribute('betLimitTime', Bet::class);
         $this->assertClassHasAttribute('typeOfBet', Bet::class);
         $this->assertClassHasAttribute('betOpened', Bet::class);
+        $this->assertClassHasAttribute('betResult', Bet::class);
     }
 
     public function getKernel(): KernelInterface
@@ -34,6 +36,7 @@ class BetTest extends KernelTestCase
         $kernel = $this->getKernel();
 
         $validator = $kernel->getContainer()->get('validator');
+        assert($validator instanceof ValidatorInterface);
         $violationList = $validator->validate($bet, null, $groups);
         //var_dump($violationList);
         return count($violationList);
@@ -98,7 +101,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->openBet();
 
-        $this->assertTrue($bet->isOpen());
+        $this->assertTrue($bet->isBetOpened());
     }
 
     public function testBetClosed(): void
@@ -106,7 +109,7 @@ class BetTest extends KernelTestCase
         $bet = new Bet();
         $bet->closeBet();
 
-        $this->assertFalse($bet->isOpen());
+        $this->assertFalse($bet->isBetOpened());
     }
 
     public function testValidTypeOfBet(): void
@@ -120,7 +123,7 @@ class BetTest extends KernelTestCase
             2 => ['V2' => 3.2],
         ]);
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet('Test');
+        $typeOfBet->setBetType('Test');
 
         $bet->setTypeOfBet($typeOfBet);
 
@@ -139,7 +142,7 @@ class BetTest extends KernelTestCase
             2 => ['V2' => 3.2],
         ]);
         $typeOfBet = new TypeOfBet();
-        $typeOfBet->setTypeOfBet('');
+        $typeOfBet->setBetType('');
 
         $bet->setTypeOfBet($typeOfBet);
 

@@ -1,0 +1,79 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+
+        <h4 class="mb-4">Description</h4>
+        <p>
+            Deux types d'auto-exclusion s'offrent à vous : l'auto-exclusion temporaire et l'auto-exclusion définitive.    </p>
+        <ul>
+            <li>
+                L'auto-exclusion temporaire : vous nous pouvez plus vous connecter à l'application et au site jusqu'à la date que vous fixez. (durée minimum : une semaine)
+
+            </li>
+            <li>
+                L'auto-exclusion définitive : votre compte sera fermé, et vos fonds seront transférés sur votre compte en banque.<br>
+                Vous ne pourrez plus vous réinscrire avant une période de 3 ans.
+            </li>
+        </ul>
+
+
+
+    <h4 class="mt-5 mb-4">Quel type d'auto exclusion souhaitez vous ?</h4>
+
+{#    <form action="/app/profile/suspend/process" method="post">#}
+{#        <label for="suspendType"></label>#}
+{#        <select name="suspendType" id="exclusionType" required >#}
+{#            <option value="">--Choisir un type d'exclusion--</option>#}
+{#            <option value="1">Exclusion temporaire</option>#}
+{#            <option value="2">Exclusion définitive</option>#}
+{#        </select>#}
+
+{#        <br><br>#}
+{#        <label for="suspendAt">M'exclure jusqu'au :</label>#}
+{#        <input type="date" id="suspendAt" name="suspendAt" required >#}
+{#        <br><br>#}
+
+{#        #}{#        <button type="submit"  class="btn btn-danger">Confirmer</button>#}
+
+{#        <!-- Button trigger modal -->#}
+{#        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">#}
+{#            Désactiver mon compte#}
+{#        </button>#}
+{#        #}{#        <a href="suspend" class="btn btn-danger">#}
+{#        #}{#            Confirmer#}
+{#        #}{#        </a>#}
+
+{#        <!-- Modal -->#}
+{#        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">#}
+{#            <div class="modal-dialog">#}
+{#                <div class="modal-content">#}
+{#                    <div class="modal-header">#}
+{#                        #}{# **** Title ****#}
+{#                        <h5 class="modal-title" id="staticBackdropLabel">Suspension de votre compte utilisateur</h5>#}
+{#                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#                    </div>#}
+{#                    #}{# **** Content ****#}
+{#                    <div class="modal-body">#}
+{#                        ...#}
+{#                    </div>#}
+{#                    <div class="modal-footer">#}
+{#                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>#}
+{#                        #}{#                        <a href="/app/profile/suspend/process" class="btn btn-danger" type="submit">#}
+{#                        #}{#                            Confirmer#}
+{#                        #}{#                        </a>#}
+{#                        <button type="submit"  class="btn btn-danger">Confirmer</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </form>#}
+
+    {{ form_start(suspendAccountForm, { attr: {novalidate: 'novalidate'} }) }}
+    {{ form_row(suspendAccountForm.suspendType) }}
+    {{ form_row(suspendAccountForm.suspendUntil) }}
+    {{ form_row(suspendAccountForm.submit) }}
+    {{ form_end(suspendAccountForm) }}
+
+
+{#    , {'id' : 'inputEmail', 'full_name' : 'email'}#}
+{% endblock %}

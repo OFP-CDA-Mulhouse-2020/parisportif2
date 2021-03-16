@@ -11,14 +11,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  */
-class Team
+class Team implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -27,7 +27,7 @@ class Team
      *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
      * )
      */
-    private string $name;
+    private string $name = '';
 
     /**
      * @ORM\Column(type="integer")
@@ -66,12 +66,17 @@ class Team
         $this->event = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -120,7 +125,7 @@ class Team
     /**
      * @return Collection<int, Event>|Event[]
      */
-    public function getEvent(): Collection
+    public function getEvent(): ?Collection
     {
         return $this->event;
     }
@@ -180,7 +185,7 @@ class Team
         return $this->sport;
     }
 
-    public function setSport(?Sport $sport): self
+    public function setSport(Sport $sport): self
     {
         $this->sport = $sport;
 
@@ -202,5 +207,13 @@ class Team
             return false;
         }
         return true;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }

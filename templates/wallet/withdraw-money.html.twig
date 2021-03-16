@@ -1,0 +1,17 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+{% block main %}
+
+
+    <h3 class="mb-5">Faire un retrait</h3>
+
+    <p class="mb-5 fs-4 text-center">Solde actuel : {{ wallet.balance }} EUR</p>
+
+{{ form(withdrawMoneyForm) }}
+    <br>
+    <h4 class="mb-4">Versement par virement bancaire sur votre compte</h4>
+    <p>Ref IBAN : XXXXXXXXXXXXXXXX</p>
+
+
+
+{% endblock %}

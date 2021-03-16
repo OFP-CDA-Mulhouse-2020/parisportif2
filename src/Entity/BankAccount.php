@@ -16,7 +16,7 @@ class BankAccount
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -24,7 +24,7 @@ class BankAccount
      *  groups={"ibanCode", "bankAccount"}
      * )
      * @Assert\Iban(
-     *  message="Ce n'est pas un IBAN valide (IBAN).",
+     *  message="Cet IBAN n'est pas valide.",
      *  groups={"ibanCode","bankAccount"}
      * )
      */
@@ -32,15 +32,25 @@ class BankAccount
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="code bic vide",
+     * @Assert\NotBlank(message="code Bic vide",
      *  groups={"bicCode", "bankAccount"}
      * )
      * @Assert\Bic(
-     *  message="Code BIC est invalide.",
+     *  message="Ce code BIC n'est pas valide.",
      *  groups={"bicCode","bankAccount"}
      * )
      */
     private string $bicCode;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="bankAccount", cascade={"persist", "remove"})
+     */
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
 
     public function getId(): ?int
     {
@@ -88,5 +98,23 @@ class BankAccount
         $bicCode ? $bankAccount->setBicCode($bicCode) : null;
 
         return $bankAccount;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBankAccount = null === $user ? null : $this;
+        if ($user->getBankAccount() !== $newBankAccount) {
+            $user->setBankAccount($newBankAccount);
+        }
+
+        return $this;
     }
 }

@@ -1,49 +1,118 @@
 {% extends 'base.html.twig' %}
+{% form_theme login_form 'form_layout/login-register_layout.html.twig' %}
 
 {% block title %}
 	Log in!
 {% endblock %}
 
+{% block class %}
+
+{% endblock %}
+
 {% block body %}
+<div class="bg-radial-black">
 
-	{{ form_start(login_form, {'attr': {novalidate: 'novalidate', id : 'loginForm'}}) }}
-	{% if error %}
-			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
+	{# HEADER #}
+	{% include "partials/_header_logo.html.twig" %}
 
-		{% if app.user %}
-			<div class="mb-3">
-				You are logged in as
-				{{ app.user.username }},
-				<a href="{{ path('app_logout') }}">Logout</a>
-			</div>
-		{% endif %}
-
-		{# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> #}
-		<h1 id="titre-principal" class="h3 mb-3 font-weight-normal">Titre principal</h1>
-		<h2>Entrez vos paramètres de connexion :</h2>
-
-		{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
-		{{ form_row(login_form.password, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
-
-		<input
-		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-md-6 p-5">
 
 
-		{#
+				{{ form_start(login_form, {'attr': {novalidate: 'novalidate', id : 'loginForm'}}) }}
+				{% if error %}
+
+					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+				{% endif %}
+
+				{% if app.user %}
+					<div class="mb-3">
+						You are logged in as
+						{{ app.user.username }},
+						<a href="{{ path('app_logout') }}">Logout</a>
+					</div>
+				{% endif %}
+
+				{# <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> #}
+				<h1 id="titre-principal" class="h3 mb-4 font-weight-normal">CONNEXION</h1>
+				{#				<h2>Entrez vos paramètres de connexion :</h2>#}
+
+				{{ form_row(login_form.email, {'id' : 'inputEmail', 'full_name' : 'email'}) }}
+				{{ form_row(login_form.plainPassword, {'id' : 'inputPassword',  'full_name' : 'password' }) }}
+
+				<input
+						type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+
+				{#
 				Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
 				See https://symfony.com/doc/current/security/remember_me.html
-																	
+
 				<div class="checkbox mb-3">
 					<label>
 						<input type="checkbox" name="_remember_me"> Remember me
 						/label>
 				</div>
-			#}
+				#}
 
-	{{ form_row(login_form.Valider) }}
+				{{ form_row(login_form.Valider) }}
+				<p class="mb-4">
+					<a href="/reset-password" >Mot de passe oublié ?</a>
+				</p>
 
-	{{ form_end(login_form) }}
 
+				{{ form_end(login_form) }}
+
+				<p class="text-end">
+					Pas encore de compte :  <a href="/register" class="btn btn-secondary" >Créer un compte</a>
+				</p>
+
+
+
+			</div>
+			<div class="col-sm-12 col-md-6 p-5">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 mb-4">
+							<span>
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad beatae est
+								facilis harum magnam molestiae nobis nulla odio omnis.
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item active">
+										<img src="https://placehold.it/1600x1200/adadad/eaeaea?text=Formule 1"
+											 class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img src="https://placehold.it/1600x1200/e3e3e3/adadad?text=Football"
+											 class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img src="https://placehold.it/1600x1200/a3a3a3/cbcbcb?text=Tennis"
+											 class="d-block w-100" alt="...">
+									</div>
+								</div>
+								{#								<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"  data-bs-slide="prev">#}
+								{#									<span class="carousel-control-prev-icon" aria-hidden="true"></span>#}
+								{#									<span class="visually-hidden">Previous</span>#}
+								{#								</button>#}
+								{#								<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"  data-bs-slide="next">#}
+								{#									<span class="carousel-control-next-icon" aria-hidden="true"></span>#}
+								{#									<span class="visually-hidden">Next</span>#}
+								{#								</button>#}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

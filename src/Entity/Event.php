@@ -14,14 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
  */
-class Event
+class Event implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -80,7 +80,7 @@ class Event
      * @ORM\ManyToMany(targetEntity=Team::class, mappedBy="event")
      * @var Collection<int, Team>|null
      */
-    private ?collection $teams;
+    private ?Collection $teams;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="events")
@@ -95,7 +95,10 @@ class Event
         $this->teams = new ArrayCollection();
     }
 
-
+    public function __toString(): string
+    {
+        return $this->getId() . ' - ' . $this->getCompetition()->getName() . ' : ' . $this->getName();
+    }
 
     public function getId(): ?int
     {
@@ -268,4 +271,19 @@ class Event
     //     }
     //     return false;
     // }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'location' => $this->getLocation(),
+            'date' => $this->getEventDateTime()->format('d/m/Y à H:i'),
+            'timezone' => $this->getEventTimeZone(),
+            'teams' => $this->getTeams(),
+            'sport' => $this->getSport(),
+            'competition' => $this->getCompetition(),
+
+        ];
+    }
 }

@@ -18,7 +18,7 @@ class Wallet
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -71,6 +71,16 @@ class Wallet
      * @var Collection<int, Payment>|null
      */
     private ?Collection $payments;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="wallet", cascade={"persist", "remove"})
+     */
+    private ?User $user;
+
+    public function getFullName(): string
+    {
+        return  $this->user->getId()  . ' - ' . $this->user->getLastName() . ' ' . $this->user->getFirstName();
+    }
 
     public function __construct()
     {
@@ -157,12 +167,12 @@ class Wallet
         return true;
     }
 
-    public function betPayment(float $amount, int $amountBetPaymentLastWeek): int
+    public function betPayment(float $amount, ?int $amountBetPaymentLastWeek): int
     {
-        if ($amount <= 0 or $amount > $this->getBalance()) {
+        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
             return 0;
         }
-        if ($amount > $this->getLimitAmountPerWeek() - $amountBetPaymentLastWeek) {
+        if ($amount <= 0 or $amount > $this->getBalance()) {
             return 1;
         }
         $this->balance -= (int) $amount * 100;
@@ -199,4 +209,26 @@ class Wallet
 
         return $this;
     }*/
+    public function __toString(): string
+    {
+        return (string)$this->getBalance();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newWallet = null === $user ? null : $this;
+        if ($user->getWallet() !== $newWallet) {
+            $user->setWallet($newWallet);
+        }
+
+        return $this;
+    }
 }

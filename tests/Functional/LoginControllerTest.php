@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 class LoginControllerTest extends WebTestCase
 {
@@ -20,9 +19,9 @@ class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/login');
         // $this->assertCount(1, $crawler->filter('h1#titre-principal'));
-        $this->assertSelectorTextContains('h1#titre-principal', 'Titre principal');
+        $this->assertSelectorTextContains('h1#titre-principal', 'CONNEXION');
         // $this->assertGreaterThan(0, $crawler->filter('h2')->count(), 'Entrez vos paramètres de connexion :');
-        $this->assertSelectorTextContains('h2', 'Entrez vos paramètres de connexion :');
+//        $this->assertSelectorTextContains('h2', 'Entrez vos paramètres de connexion :');
     }
 
 
@@ -35,7 +34,10 @@ class LoginControllerTest extends WebTestCase
         $this->assertEquals(4, $crawler->filter('form input')->count());
         $this->assertSelectorExists('form button[type="submit"]');
         $this->assertCount(1, $crawler->filter('form input[type="email"][placeholder="Entrez votre email"]'));
-        $this->assertCount(1, $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]'));
+        $this->assertCount(
+            1,
+            $crawler->filter('form input[type="password"][placeholder="Entrez votre mot de passe"]')
+        );
     }
 
     public function testSubmitFormWithSuccess(): void
@@ -46,12 +48,12 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test.com';
         $form['password'] = 'M1cdacda8';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertResponseRedirects('/app');
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
-        $this->assertSelectorTextContains('', 'Le Formulaire a été validé');
+        $this->assertSelectorTextContains('', 'Accueil');
     }
 
 
@@ -65,9 +67,9 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test2.com';
         $form['password'] = 'M1cdacda8';
 
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Email could not be found.');
     }
@@ -81,8 +83,8 @@ class LoginControllerTest extends WebTestCase
         $form['email'] = 'ladji.cda@test.com';
         $form['password'] = 'M1cdacda88';
 
-        $crawler = $client->submit($form);
-        $crawler = $client->followRedirect();
+        $client->submit($form);
+        $client->followRedirect();
 
         $this->assertSelectorTextContains('', 'Invalid credentials.');
     }

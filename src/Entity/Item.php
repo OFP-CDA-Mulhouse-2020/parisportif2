@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ItemRepository::class)
  */
-class Item
+class Item implements \JsonSerializable
 {
     public const ITEM_STATUS = [
         0 => 'en attente', // order init => attente du paiement
@@ -252,22 +252,15 @@ class Item
         return $profits;
     }
 
-    //Peut-être à mettre dans le contrôleur ???
-    public function generatePayment(): ?Payment
+    public function jsonSerialize()
     {
-        if ($this->itemStatusId === 2 || $this->itemStatusId === 4) {
-            $amount = $this->calculateProfits();
-            $payment = new Payment($amount);
-
-            $userWallet = $this->payment->getWallet();
-            $payment->setWallet($userWallet);
-
-            $arrayCollection  = new ArrayCollection();
-            $arrayCollection[] = $this;
-            $payment->setItems($arrayCollection);
-
-            return $payment;
-        }
-        return null;
+        return [
+            'id' => $this->getId(),
+            'amount' => $this->getAmount(),
+            'expectedBetResult' => $this->getExpectedBetResult(),
+            'recordedOdds' => $this->getRecordedOdds(),
+            'status' => $this->getItemStatusId(),
+            'bet' => $this->getBet(),
+        ];
     }
 }

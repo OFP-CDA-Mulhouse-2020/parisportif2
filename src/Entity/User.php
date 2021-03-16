@@ -26,7 +26,7 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -36,7 +36,7 @@ class User implements UserInterface
      * )
      * @Assert\Regex(
      *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     *  message="Nom : {{ value }} incorrect",
+     *  message="Nom incorrect",
      *  groups={"username", "register"}
      * )
      */
@@ -50,7 +50,7 @@ class User implements UserInterface
      * )
      * @Assert\Regex(
      *  pattern =  "/^[a-zA-ZÀ-ÿ '-]{1,30}$/",
-     *  message="Prénom : {{ value }} incorrect",
+     *  message="Prénom incorrect",
      *  groups={"username", "register"}
      * )
      */
@@ -70,8 +70,6 @@ class User implements UserInterface
     private string $email;
 
     /**
-     * @var string the hashed password
-     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(
      *  message="Password vide",
      *  groups={"password","login", "register"}
@@ -81,6 +79,12 @@ class User implements UserInterface
      *  message="Format password incorrect, 1 Majuscule, 1 Chiffre, 8 caractères minimum",
      *  groups={"password","login", "register"}
      * )
+     */
+    private string $plainPassword;
+
+    /**
+     * @var string the hashed password
+     * @ORM\Column(type="string", length=255)
      */
     private string $password;
 
@@ -110,7 +114,7 @@ class User implements UserInterface
      * )
      * @Assert\LessThanOrEqual(
      *  value="+1 minutes",
-     *  message="Date de création incorrecte : {{ value }}",
+     *  message="Date de création incorrecte",
      *  groups={"createAt"}
      * )
      */
@@ -156,13 +160,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\LessThanOrEqual(
-     *  value="+1 minutes",
+     * @Assert\GreaterThanOrEqual(
+     *  value="+7 days",
      *  message="Date de suspension incorrecte : {{ value }}",
      *  groups={"suspend"}
      * )
      */
-    private ?DateTimeInterface $suspendedAt;
+    private ?DateTimeInterface $endSuspendAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -182,7 +186,7 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\LessThanOrEqual(
      *  value="+1 minutes",
-     *  message="Date de suppression incorrecte : {{ value }}",
+     *  message="Date de suppression incorrecte",
      *  groups={"delete"}
      * )
      */
@@ -195,7 +199,7 @@ class User implements UserInterface
     private ?Address $address;
 
     /**
-     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=BankAccount::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"bankAccount"})
      */
     private ?BankAccount $bankAccount;
@@ -207,10 +211,37 @@ class User implements UserInterface
     private ?Cart $cart;
 
     /**
-     * @ORM\OneToOne(targetEntity=Wallet::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Wallet::class, inversedBy="user", cascade={"persist", "remove"})
      * @Assert\Valid(groups={"wallet"})
      */
     private ?Wallet $wallet;
+
+    /**
+     * @ORM\OneToOne(targetEntity=CardIdFile::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"cardIdFile"})
+
+     */
+    private ?CardIdFile $cardIdFile;
+
+    /**
+     * @ORM\OneToOne(targetEntity=BankAccountFile::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Valid(groups={"bankAccountFile"})
+     */
+    private ?BankAccountFile $bankAccountFile;
+
+    private bool $activateDto = false;
+
+    private bool $suspendedDto = false;
+
+    /**
+     * @Assert\GreaterThanOrEqual(
+     *  value="+7 days",
+     *  message="Date de suspension incorrecte : {{ value }}")
+     * )
+     */
+    private ?DateTimeInterface $endSuspendAtDto;
+
+    private bool $deletedDto = false;
 
     public function getId(): ?int
     {
@@ -230,6 +261,11 @@ class User implements UserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
     }
 
     public function getBirthDate(): ?DateTimeInterface
@@ -257,9 +293,9 @@ class User implements UserInterface
         return $this->suspended;
     }
 
-    public function getSuspendedAt(): ?DateTimeInterface
+    public function getEndSuspendedAt(): ?DateTimeInterface
     {
-        return $this->suspendedAt;
+        return $this->endSuspendAt;
     }
 
     public function isDeleted(): ?bool
@@ -307,6 +343,19 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of plainPassword
+     *
+     * @param string $plainPassword
+     * @return  self
+     */
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
@@ -366,13 +415,13 @@ class User implements UserInterface
     /**
      * Set user suspended
      *
+     * @param DateTimeInterface $endSuspendAt
      * @return  self
      */
-    public function suspend(): self
+    public function endSuspend(DatetimeInterface $endSuspendAt): self
     {
         $this->suspended = true;
-        $this->suspendedAt = new DateTime();
-
+        $this->endSuspendAt = $endSuspendAt;
         return $this;
     }
 
@@ -384,7 +433,7 @@ class User implements UserInterface
     public function unsuspended(): self
     {
         $this->suspended = false;
-        $this->suspendedAt = null;
+        $this->endSuspendAt = null;
 
         return $this;
     }
@@ -421,7 +470,7 @@ class User implements UserInterface
      * @param string|null $firstName
      * @param string|null $lastName
      * @param string|null $email
-     * @param string|null $password
+     * @param string|null $plainPassword
      * @param string|null $birthDate
      * @return  self
      */
@@ -429,15 +478,15 @@ class User implements UserInterface
         ?string $firstName,
         ?string $lastName,
         ?string $email,
-        ?string $password,
+        ?string $plainPassword,
         ?string $birthDate
     ): User {
         $user = new User();
-        $firstName ? $user->setFirstName($firstName) : null ;
-        $lastName ? $user->setLastName($lastName) : null ;
-        $email ? $user->setEmail($email) : null ;
-        $password ? $user->setPassword($password) : null ;
-        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null ;
+        $firstName ? $user->setFirstName($firstName) : null;
+        $lastName ? $user->setLastName($lastName) : null;
+        $email ? $user->setEmail($email) : null;
+        $plainPassword ? $user->setPlainPassword($plainPassword) : null;
+        $birthDate ? $user->setBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate)) : null;
 
         $user->setCreateAt(new DateTime());
 
@@ -554,5 +603,93 @@ class User implements UserInterface
         $this->wallet = $wallet;
 
         return $this;
+    }
+
+    public function getCardIdFile(): ?CardIdFile
+    {
+        return $this->cardIdFile;
+    }
+
+    public function setCardIdFile(?CardIdFile $cardIdFile): self
+    {
+        $this->cardIdFile = $cardIdFile;
+
+        return $this;
+    }
+
+    public function getBankAccountFile(): ?BankAccountFile
+    {
+        return $this->bankAccountFile;
+    }
+
+    public function setBankAccountFile(?BankAccountFile $bankAccountFile): self
+    {
+        $this->bankAccountFile = $bankAccountFile;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActivateDto(): bool
+    {
+        return $this->activateDto;
+    }
+
+    /**
+     * @param bool $activateDto
+     */
+    public function setActivateDto(bool $activateDto): void
+    {
+        $this->activateDto = $activateDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuspendedDto(): bool
+    {
+        return $this->suspendedDto;
+    }
+
+    /**
+     * @param bool $suspendedDto
+     */
+    public function setSuspendedDto(bool $suspendedDto): void
+    {
+        $this->suspendedDto = $suspendedDto;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeletedDto(): bool
+    {
+        return $this->deletedDto;
+    }
+
+    /**
+     * @param bool $deletedDto
+     */
+    public function setDeletedDto(bool $deletedDto): void
+    {
+        $this->deletedDto = $deletedDto;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getEndSuspendAtDto(): ?DateTimeInterface
+    {
+        return $this->endSuspendAtDto;
+    }
+
+    /**
+     * @param DateTimeInterface|null $endSuspendAtDto
+     */
+    public function setEndSuspendAtDto(?DateTimeInterface $endSuspendAtDto): void
+    {
+        $this->endSuspendAtDto = $endSuspendAtDto;
     }
 }

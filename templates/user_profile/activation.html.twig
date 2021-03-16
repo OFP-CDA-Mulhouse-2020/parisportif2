@@ -1,0 +1,55 @@
+{% extends 'user_profile/user_profile.html.twig' %}
+
+
+{% block main %}
+
+        <h4 class="mb-3">Activation du compte</h4>
+
+        {% if user.active %}
+            Votre compte est activé depuis le {{ user.activeAt|date("d/m/Y")}}
+
+        {% else %}
+            Votre compte n'est pas encore activé.
+
+            <a href="edit/identity" class="btn btn-primary">
+                Activer mon compte
+            </a>
+
+        {% endif %}
+
+
+    <h4 class="mt-5 mb-3">Fermeture du compte</h4>
+    <p>
+        Vous pouvez à tout moment décider de fermer votre compte. Cette décision est irréversible.
+    </p>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Fermer mon compte
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {# **** Title ****#}
+                    <h5 class="modal-title" id="staticBackdropLabel">Suppression de votre compte utilisateur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {# **** Content ****#}
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    {#                    <button type="button" class="btn btn-primary">Understood</button>#}
+                    <a href="delete" class="btn btn-danger">
+                        Confirmer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

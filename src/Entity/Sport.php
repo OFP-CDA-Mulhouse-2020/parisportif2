@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\SportRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=SportRepository::class)
  */
-class Sport
+class Sport implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -28,7 +29,7 @@ class Sport
      *  message="Format Nom incorrect, 2 caractères minimum, 40 maximum",
      * )
      */
-    private string $name;
+    private string $name = '';
 
 
     /**
@@ -79,11 +80,25 @@ class Sport
      */
     private ?Collection $events;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Competition::class, mappedBy="sport")
+     * @var Collection<int, Competition>|null
+     */
+    private ?Collection $competitions;
+
+
 
 
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->competitions = new ArrayCollection();
+    }
+
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
 
@@ -94,12 +109,12 @@ class Sport
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -111,7 +126,7 @@ class Sport
         return $this->nbOfTeams;
     }
 
-    public function setNbOfTeams(?int $nbOfTeams): self
+    public function setNbOfTeams(int $nbOfTeams): self
     {
         $this->nbOfTeams = $nbOfTeams;
 
@@ -123,7 +138,7 @@ class Sport
         return $this->nbOfPlayers;
     }
 
-    public function setNbOfPlayers(?int $nbOfPlayers): self
+    public function setNbOfPlayers(int $nbOfPlayers): self
     {
         $this->nbOfPlayers = $nbOfPlayers;
 
@@ -135,7 +150,7 @@ class Sport
         return $this->nbOfSubstitutePlayers;
     }
 
-    public function setNbOfSubstitutePlayers(?int $nbOfSubstitutePlayers): self
+    public function setNbOfSubstitutePlayers(int $nbOfSubstitutePlayers): self
     {
         $this->nbOfSubstitutePlayers = $nbOfSubstitutePlayers;
 
@@ -170,9 +185,9 @@ class Sport
     }
 
     /**
-     * @return Collection<int, Event>|Event[]
+     * @return Collection<int, Event>|null
      */
-    public function getEvents(): Collection
+    public function getEvents(): ?Collection
     {
         return $this->events;
     }
@@ -197,5 +212,43 @@ class Sport
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Competition>|Competition[]
+     */
+    public function getCompetitions(): Collection
+    {
+        return $this->competitions;
+    }
+
+    public function addCompetition(Competition $competition): self
+    {
+        if (!$this->competitions->contains($competition)) {
+            $this->competitions[] = $competition;
+            $competition->setSport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetition(Competition $competition): self
+    {
+        if ($this->competitions->removeElement($competition)) {
+            // set the owning side to null (unless already changed)
+            if ($competition->getSport() === $this) {
+                $competition->setSport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }
