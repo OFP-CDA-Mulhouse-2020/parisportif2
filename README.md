@@ -1,7 +1,7 @@
 
 
 # parisportif2 - Online Bet Sport
-# ![logo](public/images/logo/bet-sport-online_logo.png)
+# ![logo](public/images/logo/logo_light-contour-black.svg)
 ## Target : Design App for online bet, with several sport available, pokerstars like 
 
 ---
@@ -34,7 +34,7 @@ Tools :
 ![](https://img.shields.io/badge/Editor-PhpStorm-informational?style=flat&logo=phpstorm&logoColor=white&color=ee82ee)
 
 ---
-##Development Workflow :
+## Development Workflow :
 
 ### Phase 1 : Design graph and logic, from 03-11-2020 to  16-11-2020
 
@@ -46,7 +46,7 @@ Tools :
 
 
 ---
-##Overview :
+## Overview :
 
 ### Login Page
 ![inplay](document/screenshot/Image1.png)
