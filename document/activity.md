@@ -173,3 +173,6 @@ User Profile et Home Page
 
 ---
 01/03 correction du panier en react (daniel), formulaire limite de jeu terminé (ladji)
+
+---
+16/03 ajout logo et correction theme (ladji), ajout fixtures et update README (daniel)
